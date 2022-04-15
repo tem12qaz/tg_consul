@@ -22,6 +22,97 @@ def get_main_keyboard(user: TelegramUser):
     return main_keyboard
 
 
+def get_address_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.OLD_ADDRESS_BUTTON)],
+            [KeyboardButton(user.button.NEW_ADDRESS_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_time_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.FASTER_BUTTON)],
+            [KeyboardButton(user.button.CANCEL_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_area_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.CENTER_BUTTON)],
+            [KeyboardButton(user.button.SOUTH_BUTTON)],
+            [KeyboardButton(user.button.NORTH_BUTTON)],
+            [KeyboardButton(user.button.BIGC_BUTTON)],
+            [KeyboardButton(user.button.CANCEL_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_geo_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.GEO_BUTTON, request_location=True)],
+            [KeyboardButton(user.button.CANCEL_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_ads_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.NO_ADS_BUTTON)],
+            [KeyboardButton(user.button.CANCEL_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_communication_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.TELEGRAM_BUTTON)],
+            [KeyboardButton(user.button.PHONE_BUTTON)],
+            [KeyboardButton(user.button.WHATSAPP_BUTTON)],
+            [KeyboardButton(user.button.CANCEL_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_end_order_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.NEW_ORDER_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
+def get_cancel_keyboard(user: TelegramUser):
+    main_keyboard = ReplyKeyboardMarkup(
+        [
+            [KeyboardButton(user.button.CANCEL_BUTTON)]
+        ],
+        resize_keyboard=True
+    )
+    return main_keyboard
+
+
 def get_meal_or_service_keyboard(user: TelegramUser):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
@@ -264,6 +355,19 @@ async def get_service_keyboard(service: Service, user: TelegramUser):
             [InlineKeyboardButton(
                 text=user.button.BACK_BUTTON, callback_data=select_callback.new(
                     select='shop=' + str(await service.shop.id)
+                )
+            )]
+        ]
+    )
+    return keyboard
+
+
+def go_main_keyboard(user: TelegramUser):
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(
+                text=user.button.BACK_BUTTON, callback_data=select_callback.new(
+                    select='main'
                 )
             )]
         ]

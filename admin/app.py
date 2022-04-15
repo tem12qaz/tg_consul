@@ -16,9 +16,9 @@ migrate = Migrate(app, db, directory=MIGRATION_DIR)
 
 # FLASK-ADMIN
 from models import User, Role, ServiceShop, ServiceCategory, MealCategory, Service, Restaurant, RestaurantCategory, \
-    Product
+    Product, Order, ServiceOrder
 from views import HomeAdminView, ServiceCategoryView, LogoutView, ServiceShopView, ServiceView, MealCategoryView, \
-    RestaurantView, RestaurantCategoryView, ProductView
+    RestaurantView, RestaurantCategoryView, ProductView, ServiceOrderView, OrderView
 
 admin = Admin(app, 'TGbot', url='/admin', index_view=HomeAdminView())
 
@@ -29,6 +29,8 @@ admin.add_view(MealCategoryView(MealCategory, db.session))
 admin.add_view(RestaurantView(Restaurant, db.session))
 admin.add_view(RestaurantCategoryView(RestaurantCategory, db.session))
 admin.add_view(ProductView(Product, db.session))
+admin.add_view(OrderView(Order, db.session))
+admin.add_view(ServiceOrderView(ServiceOrder, db.session))
 
 admin.add_view(LogoutView(name='Logout', endpoint='admin/logout_redirect'))
 

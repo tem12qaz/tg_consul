@@ -18,6 +18,22 @@ class Ru:
     CONFIRM_ORDER_BUTTON = 'Подтвердить ✅'
     MIN_SUM_BUTTON = '🚫 Заказ меньше минимальной стоимости'
     REST_CLOSED_BUTTON = '🚫 Ресторан сейчас закрыт'
+    OLD_ADDRESS_BUTTON = 'Да, заказываю туда же'
+    NEW_ADDRESS_BUTTON = 'Нет, введу новый'
+    FASTER_BUTTON = 'Как можно быстрее'
+    CANCEL_BUTTON = 'Отмена заказа'
+    CENTER_BUTTON = 'Центр'
+    SOUTH_BUTTON = 'Юг'
+    BIGC_BUTTON = 'Big C'
+    NORTH_BUTTON = 'Север'
+    GEO_BUTTON = 'Отправить геолокацию'
+    NO_ADS_BUTTON = 'Нет дополнений'
+    TELEGRAM_BUTTON = 'Telegram'
+    PHONE_BUTTON = 'Телефон'
+    WHATSAPP_BUTTON = 'WhatsApp'
+    NEW_ORDER_BUTTON = 'Новый заказ'
+    MESSAGE_BUTTON = 'Написать ресторану'
+    REVIEW_BUTTON = 'Оставить отзыв'
 
 
 class En:
@@ -36,6 +52,22 @@ class En:
     CONFIRM_ORDER_BUTTON = 'Confirm your order ✅'
     MIN_SUM_BUTTON = "🚫 Minimal sum isn't reached"
     REST_CLOSED_BUTTON = '🚫 Restaurant is closed right now'
+    OLD_ADDRESS_BUTTON = 'Yes'
+    NEW_ADDRESS_BUTTON = 'No, I want to enter new data'
+    FASTER_BUTTON = 'APAS'
+    CANCEL_BUTTON = 'Cancel'
+    CENTER_BUTTON = 'Center'
+    SOUTH_BUTTON = 'South'
+    BIGC_BUTTON = 'Big C'
+    NORTH_BUTTON = 'North'
+    GEO_BUTTON = 'Send geolocation'
+    NO_ADS_BUTTON = 'No additions'
+    TELEGRAM_BUTTON = 'Telegram'
+    PHONE_BUTTON = 'Local Phone'
+    WHATSAPP_BUTTON = 'WhatsApp'
+    NEW_ORDER_BUTTON = 'New order'
+    MESSAGE_BUTTON = 'Leave message'
+    REVIEW_BUTTON = 'Send review'
 
 
 

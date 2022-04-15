@@ -1,5 +1,7 @@
 from flask_security import UserMixin, RoleMixin
 
+from data import messages
+from data.messages import MESSAGE
 from flask_app_init import db
 
 roles_users = db.Table('roles_users',
@@ -20,6 +22,16 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.String(255))
+
+
+class TelegramUser(db.Model):
+    __tablename__ = 'telegramuser'
+    id = db.Column(db.Integer(), primary_key=True)
+    telegram_id = db.Column(db.BigInteger())
+    username = db.Column(db.String(128))
+    orders = db.relationship('Order', backref='customer', lazy=True)
+    service_orders = db.relationship('ServiceOrder', backref='customer', lazy=True)
+
 
 
 class ServiceCategory(db.Model):
@@ -43,6 +55,8 @@ class ServiceShop(db.Model):
     contact = db.Column(db.BigInteger())
     photo = db.Column(db.String)
     products = db.relationship('Service', backref='shop', lazy=True)
+    orders = db.relationship('ServiceOrder', backref='shop', lazy=True)
+
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
@@ -56,6 +70,8 @@ class Service(db.Model):
     description_ru = db.Column(db.String(512))
     description_en = db.Column(db.String(512))
     price = db.Column(db.Integer())
+    orders = db.relationship('ServiceOrder', backref='product', lazy=True)
+
 
 
 class MealCategory(db.Model):
@@ -82,6 +98,7 @@ class Restaurant(db.Model):
     min_sum = db.Column(db.Integer())
     delivery_price = db.Column(db.Integer())
     categories = db.relationship('RestaurantCategory', backref='restaurant', lazy=True)
+    orders = db.relationship('Order', backref='restaurant', lazy=True)
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_
@@ -97,6 +114,43 @@ class RestaurantCategory(db.Model):
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
 
+
+class Order(db.Model):
+    __tablename__ = 'order'
+    id = db.Column(db.Integer(), primary_key=True)
+    address = db.Column(db.Text())
+    name = db.Column(db.String(128))
+    communication = db.Column(db.String(32))
+    delivery_time = db.Column(db.String(64))
+    active = db.Column(db.Boolean())
+    messages = db.relationship('Message', backref='order', lazy=True)
+
+    def chat(self):
+        messages_ = ''
+        for mess in self.messages:
+            messages_ += MESSAGE.format(
+                time=mess.time,
+                name=mess.name,
+                text=mess.text
+            )
+        text = messages.En.CHAT_MESSAGE.format(
+            id_=self.id,
+            messages=messages_
+        )
+        return text
+
+
+class ServiceOrder(db.Model):
+    __tablename__ = 'serviceorder'
+    id = db.Column(db.Integer(), primary_key=True)
+
+
+class Message(db.Model):
+    __tablename__ = 'message'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(128))
+    text = db.Column(db.Text())
+    time = db.Column(db.Time())
 
 class Product(db.Model):
     __tablename__ = 'product'

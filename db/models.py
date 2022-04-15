@@ -6,6 +6,7 @@ from tortoise import fields
 from flask_security import UserMixin, RoleMixin
 
 from data import buttons, messages
+from data.messages import MESSAGE
 
 
 class Cart:
@@ -68,6 +69,8 @@ class TelegramUser(Model):
     state = fields.CharField(64, default='')
     lang = fields.CharField(4, default='ru')
     cart_ = fields.TextField(default=';')
+    address = fields.TextField(null=True)
+    name = fields.CharField(128, null=True)
 
     @property
     def cart(self):
@@ -186,7 +189,7 @@ class Restaurant(Model):
 
     id = fields.IntField(pk=True)
     name_ = fields.CharField(64)
-    contact = fields.BigIntField()
+    contact = fields.BigIntField(index=True)
     description_ru = fields.CharField(512)
     description_en = fields.CharField(512)
     photo = fields.TextField()
@@ -260,18 +263,63 @@ class Product(Model):
             return self.name_en
 
 
-class Form(Model):
-    type = ''
+class Order(Model):
     id = fields.IntField(pk=True)
-    shop = fields.OneToOneField('models.Shop', related_name='form', index=True, null=True)
-    field1 = fields.CharField(256)
-    field2 = fields.CharField(256, null=True)
-    field3 = fields.CharField(256, null=True)
-    field4 = fields.CharField(256, null=True)
-    field5 = fields.CharField(256, null=True)
+    shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True)
+    customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True)
+    address = fields.TextField(default='')
+    name = fields.CharField(128)
+    communication = fields.CharField(32, default='Telegram')
+    delivery_time = fields.CharField(64, default='')
+    cart_ = fields.TextField(default=';')
+    active = fields.BooleanField(default=False)
 
-    def fields(self):
-        return self.field1, self.field2, self.field3, self.field4, self.field5
+    @property
+    def cart(self):
+        return Cart(self)
+
+    async def message(self, rows, order_sum):
+        text = messages.Ru.REST_ORDER_MESSAGE.format(
+            id_=self.id,
+            lang=(await self.customer).lang,
+            name=self.name,
+            communication=self.communication,
+            time=self.delivery_time,
+            address=self.address,
+            rows=rows,
+            delivery=(await self.shop).delivery_price,
+            sum=order_sum
+        )
+        return text
+
+    async def chat(self, user: TelegramUser):
+        messages_ = ''
+        for mess in await self.messages:
+            messages_ += MESSAGE.format(
+                time=mess.time,
+                name=mess.name,
+                text=mess.text
+            )
+        text = user.message.CHAT_MESSAGE.format(
+            id_=self.id,
+            messages=messages_
+        )
+        return text
+
+
+class ServiceOrder(Model):
+    id = fields.IntField(pk=True)
+    shop = fields.ForeignKeyField('models.Shop', related_name='orders', index=True)
+    product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET_NULL')
+    customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True)
+
+
+class Message(Model):
+    id = fields.IntField(pk=True)
+    order = fields.ForeignKeyField('models.Order', related_name='messages', index=True)
+    name = fields.CharField(128)
+    text = fields.TextField()
+    time = fields.TimeField()
 
 
 class User(Model, UserMixin):

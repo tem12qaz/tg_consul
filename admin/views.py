@@ -13,6 +13,8 @@ from jinja2 import Markup
 from werkzeug.utils import secure_filename
 from wtforms import ValidationError
 
+from admin import modal
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 file_path = os.path.join(basedir, 'files')
 
@@ -112,6 +114,33 @@ class RestaurantCategoryView(AdminMixin, ModelView):
 class ProductView(AdminMixin, ModelView):
     column_list = ('id', 'name_ru', 'name_en', 'description_ru', 'description_en', 'price', 'category')
     form_columns = ('name_ru', 'name_en', 'description_ru', 'description_en', 'price', 'category')
+
+
+class OrderView(AdminMixin, ModelView, PhotoFormatter):
+    column_list = (
+        'id', 'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'chat'
+    )
+    form_columns = (
+        'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'chat'
+
+    def chat_button(view, context, model, name):
+        return Markup(
+            modal.html.replace('to_replace', model.chat())
+        )
+
+
+    column_formatters = {
+        'chat': chat_button
+    }
+
+
+class ServiceOrderView(AdminMixin, ModelView, PhotoFormatter):
+    column_list = (
+        'id', 'shop', 'customer', 'service'
+    )
+    form_columns = (
+        'shop', 'customer', 'service'
+    )
 
 
 class LogoutView(AdminMixin, BaseView):

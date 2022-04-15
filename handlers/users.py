@@ -1,13 +1,17 @@
 import io
+import traceback
+from datetime import datetime
 
 import button as button
+import product as product
+import pytz
 from aiogram import types
-from aiogram.dispatcher.filters import CommandStart
+from aiogram.dispatcher.filters import CommandStart, RegexpCommandsFilter
 from aiogram.types import InputMedia
 
 from data.config import FLOOD_RATE
-from data.messages import SELECT_LANG_MESSAGE, CART_ROW
-from db.models import TelegramUser
+from data.messages import SELECT_LANG_MESSAGE, CART_ROW, ORDER_SHOP_MESSAGE
+from db.models import TelegramUser, ServiceOrder, Order, Message
 from keyboards.keyboards import *
 from loader import dp, bot
 
@@ -23,6 +27,10 @@ async def bot_start(message: types.Message):
             reply_markup=lang_keyboard
         )
     else:
+        if user.state != '':
+            await message.delete()
+            return
+
         await bot.send_photo(
             message.from_user.id,
             photo=open('logo.jpg', 'rb'),
@@ -46,6 +54,10 @@ async def lang_handler(callback: types.CallbackQuery, callback_data):
             lang=callback_data['lang']
         )
     else:
+        if user.state != '':
+            await callback.message.delete()
+            return
+
         user.lang = callback_data['lang']
         await user.save()
 
@@ -79,6 +91,32 @@ def compare_restaurants(user, rest, callback):
             return True
 
 
+async def format_cart_rows(cart, user, buttons_=False, deal=False):
+    buttons = []
+    prods_text = ''
+    order_sum = 0
+    i = 1
+
+    for prod, count in cart.items():
+        if deal:
+            prod.deals += 1
+            await prod.save()
+        sum_ = count * prod.price
+        prods_text += CART_ROW.format(
+            num=i, name=prod.name, category=await prod.category,
+            price=prod.price, count=count, sum=sum_
+        )
+        if buttons_:
+            buttons.append((CART_BUTTON_ROW.format(name=prod.name(user), count=count), prod.id))
+        i += 1
+        order_sum += sum_
+
+    if buttons_:
+        return prods_text, order_sum, buttons
+    else:
+        return prods_text, order_sum
+
+
 async def format_cart_message(user: TelegramUser):
     cart = await user.cart.all()
     if cart:
@@ -86,19 +124,7 @@ async def format_cart_message(user: TelegramUser):
     else:
         return False, False
 
-    prods_text = ''
-    buttons = []
-    i = 1
-    order_sum = 0
-    for prod, count in cart.items():
-        sum_ = count * prod.price
-        prods_text += CART_ROW.format(
-            num=i, name=prod.name, category=await prod.category,
-            price=prod.price, count=count, sum=sum_
-        )
-        buttons.append((CART_BUTTON_ROW.format(name=prod.name(user), count=count), prod.id))
-        i += 1
-        order_sum += sum_
+    prods_text, order_sum, buttons = await format_cart_rows(cart, user, True)
 
     text = user.message.CART_MESSAGE.format(
         rest=rest.name(user),
@@ -296,11 +322,71 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             keyboard = await get_service_keyboard(service, user)
 
         elif 'service_order' in select:
-            pass
+            service = await Service.get_or_none(id=id_)
+            if service is None:
+                return
+
+            shop = await ServiceShop.get_or_none(id=id_)
+            if shop is None:
+                return
+
+            order = await ServiceOrder.create(
+                shop=shop,
+                customer=user,
+                product=service
+            )
+
+            message = user.message.SERVICE_ORDER_MESSAGE.format(id_=order.id)
+            keyboard = go_main_keyboard(user)
+
+            try:
+                await bot.send_message(
+                    shop.contact,
+                    ORDER_SHOP_MESSAGE.format(
+                        id_=order.id,
+                        username=user.username,
+                        name_ru=service.name_ru,
+                        name_en=service.name_en
+                    )
+                )
+            except Exception as e:
+                print(traceback.format_exc())
 
         elif 'order' in select:
-            pass
+            cart = await user.cart.all()
+            rest = await cart[0].restaurant
+            if cart and rest.is_work() and sum([i.price for i in cart]) >= rest.min_sum:
+                if user.address:
+                    message = user.message.USE_OLD_ADDRESS_MESSAGE
+                    keyboard = get_address_keyboard(user)
+                    user.state = 'old_address'
+                else:
+                    message = user.message.SELECT_TIME_MESSAGE
+                    keyboard = get_time_keyboard(user)
+                    user.state = 'time'
 
+                await user.save()
+                await callback.message.answer(
+                    message,
+                    reply_markup=keyboard
+                )
+
+            else:
+                text, keyboard = await format_cart_message(user)
+                if not text:
+                    await callback.message.answer_photo(
+                        photo=open('logo.jpg', 'rb'),
+                        caption=user.message.CART_EMPTY_MESSAGE
+                    )
+                    return
+                else:
+                    await callback.message.answer_photo(
+                        photo=open('logo.jpg', 'rb'),
+                        caption=text,
+                        reply_markup=keyboard
+                    )
+            await callback.message.delete()
+            return
         else:
             return
 
@@ -316,7 +402,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 @dp.throttled(rate=FLOOD_RATE)
 async def listen_handler(message: types.Message):
     message_ = message
-    print(message_)
     user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
     if user is None:
         return
@@ -358,6 +443,302 @@ async def listen_handler(message: types.Message):
             reply_markup=lang_keyboard
         )
 
+    elif message.text == user.button.OLD_ADDRESS_BUTTON or message.text == user.button.NEW_ADDRESS_BUTTON:
+        if user.state != 'old_address':
+            await message.delete()
+            return
+
+        elif message.text == user.button.OLD_ADDRESS_BUTTON:
+            cart = await user.cart.all()
+            shop = await cart[0].restaurant
+            order = await Order.create(
+                shop=shop,
+                customer=user,
+                address=user.address,
+                name=user.name,
+                cart_=user.cart_
+            )
+            user.state = f'time={order.id}'
+        else:
+            user.state = 'time'
+
+        await user.save()
+        await message.answer(
+            user.message.SELECT_TIME_MESSAGE,
+            reply_markup=get_time_keyboard(user)
+        )
+
+    elif user.state == 'time':
+        cart = await user.cart.all()
+        shop = await cart[0].restaurant
+        order = await Order.create(
+            shop=shop,
+            customer=user,
+            delivery_time=message.text,
+            cart_=user.cart_
+        )
+        user.state = 'area=' + str(order.id)
+        await user.save()
+        await message.answer(
+            user.message.SELECT_AREA_MESSAGE,
+            reply_markup=get_area_keyboard(user)
+        )
+
+    elif '=' in user.state:
+        order = await Order.get_or_none(id=int(user.state.split('=')[1]))
+        if order is None:
+            user.state = ''
+            await message.delete()
+            await user.save()
+            return
+
+        elif message.text == user.button.CANCEL_BUTTON:
+            user.state = ''
+            user.cart_ = ';'
+            await order.delete()
+            await user.save()
+            await bot.send_photo(
+                message.from_user.id,
+                photo=open('logo.jpg', 'rb'),
+                reply_markup=get_main_keyboard(user)
+            )
+            await message.answer(
+                user.message.START_MESSAGE,
+                reply_markup=get_meal_or_service_keyboard(user)
+            )
+
+        elif 'chat' in user.state:
+            if 'supplier_chat' in user.state:
+                if await order.customer == user:
+                    name = order.name
+                else:
+                    user.state = ''
+                    await user.save()
+                    await message.delete()
+                    return
+            elif 'shop_chat' in user.state:
+                if (await order.shop).contact == user.telegram_id or (await order.shop).contact == message.chat.id:
+                    name = (await order.shop).name_
+                else:
+                    user.state = ''
+                    await user.save()
+                    await message.delete()
+                    return
+            else:
+                return
+            mess_id = int(user.state.split(';')[0])
+            tz = pytz.timezone('Europe/Moscow')
+            now = datetime.now(tz).time()
+
+            await Message.create(
+                order=order,
+                name=name,
+                text=message.text,
+                time=now
+            )
+
+            await bot.edit_message_text(
+                await order.chat(user),
+                message.chat.id,
+                mess_id
+            )
+            await message.delete()
+
+        elif 'time' in user.state:
+            order.delivery_time = message.text[:64]
+            await order.save()
+            user.state = f'comm={order.id}'
+            await user.save()
+            await message.answer(
+                user.message.COMMUNICATION_MESSAGE,
+                reply_markup=get_communication_keyboard(user)
+            )
+
+        elif 'area' in user.state:
+            if message.text in (user.button.CENTER_BUTTON, user.button.SOUTH_BUTTON,
+                                user.button.NORTH_BUTTON, user.button.BIGC_BUTTON):
+                order.address += f'Area: {message.text}<br>'
+                user.state = f'geo={order.id}'
+                await order.save()
+                await user.save()
+                await message.answer(
+                    user.message.INPUT_ADDRESS_MESSAGE,
+                    reply_markup=get_geo_keyboard(user)
+                )
+            else:
+                await message_.delete()
+
+        elif 'geo' in user.state:
+            if message.location:
+                order.address += f'Latitude/Longitude: {message.location.latitude} {message.location.longitude}<br>'
+            else:
+                order.address += f'Address: {message.text}<br>'
+
+            user.state = f'ads={order.id}'
+            await user.save()
+            await order.save()
+
+            await message.answer(
+                user.message.ADDRESS_APPS_MESSAGE,
+                reply_markup=get_ads_keyboard(user)
+            )
+
+        elif 'ads' in user.state:
+            if message.text != user.button.NO_ADS_BUTTON:
+                order.address += f'Additions: {message.text}<br>'
+                await order.save()
+
+            if not user.address:
+                user.address = order.address
+
+            user.state = f'name={order.id}'
+            await user.save()
+
+            await message.answer(
+                user.message.NAME_MESSAGE,
+                reply_markup=get_cancel_keyboard(user)
+            )
+
+        elif 'name' in user.state:
+            order.name = message.text[:128]
+            if not user.name:
+                user.name = message.text[:128]
+            user.state = f'comm={order.id}'
+            await user.save()
+            await order.save()
+
+            await message.answer(
+                user.message.COMMUNICATION_MESSAGE,
+                reply_markup=get_communication_keyboard(user)
+            )
+
+        elif 'comm' in user.state:
+            if message.text == user.button.TELEGRAM_BUTTON:
+                order.active = True
+                await order.save()
+                user.state = ''
+                await user.save()
+                prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
+                text = user.message.ORDER_MESSAGE.format(
+                    id_=order.id,
+                    delivery=(await order.shop).delivery_price,
+                    sum=order_sum,
+                    rows=prods_text
+                )
+                keyboard = get_end_order_keyboard(user)
+                try:
+                    await bot.send_message(
+                        (await order.shop).contact,
+                        await order.message(prods_text, order_sum)
+                    )
+                except Exception as e:
+                    print(traceback.format_exc())
+
+            elif message.text == user.button.WHATSAPP_BUTTON:
+                user.state = f'whatsapp={order.id}'
+                text = user.message.WHATSAPP_MESSAGE
+                keyboard = get_cancel_keyboard(user)
+
+            elif message.text == user.button.PHONE_BUTTON:
+                user.state = f'phone={order.id}'
+                text = user.message.PHONE_MESSAGE
+                keyboard = get_cancel_keyboard(user)
+
+            else:
+                await message.delete()
+                return
+
+            await user.save()
+            await message.answer(
+                text,
+                reply_markup=keyboard
+            )
+
+        elif 'whatsapp' in user.state:
+            if message.text[0] == '+':
+                try:
+                    int(message.text[1:].replace(' ', ''))
+                except TypeError:
+                    await message.delete()
+                else:
+                    if len(message[1:].replace(' ', '')) == 11:
+                        order.communication = f'WhatsApp {message.text}'
+                        await order.save()
+                        prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
+                        user.state = ''
+                        await user.save()
+
+                        await message.answer(
+                            user.message.ORDER_MESSAGE.format(
+                                id_=order.id,
+                                delivery=(await order.shop).delivery_price,
+                                sum=order_sum,
+                                rows=prods_text
+                            ),
+                            reply_markup=get_end_order_keyboard(user)
+                        )
+                        try:
+                            await bot.send_message(
+                                (await order.shop).contact,
+                                await order.message(prods_text, order_sum)
+                            )
+                        except Exception as e:
+                            print(traceback.format_exc())
+                    else:
+                        await message.delete()
+
+        elif 'phone' in user.state:
+            try:
+                int(message.text.replace('+', '').replace(' ', ''))
+            except TypeError:
+                await message.delete()
+            else:
+                order.communication = f'Phone {message.text}'
+                await order.save()
+                prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
+                user.state = ''
+                await user.save()
+
+                await message.answer(
+                    user.message.ORDER_MESSAGE.format(
+                        id_=order.id,
+                        delivery=(await order.shop).delivery_price,
+                        sum=order_sum,
+                        rows=prods_text
+                    ),
+                    reply_markup=get_end_order_keyboard(user)
+                )
+                try:
+                    await bot.send_message(
+                        (await order.shop).contact,
+                        await order.message(prods_text, order_sum)
+                    )
+                except Exception as e:
+                    print(traceback.format_exc())
     else:
         await message_.delete()
+
+
+@dp.message_handler(RegexpCommandsFilter(regexp_commands=['chat([0-9]*)']))
+@dp.throttled(rate=FLOOD_RATE)
+async def chat(message: types.Message, regexp_command):
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
+    order = await Order.get_or_none(id=int(regexp_command.group(1)), active=True)
+    if order is None:
+        await message.delete()
+
+    if (await order.customer).telegram_id == user.telegram_id:
+        user.state = f'supplier_chat={order.id}'
+    elif (await order.shop).contact == user.telegram_id or (await order.shop).contact == message.chat.id:
+        user.state = f'shop_chat={order.id}'
+
+    message = await message.answer(
+        await order.chat(user)
+    )
+    user.state = str(message.message_id) + ';' + user.state
+    await user.save()
+
+
+
+
 
