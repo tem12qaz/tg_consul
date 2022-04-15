@@ -309,7 +309,7 @@ class Order(Model):
 
 class ServiceOrder(Model):
     id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.Shop', related_name='orders', index=True, on_delete='SET NULL', null=True)
+    shop = fields.ForeignKeyField('models.ServiceShop', related_name='orders', index=True, on_delete='SET NULL', null=True)
     product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET NULL', null=True)
     customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True, on_delete='SET NULL', null=True)
 
