@@ -122,6 +122,7 @@ class OrderView(AdminMixin, ModelView, PhotoFormatter):
     )
     form_columns = (
         'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'chat'
+    )
 
     def chat_button(view, context, model, name):
         return Markup(
