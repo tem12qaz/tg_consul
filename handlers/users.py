@@ -77,7 +77,7 @@ async def lang_handler(callback: types.CallbackQuery, callback_data):
     )
 
 
-def compare_restaurants(user, rest, callback):
+async def compare_restaurants(user, rest, callback):
     prod_from_cart = await user.cart.limit(1)
     if prod_from_cart:
         rest2 = await (await prod_from_cart.category).restaurant
@@ -218,7 +218,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if rest is None:
                 return
 
-            if not compare_restaurants(user, rest, callback):
+            if not await compare_restaurants(user, rest, callback):
                 return
 
             message = user.message.REST_MESSAGE.format(
@@ -243,7 +243,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if rest is None:
                 return
 
-            if not compare_restaurants(user, rest, callback):
+            if not await compare_restaurants(user, rest, callback):
                 return
 
             message = user.message.REST_MESSAGE.format(
@@ -261,7 +261,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if product is None:
                 return
 
-            if not compare_restaurants(user, await (await product.category).restaurant, callback):
+            if not await compare_restaurants(user, await (await product.category).restaurant, callback):
                 return
 
             if 'add' in select:

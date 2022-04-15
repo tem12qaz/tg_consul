@@ -128,7 +128,6 @@ class OrderView(AdminMixin, ModelView, PhotoFormatter):
             modal.html.replace('to_replace', model.chat())
         )
 
-
     column_formatters = {
         'chat': chat_button
     }
