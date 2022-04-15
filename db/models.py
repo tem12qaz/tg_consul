@@ -265,8 +265,8 @@ class Product(Model):
 
 class Order(Model):
     id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True)
-    customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True)
+    shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True, on_delete='SET NULL')
+    customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True, on_delete='SET NULL')
     address = fields.TextField(default='')
     name = fields.CharField(128)
     communication = fields.CharField(32, default='Telegram')
@@ -309,9 +309,9 @@ class Order(Model):
 
 class ServiceOrder(Model):
     id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.Shop', related_name='orders', index=True)
-    product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET_NULL')
-    customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True)
+    shop = fields.ForeignKeyField('models.Shop', related_name='orders', index=True, on_delete='SET NULL')
+    product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET NULL')
+    customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True, on_delete='SET NULL')
 
 
 class Message(Model):
