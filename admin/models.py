@@ -1,13 +1,22 @@
 from flask_security import UserMixin, RoleMixin
 
-from data import messages
-from data.messages import MESSAGE
 from flask_app_init import db
 
 roles_users = db.Table('roles_users',
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
                        )
+
+MESSAGE = '''<code>{time}</code> <b>{name}</b>
+{text}
+
+'''
+CHAT_MESSAGE = '''Chat  Order #{id_}
+
+{messages}
+
+Send /exit to leave the chat
+'''
 
 
 class User(db.Model, UserMixin):
@@ -31,7 +40,6 @@ class TelegramUser(db.Model):
     username = db.Column(db.String(128))
     orders = db.relationship('Order', backref='customer', lazy=True)
     service_orders = db.relationship('ServiceOrder', backref='customer', lazy=True)
-
 
 
 class ServiceCategory(db.Model):
@@ -133,7 +141,7 @@ class Order(db.Model):
                 name=mess.name,
                 text=mess.text
             )
-        text = messages.En.CHAT_MESSAGE.format(
+        text = CHAT_MESSAGE.format(
             id_=self.id,
             messages=messages_
         )
