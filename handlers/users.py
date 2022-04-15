@@ -1,11 +1,7 @@
-import io
 import traceback
 from datetime import datetime
 
-import button as button
-import product as product
 import pytz
-from aiogram import types
 from aiogram.dispatcher.filters import CommandStart, RegexpCommandsFilter
 from aiogram.types import InputMedia
 
