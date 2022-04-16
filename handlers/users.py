@@ -101,7 +101,7 @@ async def format_cart_rows(cart, user, buttons_=False, deal=False):
             await prod.save()
         sum_ = count * prod.price
         prods_text += CART_ROW.format(
-            num=i, name=prod.name, category=(await prod.category).name(user),
+            num=i, name=prod.name(user), category=(await prod.category).name(user),
             price=prod.price, count=count, sum=sum_
         )
         if buttons_:
