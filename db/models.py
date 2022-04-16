@@ -146,7 +146,7 @@ class ServiceShop(Model):
 
 
 class Service(Model):
-    button_type = 'service_prod'
+    button_type = 'shop_prod'
     back_to = 'servicecat'
 
     id = fields.IntField(pk=True)

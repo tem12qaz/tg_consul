@@ -305,6 +305,16 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
             keyboard = await get_products_keyboard(category, user)
 
+        elif 'shop_prod' in select:
+            service = await Service.get_or_none(id=id_)
+            if service is None:
+                return
+            message = user.message.SERVICE_SHOP_MESSAGE.format(
+                name=service.name(user),
+                description=service.description(user)
+            )
+            keyboard = await get_service_keyboard(service, user)
+
         elif 'prod=' in select or 'add' in select:
             product = await Product.get_or_none(id=id_)
             if product is None:
@@ -359,16 +369,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 InputMedia(media=open('admin/files/' + shop.photo, 'rb'), type='photo'),
                 reply_markup=keyboard
             )
-
-        elif 'shop_prod' in select:
-            service = await Service.get_or_none(id=id_)
-            if service is None:
-                return
-            message = user.message.SERVICE_SHOP_MESSAGE.format(
-                name=service.name(user),
-                description=service.description(user)
-            )
-            keyboard = await get_service_keyboard(service, user)
 
         elif 'service_order' in select:
             service = await Service.get_or_none(id=id_)

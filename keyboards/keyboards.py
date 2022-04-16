@@ -353,7 +353,7 @@ async def get_services_keyboard(shop: ServiceShop, user: TelegramUser):
     inline_keyboard.append(
         [InlineKeyboardButton(
             text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=Service.back_to
+                select=Service.back_to + f'={(await shop.category).id}'
             )
         )]
     )
