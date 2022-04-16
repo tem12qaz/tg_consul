@@ -100,7 +100,7 @@ class Restaurant(db.Model):
     description_ru = db.Column(db.String(512))
     description_en = db.Column(db.String(512))
     contact = db.Column(db.BigInteger())
-    photo = db.Column(db.String)
+    photo = db.Column(db.String(64))
     start_time = db.Column(db.Time())
     end_time = db.Column(db.Time())
     min_sum = db.Column(db.Integer())
