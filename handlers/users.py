@@ -165,6 +165,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         )
 
     elif select == 'main':
+        await callback.message.delete()
         await bot.send_message(
             callback.from_user.id,
             user.message.BOT_MESSAGE,
@@ -196,7 +197,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         if 'mealcat' in select:
             try:
                 await callback.message.edit_media(
-                    InputMedia(open('logo.jpg',  'rb')),
+                    InputMedia(media=open('logo.jpg',  'rb'), type='photo'),
                 )
             except:
                 pass
