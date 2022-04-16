@@ -28,7 +28,7 @@ async def bot_start(message: types.Message):
             return
 
         await message.answer(
-            user.message.BOT_MEESAGE,
+            user.message.BOT_MESSAGE,
             reply_markup=get_main_keyboard(user)
         )
 
@@ -61,7 +61,7 @@ async def lang_handler(callback: types.CallbackQuery, callback_data):
 
     await bot.send_message(
         callback.from_user.id,
-        user.message.BOT_MEESAGE,
+        user.message.BOT_MESSAGE,
         reply_markup=get_main_keyboard(user)
     )
 
@@ -165,7 +165,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     elif select == 'main':
         await bot.send_message(
             callback.from_user.id,
-            user.message.BOT_MEESAGE,
+            user.message.BOT_MESSAGE,
             reply_markup=get_main_keyboard(user)
         )
 
@@ -409,7 +409,7 @@ async def listen_handler(message: types.Message):
     if message.text == user.button.MAIN_MENU_BUTTON and user.state == '':
         await bot.send_message(
             message.from_user.id,
-            user.message.BOT_MEESAGE,
+            user.message.BOT_MESSAGE,
             reply_markup=get_main_keyboard(user)
         )
 
@@ -502,7 +502,7 @@ async def listen_handler(message: types.Message):
             )
             await bot.send_message(
                 message.from_user.id,
-                user.message.BOT_MEESAGE,
+                user.message.BOT_MESSAGE,
                 reply_markup=get_main_keyboard(user)
             )
 

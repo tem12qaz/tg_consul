@@ -16,7 +16,7 @@ MESSAGE = '''<code>{time}</code> <b>{name}</b>
 
 
 class Ru:
-    BOT_MEESAGE = 'Информация о боте'
+    BOT_MESSAGE = 'Информация о боте'
     START_MESSAGE = 'Выберете раздел'
     SELECT_CATEGORY = 'Выберете категорию'
     SELECTED_KITCHEN_MESSAGE = '''Выбранная кухня: <b>{name}</b>
