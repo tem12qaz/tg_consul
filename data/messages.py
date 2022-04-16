@@ -1,7 +1,7 @@
 SELECT_LANG_MESSAGE = 'Choose language/Выберите язык:'
-CART_ROW = '''{num} {name} ({category})
+CART_ROW = '''
+{num} {name} ({category})
 {price} VND x {count} = {sum} VND
-
 '''
 ORDER_SHOP_MESSAGE = '''
 Order #{id_}
