@@ -3,11 +3,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 /* The Modal (background) */
 .modal {
-  position: fixed;
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
   top: 50%;
   left: 50%;
-  margin-top: -50%;
-  margin-left: -100%;
+  z-index: 1; /* Sit on top */
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
