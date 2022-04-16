@@ -17,7 +17,7 @@ class Cart:
         string = f';{product.id}='
         if string in self.user.cart_:
             count = int(self.user.cart_.split(string)[1].split(';')[0])
-            self.user.cart_.replace(f'{string}{count}', f'{string}{count+1}')
+            self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count+1}')
         else:
             self.user.cart_ += f'{string}1;'
 
@@ -28,9 +28,9 @@ class Cart:
         if string in self.user.cart_:
             count = int(self.user.cart_.split(string)[1].split(';')[0])
             if count > 1:
-                self.user.cart_.replace(f'{string}{count}', f'{string}{count-1}')
+                self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count-1}')
             else:
-                self.user.cart_.replace(f'{string}{count}', '')
+                self.user.cart_ = self.user.cart_.replace(f'{string}{count}', '')
         else:
             self.user.cart_ += f'{string}1;'
 
@@ -55,7 +55,7 @@ class Cart:
 
     async def first(self):
         try:
-            prod_id, count = self.user.cart_.split(';')[1]
+            prod_id, count = self.user.cart_.split(';')[1].split('=')
         except (IndexError, ValueError):
             return None
         else:
