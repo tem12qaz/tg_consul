@@ -292,6 +292,7 @@ class Order(Model):
             delivery=(await self.shop).delivery_price,
             sum=order_sum
         )
+        print(text)
         return text
 
     async def chat(self, user: TelegramUser):
