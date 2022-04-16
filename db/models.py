@@ -14,7 +14,10 @@ class Cart:
         self.user = user
 
     async def add(self, product):
-        string = f';{product.id}='
+        if self.user.cart_[-1] == ';':
+            string = f'{product.id}='
+        else:
+            string = f';{product.id}='
         if string in self.user.cart_:
             count = int(self.user.cart_.split(string)[1].split(';')[0])
             self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count+1}')
