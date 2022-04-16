@@ -139,19 +139,19 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
     shop_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
 
-    def __chat__(self):
-        messages_ = ''
-        for mess in self.messages:
-            messages_ += MESSAGE.format(
-                time=mess.time,
-                name=mess.name,
-                text=mess.text
-            )
-        text = CHAT_MESSAGE.format(
-            id_=self.id,
-            messages=messages_
-        )
-        return text
+    # def __chat__(self):
+    #     messages_ = ''
+    #     for mess in self.messages:
+    #         messages_ += MESSAGE.format(
+    #             time=mess.time,
+    #             name=mess.name,
+    #             text=mess.text
+    #         )
+    #     text = CHAT_MESSAGE.format(
+    #         id_=self.id,
+    #         messages=messages_
+    #     )
+    #     return text
 
 
 class ServiceOrder(db.Model):
