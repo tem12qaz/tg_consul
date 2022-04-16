@@ -8,15 +8,10 @@ roles_users = db.Table('roles_users',
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
                        )
 
-MESSAGE = '''<code>{time}</code> <b>{name}</b>
-{text}
-
-'''
+MESSAGE = '''<code>{time}</code> <b>{name}</b> {text}<br>'''
 CHAT_MESSAGE = '''Chat  Order #{id_}
-
+<br>
 {messages}
-
-Send /exit to leave the chat
 '''
 
 tz = pytz.timezone('Europe/Moscow')
