@@ -55,6 +55,7 @@ class Cart:
 
     async def first(self):
         try:
+            print(self.user.cart_)
             prod_id, count = self.user.cart_.split(';')[1].split('=')
         except (IndexError, ValueError):
             return None
