@@ -135,8 +135,8 @@ class Order(db.Model):
     communication = db.Column(db.String(32))
     delivery_time = db.Column(db.String(64))
     active = db.Column(db.Boolean())
-    messages = db.relationship('Message', backref='order', lazy=True))
-    telegramuser_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id')
+    messages = db.relationship('Message', backref='order', lazy=True)
+    telegramuser_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
 
 
