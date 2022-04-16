@@ -685,7 +685,7 @@ async def listen_handler(message: types.Message):
                 except TypeError:
                     await message.delete()
                 else:
-                    if len(message[1:].replace(' ', '')) == 11:
+                    if len(message.text[1:].replace(' ', '')) == 11:
                         order.communication = f'WhatsApp {message.text}'
                         await order.save()
                         prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
