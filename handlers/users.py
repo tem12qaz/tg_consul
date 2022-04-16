@@ -85,6 +85,8 @@ async def compare_restaurants(user, rest, callback):
             return False
         else:
             return True
+    else:
+        return True
 
 
 async def format_cart_rows(cart, user, buttons_=False, deal=False):
