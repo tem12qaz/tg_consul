@@ -34,8 +34,6 @@ class Cart:
                 self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count-1}')
             else:
                 self.user.cart_ = self.user.cart_.replace(f'{string}{count}', '')
-        else:
-            self.user.cart_ += f'{string}1;'
 
         await self.user.save()
 

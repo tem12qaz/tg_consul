@@ -299,7 +299,7 @@ def get_cart_keyboard(rest: Restaurant, sum_,  buttons, user: TelegramUser):
         inline_keyboard.append(
             [InlineKeyboardButton(
                 text=button[0], callback_data=select_callback.new(
-                    select=f'remove_{button[1]}')
+                    select=f'remove={button[1]}')
             )]
         )
     if sum_ < rest.min_sum:
