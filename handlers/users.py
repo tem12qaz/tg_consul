@@ -40,6 +40,27 @@ async def bot_start(message: types.Message):
         )
 
 
+@dp.message_handler(RegexpCommandsFilter(regexp_commands=['chat([0-9]*)']))
+@dp.throttled(rate=FLOOD_RATE)
+async def chat(message: types.Message, regexp_command):
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
+    print(regexp_command.group(1))
+    order = await Order.get_or_none(id=int(regexp_command.group(1)), active=True)
+    if order is None:
+        await message.delete()
+
+    if (await order.customer).telegram_id == user.telegram_id:
+        user.state = f'supplier_chat={order.id}'
+    elif (await order.shop).contact == user.telegram_id or (await order.shop).contact == message.chat.id:
+        user.state = f'shop_chat={order.id}'
+
+    message = await message.answer(
+        await order.chat(user)
+    )
+    user.state = str(message.message_id) + ';' + user.state
+    await user.save()
+
+
 @dp.callback_query_handler(lang_callback.filter())
 @dp.throttled(rate=FLOOD_RATE)
 async def lang_handler(callback: types.CallbackQuery, callback_data):
@@ -749,27 +770,6 @@ async def listen_handler(message: types.Message):
                     print(traceback.format_exc())
     else:
         await message_.delete()
-
-
-@dp.message_handler(RegexpCommandsFilter(regexp_commands=['chat([0-9]*)']))
-@dp.throttled(rate=FLOOD_RATE)
-async def chat(message: types.Message, regexp_command):
-    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
-    print(regexp_command.group(1))
-    order = await Order.get_or_none(id=int(regexp_command.group(1)), active=True)
-    if order is None:
-        await message.delete()
-
-    if (await order.customer).telegram_id == user.telegram_id:
-        user.state = f'supplier_chat={order.id}'
-    elif (await order.shop).contact == user.telegram_id or (await order.shop).contact == message.chat.id:
-        user.state = f'shop_chat={order.id}'
-
-    message = await message.answer(
-        await order.chat(user)
-    )
-    user.state = str(message.message_id) + ';' + user.state
-    await user.save()
 
 
 
