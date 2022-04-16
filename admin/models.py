@@ -180,7 +180,7 @@ class Product(db.Model):
     description_en = db.Column(db.String(512))
     price = db.Column(db.Integer())
     deals = db.Column(db.Integer(), default=0)
-    restaurantcategory_id = db.Column(db.Integer, db.ForeignKey('restaurantcategory.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('restaurantcategory.id'))
 
 
     def __repr__(self):
