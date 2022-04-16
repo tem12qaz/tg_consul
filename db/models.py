@@ -56,7 +56,7 @@ class Cart:
     async def first(self):
         try:
             prod_id, count = self.user.cart_.split(';')[1]
-        except IndexError:
+        except (IndexError, ValueError):
             return None
         else:
             return await Product.get_or_none(id=int(prod_id))
