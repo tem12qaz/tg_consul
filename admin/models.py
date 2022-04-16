@@ -141,7 +141,7 @@ class Order(db.Model):
         messages_ = ''
         for mess in self.messages:
             messages_ += MESSAGE.format(
-                time=mess.time,
+                time=str(mess.time)[:8],
                 name=mess.name,
                 text=mess.text
             )

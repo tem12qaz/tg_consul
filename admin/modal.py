@@ -5,7 +5,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .modal {
   align: center;
   display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
   left: 0;
@@ -52,7 +51,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-    <p>to_replace</p>
+    </div>to_replace</div>
   </div>
 
 </div>
