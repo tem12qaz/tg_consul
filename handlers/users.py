@@ -233,7 +233,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             keyboard = await get_rest_cat_keyboard(rest, user)
 
             await callback.message.edit_media(
-                InputMedia(open(rest.photo, 'rb')),
+                InputMedia(open('admin/files/'+rest.photo, 'rb')),
                 reply_markup=keyboard
             )
 
@@ -309,7 +309,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             keyboard = await get_services_keyboard(shop, user)
 
             await callback.message.edit_media(
-                InputMedia(open(shop.photo, 'rb')),
+                InputMedia(open('admin/files/'+shop.photo, 'rb')),
                 reply_markup=keyboard
             )
 
