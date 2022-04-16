@@ -119,7 +119,7 @@ class RestaurantCategory(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name_ru = db.Column(db.String(64))
     name_en = db.Column(db.String(64))
-    products = db.relationship('Restaurant', backref='category', lazy=True)
+    products = db.relationship('Product', backref='category', lazy=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
 
 
