@@ -136,10 +136,10 @@ class OrderView(AdminMixin, ModelView, PhotoFormatter):
 
 class ServiceOrderView(AdminMixin, ModelView, PhotoFormatter):
     column_list = (
-        'id', 'shop', 'customer', 'service'
+        'id', 'shop', 'customer', 'product'
     )
     form_columns = (
-        'shop', 'customer', 'service'
+        'shop', 'customer', 'product'
     )
 
 
