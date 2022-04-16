@@ -257,7 +257,7 @@ async def get_product_keyboard(product: Product, user: TelegramUser):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(
-                text=user.button.ADD_BUTTON.format(count=await user.prod_count(product)),
+                text=user.button.ADD_BUTTON.format(count=(await user.cart.all())[product]),
                 callback_data=select_callback.new(
                     select='add=' + str(product.id)
                 )

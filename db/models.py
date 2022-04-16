@@ -78,7 +78,7 @@ class TelegramUser(Model):
 
     async def prod_count(self, product):
         count = 0
-        for prod in self.cart:
+        for prod in self.cart.all():
             if prod == product:
                 count += 1
 
