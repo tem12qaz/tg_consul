@@ -132,12 +132,12 @@ def get_table_buttons(objects, user: TelegramUser):
             inline_keyboard.append(
                 [
                     InlineKeyboardButton(
-                        text=objects[i].name(user.lang), callback_data=select_callback.new(
+                        text=objects[i].name(user), callback_data=select_callback.new(
                             select=objects[i].button_type + '=' + str(objects[i].id)
                         )
                     ),
                     InlineKeyboardButton(
-                        text=objects[i+1].name(user.lang), callback_data=select_callback.new(
+                        text=objects[i+1].name(user), callback_data=select_callback.new(
                             select=objects[i+1].button_type + '=' + str(objects[i+1].id)
                         )
                     ),
@@ -147,7 +147,7 @@ def get_table_buttons(objects, user: TelegramUser):
             inline_keyboard.append(
                 [
                     InlineKeyboardButton(
-                        text=objects[i].name(user.lang), callback_data=select_callback.new(
+                        text=objects[i].name(user), callback_data=select_callback.new(
                             select=objects[i].button_type + '=' + str(objects[i].id)
                         )
                     )
