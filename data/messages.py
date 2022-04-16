@@ -1,5 +1,5 @@
 SELECT_LANG_MESSAGE = 'Choose language/Выберите язык:'
-CART_ROW = '''{num} {name} (category)
+CART_ROW = '''{num} {name} ({category})
 {price} VND x {count} = {sum} VND
 
 '''
@@ -42,7 +42,6 @@ class Ru:
     CART_MESSAGE = '''{rest}
 
 {rows}
-
 Итого: <b>{sum}</b> VND
 Доставка: {delivery} VND
 
