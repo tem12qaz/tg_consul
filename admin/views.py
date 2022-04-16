@@ -118,10 +118,10 @@ class ProductView(AdminMixin, ModelView):
 
 class OrderView(AdminMixin, ModelView, PhotoFormatter):
     column_list = (
-        'id', 'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'chat'
+        'id', 'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'messages'
     )
     form_columns = (
-        'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'chat'
+        'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'messages'
     )
 
     def chat_button(view, context, model, name):
@@ -130,7 +130,7 @@ class OrderView(AdminMixin, ModelView, PhotoFormatter):
         )
 
     column_formatters = {
-        'chat': chat_button
+        'messages': chat_button
     }
 
 
