@@ -105,6 +105,46 @@ class RestaurantView(AdminMixin, ModelView, PhotoFormatter):
         'start_time', 'end_time', 'min_sum', 'delivery_price', 'category'
     )
 
+    def name_gen(obj, file_data):
+        parts = op.splitext(file_data.filename)
+        return secure_filename(f'file-{time.time()}%s%s' % parts)
+
+    def picture_validation(form, field):
+        if field.data:
+            filename = field.data.filename
+            if filename[-4:] != '.jpg' and filename[-4:] != '.png':
+                raise ValidationError('file must be .jpg or .png')
+        data = field.data.stream.read()
+        field.data = data
+        return True
+
+    # @staticmethod
+    def picture_formatter(view, context, model, name):
+        return '' if not getattr(model, name) else 'a picture'
+
+    # column_formatters = dict(photo=picture_formatter)
+    # form_overrides = dict(photo=FileUploadField)
+    # form_args = dict(photo=dict(validators=[picture_validation]))
+
+    def _list_thumbnail(view, context, model, name):
+        if not model.photo:
+            return ''
+
+        return Markup(
+            '<img src="%s">' %
+            url_for('static',
+                    filename=form.thumbgen_filename(model.photo))
+        )
+
+    column_formatters = {
+        'photo': _list_thumbnail
+    }
+
+    form_extra_fields = {
+        'photo': ImageUploadField(
+            'photo', base_path=file_path, thumbnail_size=(100, 100, True), namegen=name_gen)
+    }
+
 
 class RestaurantCategoryView(AdminMixin, ModelView):
     column_list = ('id', 'name_ru', 'name_en', 'restaurant')
