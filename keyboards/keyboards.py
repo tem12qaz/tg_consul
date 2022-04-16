@@ -310,7 +310,7 @@ def get_cart_keyboard(rest: Restaurant, sum_,  buttons, user: TelegramUser):
         select = 'nothing'
     else:
         text = user.button.CONFIRM_ORDER_BUTTON
-        select = 'order='
+        select = 'order'
     inline_keyboard.append(
         [
             InlineKeyboardButton(

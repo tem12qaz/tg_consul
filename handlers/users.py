@@ -191,6 +191,42 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             reply_markup=await get_top_products(user)
         )
 
+    elif 'order' == select:
+        cart = await user.cart.all()
+        rest = await (await user.cart.first()).restaurant
+        if cart and rest.is_work() and sum([i.price for i in cart]) >= rest.min_sum:
+            if user.address:
+                message = user.message.USE_OLD_ADDRESS_MESSAGE
+                keyboard = get_address_keyboard(user)
+                user.state = 'old_address'
+            else:
+                message = user.message.SELECT_TIME_MESSAGE
+                keyboard = get_time_keyboard(user)
+                user.state = 'time'
+
+            await user.save()
+            await callback.message.answer(
+                message,
+                reply_markup=keyboard
+            )
+
+        else:
+            text, keyboard = await format_cart_message(user)
+            if not text:
+                await callback.message.answer_photo(
+                    photo=open('logo.jpg', 'rb'),
+                    caption=user.message.CART_EMPTY_MESSAGE
+                )
+                return
+            else:
+                await callback.message.answer_photo(
+                    photo=open('logo.jpg', 'rb'),
+                    caption=text,
+                    reply_markup=keyboard
+                )
+        await callback.message.delete()
+        return
+
     elif '=' in select:
         id_ = int(select.split('=')[1])
 
@@ -355,41 +391,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 reply_markup=keyboard
             )
 
-        elif 'order' in select:
-            cart = await user.cart.all()
-            rest = await (await user.cart.first()).restaurant
-            if cart and rest.is_work() and sum([i.price for i in cart]) >= rest.min_sum:
-                if user.address:
-                    message = user.message.USE_OLD_ADDRESS_MESSAGE
-                    keyboard = get_address_keyboard(user)
-                    user.state = 'old_address'
-                else:
-                    message = user.message.SELECT_TIME_MESSAGE
-                    keyboard = get_time_keyboard(user)
-                    user.state = 'time'
-
-                await user.save()
-                await callback.message.answer(
-                    message,
-                    reply_markup=keyboard
-                )
-
-            else:
-                text, keyboard = await format_cart_message(user)
-                if not text:
-                    await callback.message.answer_photo(
-                        photo=open('logo.jpg', 'rb'),
-                        caption=user.message.CART_EMPTY_MESSAGE
-                    )
-                    return
-                else:
-                    await callback.message.answer_photo(
-                        photo=open('logo.jpg', 'rb'),
-                        caption=text,
-                        reply_markup=keyboard
-                    )
-            await callback.message.delete()
-            return
         else:
             return
 
