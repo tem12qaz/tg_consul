@@ -216,27 +216,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             message = user.message.SELECTED_KITCHEN_MESSAGE.format(name=category.name(user))
             keyboard = await get_rest_keyboard(category, user)
 
-        elif 'rest' in select:
-            rest = await Restaurant.get_or_none(id=id_)
-            if rest is None:
-                return
-
-            if not await compare_restaurants(user, rest, callback):
-                return
-
-            message = user.message.REST_MESSAGE.format(
-                name=rest.name(user),
-                description=rest.description(user),
-                min_price=rest.min_sum,
-                delivery=rest.delivery_price,
-                time=f'{str(rest.start_time).split(":00+")[0]}-{str(rest.end_time).split(":00+")[0]}'
-            )
-            keyboard = await get_rest_cat_keyboard(rest, user)
-
-            await callback.message.edit_media(
-                InputMedia(media=open('admin/files/'+rest.photo, 'rb'), type='photo'),
-                reply_markup=keyboard
-            )
 
         elif 'restcat' in select:
             category = await RestaurantCategory.get_or_none(id=id_)
@@ -354,6 +333,29 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 )
             except Exception as e:
                 print(traceback.format_exc())
+
+
+        elif 'rest' in select:
+            rest = await Restaurant.get_or_none(id=id_)
+            if rest is None:
+                return
+
+            if not await compare_restaurants(user, rest, callback):
+                return
+
+            message = user.message.REST_MESSAGE.format(
+                name=rest.name(user),
+                description=rest.description(user),
+                min_price=rest.min_sum,
+                delivery=rest.delivery_price,
+                time=f'{str(rest.start_time).split(":00+")[0]}-{str(rest.end_time).split(":00+")[0]}'
+            )
+            keyboard = await get_rest_cat_keyboard(rest, user)
+
+            await callback.message.edit_media(
+                InputMedia(media=open('admin/files/'+rest.photo, 'rb'), type='photo'),
+                reply_markup=keyboard
+            )
 
         elif 'order' in select:
             cart = await user.cart.all()
