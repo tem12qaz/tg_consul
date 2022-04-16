@@ -216,7 +216,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             message = user.message.SELECTED_KITCHEN_MESSAGE.format(name=category.name(user))
             keyboard = await get_rest_keyboard(category, user)
 
-
         elif 'restcat' in select:
             category = await RestaurantCategory.get_or_none(id=id_)
             if category is None:
@@ -238,7 +237,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
             keyboard = await get_products_keyboard(category, user)
 
-        elif 'prod=' or 'add' in select:
+        elif 'prod=' in select or 'add' in select:
             product = await Product.get_or_none(id=id_)
             if product is None:
                 return
@@ -333,7 +332,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 )
             except Exception as e:
                 print(traceback.format_exc())
-
 
         elif 'rest' in select:
             rest = await Restaurant.get_or_none(id=id_)
