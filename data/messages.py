@@ -75,7 +75,7 @@ Name: {name}
 Language: {lang}
 Communication: {communication}
 Delivery time: {time}
-Address: {address}
+{address}
 
 <code>{rows}</code>
 Delivery: {delivery} VND

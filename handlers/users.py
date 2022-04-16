@@ -410,7 +410,7 @@ async def listen_handler(message: types.Message):
     if user is None:
         return
 
-    if message.text == user.button.MAIN_MENU_BUTTON and user.state == '':
+    if (message.text == user.button.NEW_ORDER_BUTTON or message.text == user.button.MAIN_MENU_BUTTON) and user.state == '':
         await bot.send_message(
             message.from_user.id,
             user.message.BOT_MESSAGE,
@@ -581,7 +581,7 @@ async def listen_handler(message: types.Message):
         elif 'area' in user.state:
             if message.text in (user.button.CENTER_BUTTON, user.button.SOUTH_BUTTON,
                                 user.button.NORTH_BUTTON, user.button.BIGC_BUTTON):
-                order.address += f'Area: {message.text}<br>'
+                order.address += f'Area: {message.text}  '
                 user.state = f'geo={order.id}'
                 await order.save()
                 await user.save()
@@ -594,9 +594,9 @@ async def listen_handler(message: types.Message):
 
         elif 'geo' in user.state:
             if message.location:
-                order.address += f'Latitude/Longitude: {message.location.latitude} {message.location.longitude}<br>'
+                order.address += f'Latitude/Longitude: {message.location.latitude} {message.location.longitude} '
             else:
-                order.address += f'Address: {message.text}<br>'
+                order.address += f'Address: {message.text} '
 
             user.state = f'ads={order.id}'
             await user.save()
@@ -609,7 +609,7 @@ async def listen_handler(message: types.Message):
 
         elif 'ads' in user.state:
             if message.text != user.button.NO_ADS_BUTTON:
-                order.address += f'Additions: {message.text}<br>'
+                order.address += f'Additions: {message.text}  '
                 await order.save()
 
             if not user.address:
@@ -641,6 +641,7 @@ async def listen_handler(message: types.Message):
                 order.active = True
                 await order.save()
                 user.state = ''
+                user.cart_ = ';'
                 await user.save()
                 prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
                 text = user.message.ORDER_MESSAGE.format(
@@ -690,6 +691,7 @@ async def listen_handler(message: types.Message):
                         await order.save()
                         prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
                         user.state = ''
+                        user.cart_ = ';'
                         await user.save()
 
                         await message.answer(
@@ -724,6 +726,7 @@ async def listen_handler(message: types.Message):
                 await order.save()
                 prods_text, order_sum = await format_cart_rows(await order.cart.all(), user, deal=True)
                 user.state = ''
+                user.cart_ = ';'
                 await user.save()
 
                 await message.answer(
