@@ -74,7 +74,7 @@ async def lang_handler(callback: types.CallbackQuery, callback_data):
 
 
 async def compare_restaurants(user, rest, callback):
-    prod_from_cart = await user.cart.limit(1)
+    prod_from_cart = await user.cart.all()[0]
     if prod_from_cart:
         rest2 = await (await prod_from_cart.category).restaurant
         if rest2 != rest:
@@ -199,7 +199,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             except:
                 pass
 
-            prod_from_cart = await user.cart.limit(1)
+            prod_from_cart = await user.cart.all()[0]
             if prod_from_cart:
                 rest = await (await prod_from_cart.category).restaurant
                 await callback.message.edit_caption(
