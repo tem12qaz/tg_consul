@@ -131,6 +131,7 @@ async def format_cart_message(user: TelegramUser):
         delivery=rest.delivery_price
     )
     keyboard = get_cart_keyboard(rest, order_sum, buttons, user)
+    print(text)
     return text, keyboard
 
 
