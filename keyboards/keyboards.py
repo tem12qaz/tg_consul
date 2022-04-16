@@ -253,11 +253,13 @@ async def get_products_keyboard(category: RestaurantCategory, user: TelegramUser
 
 async def get_product_keyboard(product: Product, user: TelegramUser):
     rest_cat = await product.category
-
+    count = (await user.cart.all()).get(product)
+    if not count:
+        count = 0
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(
-                text=user.button.ADD_BUTTON.format(count=(await user.cart.all())[product]),
+                text=user.button.ADD_BUTTON.format(count=count),
                 callback_data=select_callback.new(
                     select='add=' + str(product.id)
                 )
