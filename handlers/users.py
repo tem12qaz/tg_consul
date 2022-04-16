@@ -490,7 +490,7 @@ async def listen_handler(message: types.Message):
             return
 
         cart = await user.cart.all()
-        shop = await cart[0].restaurant
+        shop = await (await (await user.cart.first()).category).restaurant
         order = await Order.create(
             shop=shop,
             customer=user,
