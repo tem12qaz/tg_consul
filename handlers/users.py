@@ -194,7 +194,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     elif 'order' == select:
         cart = await user.cart.all()
         rest = await (await (await user.cart.first()).category).restaurant
-        if cart and rest.is_work() and sum([i.price for i in cart]) >= rest.min_sum:
+        if cart and rest.is_work() and sum([i.price*c for i, c in cart]) >= rest.min_sum:
             if user.address:
                 message = user.message.USE_OLD_ADDRESS_MESSAGE
                 keyboard = get_address_keyboard(user)
