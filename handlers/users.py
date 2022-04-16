@@ -229,7 +229,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 description=rest.description(user),
                 min_price=rest.min_sum,
                 delivery=rest.delivery_price,
-                time=f'{rest.start_time}-{rest.end_time}'
+                time=f'{rest.start_time.split(":00+")[0]}-{rest.end_time.split(":00+")[0]}'
             )
             keyboard = await get_rest_cat_keyboard(rest, user)
 
@@ -254,7 +254,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 description=rest.description(user),
                 min_price=rest.min_sum,
                 delivery=rest.delivery_price,
-                time=f'{rest.start_time}-{rest.end_time}'
+                time=f'{rest.start_time.split(":00+")[0]}-{rest.end_time.split(":00+")[0]}'
             )
 
             keyboard = await get_products_keyboard(category, user)
