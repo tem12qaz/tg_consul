@@ -193,7 +193,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
     elif 'order' == select:
         cart = await user.cart.all()
-        rest = await (await user.cart.first()).restaurant
+        rest = await (await (await user.cart.first()).category).restaurant
         if cart and rest.is_work() and sum([i.price for i in cart]) >= rest.min_sum:
             if user.address:
                 message = user.message.USE_OLD_ADDRESS_MESSAGE
@@ -451,7 +451,7 @@ async def listen_handler(message: types.Message):
             return
 
         elif message.text == user.button.OLD_ADDRESS_BUTTON:
-            shop = await (await user.cart.first()).restaurant
+            shop = await (await (await user.cart.first()).category).restaurant
             order = await Order.create(
                 shop=shop,
                 customer=user,
