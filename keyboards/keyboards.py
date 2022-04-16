@@ -225,7 +225,7 @@ async def get_rest_keyboard(category: MealCategory, user: TelegramUser):
 
 async def get_rest_cat_keyboard(rest: Restaurant, user: TelegramUser):
     cats = await rest.categories.all()
-    meal_cat = await Restaurant.category
+    meal_cat = await rest.category
     inline_keyboard = get_table_buttons(cats, user)
     inline_keyboard.append(
         [InlineKeyboardButton(
