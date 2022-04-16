@@ -97,11 +97,11 @@ class MealCategoryView(AdminMixin, ModelView):
 
 class RestaurantView(AdminMixin, ModelView, PhotoFormatter):
     column_list = (
-        'id', 'name_', 'description_ru', 'description_en', 'contact', 'photo'
+        'id', 'name_', 'description_ru', 'description_en', 'contact', 'photo',
         'start_time', 'end_time', 'min_sum', 'delivery_price', 'category'
     )
     form_columns = (
-        'name_', 'description_ru', 'description_en', 'contact', 'photo'
+        'name_', 'description_ru', 'description_en', 'contact', 'photo',
         'start_time', 'end_time', 'min_sum', 'delivery_price', 'category'
     )
 
