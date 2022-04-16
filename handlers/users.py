@@ -27,13 +27,15 @@ async def bot_start(message: types.Message):
             await message.delete()
             return
 
+        await message.answer(
+            user.message.BOT_MEESAGE,
+            reply_markup=get_main_keyboard(user)
+        )
+
         await bot.send_photo(
             message.from_user.id,
             photo=open('logo.jpg', 'rb'),
-            reply_markup=get_main_keyboard(user)
-        )
-        await message.answer(
-            user.message.START_MESSAGE,
+            caption=user.message.START_MESSAGE,
             reply_markup=get_meal_or_service_keyboard(user)
         )
 
@@ -57,13 +59,11 @@ async def lang_handler(callback: types.CallbackQuery, callback_data):
         user.lang = callback_data['lang']
         await user.save()
 
-    message = await bot.send_message(
+    await bot.send_message(
         callback.from_user.id,
-        user.message.START_MESSAGE,
+        user.message.BOT_MEESAGE,
         reply_markup=get_main_keyboard(user)
     )
-
-    await message.delete()
 
     await bot.send_photo(
         callback.from_user.id,
@@ -156,14 +156,18 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             reply_markup=await get_meal_cat_keyboard(user)
         )
 
-    elif select == 'main':
-        message = await bot.send_message(
-            callback.from_user.id,
-            user.message.START_MESSAGE,
-            reply_markup=get_main_keyboard(user)
+    elif select == 'open_now':
+        await callback.message.edit_caption(
+            caption=user.message.SELECT_REST_MESSAGE,
+            reply_markup=await get_open_rest_keyboard(user)
         )
 
-        await message.delete()
+    elif select == 'main':
+        await bot.send_message(
+            callback.from_user.id,
+            user.message.BOT_MEESAGE,
+            reply_markup=get_main_keyboard(user)
+        )
 
         await bot.send_photo(
             callback.from_user.id,
@@ -403,16 +407,14 @@ async def listen_handler(message: types.Message):
         return
 
     if message.text == user.button.MAIN_MENU_BUTTON and user.state == '':
-        message = await bot.send_message(
+        await bot.send_message(
             message.from_user.id,
-            user.message.START_MESSAGE,
+            user.message.BOT_MEESAGE,
             reply_markup=get_main_keyboard(user)
         )
 
-        await message.delete()
-
         await bot.send_photo(
-            message.from_user.id,
+            message_.from_user.id,
             photo=open('logo.jpg', 'rb'),
             caption=user.message.START_MESSAGE,
             reply_markup=get_meal_or_service_keyboard(user)
@@ -498,8 +500,16 @@ async def listen_handler(message: types.Message):
                 photo=open('logo.jpg', 'rb'),
                 reply_markup=get_main_keyboard(user)
             )
-            await message.answer(
-                user.message.START_MESSAGE,
+            await bot.send_message(
+                message.from_user.id,
+                user.message.BOT_MEESAGE,
+                reply_markup=get_main_keyboard(user)
+            )
+
+            await bot.send_photo(
+                message_.from_user.id,
+                photo=open('logo.jpg', 'rb'),
+                caption=user.message.START_MESSAGE,
                 reply_markup=get_meal_or_service_keyboard(user)
             )
 

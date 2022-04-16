@@ -16,6 +16,7 @@ MESSAGE = '''<code>{time}</code> <b>{name}</b>
 
 
 class Ru:
+    BOT_MEESAGE = 'Информация о боте'
     START_MESSAGE = 'Выберете раздел'
     SELECT_CATEGORY = 'Выберете категорию'
     SELECTED_KITCHEN_MESSAGE = '''Выбранная кухня: <b>{name}</b>
@@ -29,6 +30,7 @@ class Ru:
 
 Выберите категорию блюда:
 '''
+    SELECT_REST_MESSAGE = 'Выберите ресторан:'
     PRODUCT_MESSAGE = '''Ресторан: <b>{rest}</b>
 
 <b>{name}</b>
@@ -90,11 +92,14 @@ Send /chat{id_} to chat with user
 
 
 class En:
+    BOT_MESSAGE = 'Bot info'
+
     START_MESSAGE = 'Select category'
     SELECT_CATEGORY = 'Select category'
     SELECTED_KITCHEN_MESSAGE = '''Selected cuisine: <b>{name}</b>
 
 Choose the restaurant:'''
+    SELECT_REST_MESSAGE = 'Select restaurant:'
     REST_MESSAGE = '''<b>{name}</b>
 {description}
 Minimal order: {min_price}VND

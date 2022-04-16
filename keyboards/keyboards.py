@@ -166,6 +166,21 @@ async def get_top_products(user: TelegramUser):
             )
         )]
     )
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
+
+async def get_open_rest_keyboard(user: TelegramUser):
+    rests = await Restaurant.all()
+    rests = [rest for rest in rests if rest.is_work()]
+    inline_keyboard = get_table_buttons(rests, user)
+    inline_keyboard.append(
+        [InlineKeyboardButton(
+            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
+                select='meal'
+            )
+        )]
+    )
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
 async def get_meal_cat_keyboard(user: TelegramUser):
