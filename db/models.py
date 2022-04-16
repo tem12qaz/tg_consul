@@ -270,7 +270,7 @@ class Order(Model):
     shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True, on_delete='SET NULL', null=True)
     customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True, on_delete='SET NULL', null=True)
     address = fields.TextField(default='')
-    name = fields.CharField(128)
+    name = fields.CharField(128, default='')
     communication = fields.CharField(32, default='Telegram')
     delivery_time = fields.CharField(64, default='')
     cart_ = fields.TextField(default=';')
