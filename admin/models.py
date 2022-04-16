@@ -64,7 +64,7 @@ class ServiceShop(db.Model):
     photo = db.Column(db.String)
     products = db.relationship('Service', backref='shop', lazy=True)
     orders = db.relationship('ServiceOrder', backref='shop', lazy=True)
-
+    servicecategory_id = db.Column(db.Integer, db.ForeignKey('servicecategory.id'))
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
@@ -79,7 +79,7 @@ class Service(db.Model):
     description_en = db.Column(db.String(512))
     price = db.Column(db.Integer())
     orders = db.relationship('ServiceOrder', backref='product', lazy=True)
-
+    serviceshop_id = db.Column(db.Integer, db.ForeignKey('serviceshop.id'))
 
 
 class MealCategory(db.Model):
@@ -107,6 +107,8 @@ class Restaurant(db.Model):
     delivery_price = db.Column(db.Integer())
     categories = db.relationship('RestaurantCategory', backref='restaurant', lazy=True)
     orders = db.relationship('Order', backref='restaurant', lazy=True)
+    mealcategory_id = db.Column(db.Integer, db.ForeignKey('mealcategory.id'))
+
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_
@@ -118,6 +120,8 @@ class RestaurantCategory(db.Model):
     name_ru = db.Column(db.String(64))
     name_en = db.Column(db.String(64))
     products = db.relationship('Restaurant', backref='category', lazy=True)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
+
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
@@ -131,7 +135,10 @@ class Order(db.Model):
     communication = db.Column(db.String(32))
     delivery_time = db.Column(db.String(64))
     active = db.Column(db.Boolean())
-    messages = db.relationship('Message', backref='order', lazy=True)
+    messages = db.relationship('Message', backref='order', lazy=True))
+    telegramuser_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id')
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
+
 
     def chat(self):
         messages_ = ''
@@ -151,6 +158,9 @@ class Order(db.Model):
 class ServiceOrder(db.Model):
     __tablename__ = 'serviceorder'
     id = db.Column(db.Integer(), primary_key=True)
+    telegramuser_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+    serviceshop_id = db.Column(db.Integer, db.ForeignKey('serviceshop.id'))
 
 
 class Message(db.Model):
@@ -159,6 +169,8 @@ class Message(db.Model):
     name = db.Column(db.String(128))
     text = db.Column(db.Text())
     time = db.Column(db.Time())
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
+
 
 class Product(db.Model):
     __tablename__ = 'product'
@@ -169,6 +181,8 @@ class Product(db.Model):
     description_en = db.Column(db.String(512))
     price = db.Column(db.Integer())
     deals = db.Column(db.Integer(), default=0)
+    restaurantcategory_id = db.Column(db.Integer, db.ForeignKey('restaurantcategory.id'))
+
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
