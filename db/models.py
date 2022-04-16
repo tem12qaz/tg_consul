@@ -21,7 +21,7 @@ class Cart:
         else:
             self.user.cart_ += f'{string}1;'
 
-        await self.user.save
+        await self.user.save()
 
     async def remove(self, product):
         string = f';{product.id}='
@@ -34,7 +34,7 @@ class Cart:
         else:
             self.user.cart_ += f'{string}1;'
 
-        await self.user.save
+        await self.user.save()
 
     async def clear(self):
         self.user.cart_ = ';'
