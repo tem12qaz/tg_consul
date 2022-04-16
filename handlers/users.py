@@ -470,6 +470,25 @@ async def listen_handler(message: types.Message):
         )
 
     elif user.state == 'time':
+        if message.text == user.button.CANCEL_BUTTON:
+            user.state = ''
+            user.cart_ = ';'
+            await user.save()
+
+            await bot.send_message(
+                message.from_user.id,
+                user.message.BOT_MESSAGE,
+                reply_markup=get_main_keyboard(user)
+            )
+
+            await bot.send_photo(
+                message_.from_user.id,
+                photo=open('logo.jpg', 'rb'),
+                caption=user.message.START_MESSAGE,
+                reply_markup=get_meal_or_service_keyboard(user)
+            )
+            return
+
         cart = await user.cart.all()
         shop = await cart[0].restaurant
         order = await Order.create(
@@ -498,11 +517,7 @@ async def listen_handler(message: types.Message):
             user.cart_ = ';'
             await order.delete()
             await user.save()
-            await bot.send_photo(
-                message.from_user.id,
-                photo=open('logo.jpg', 'rb'),
-                reply_markup=get_main_keyboard(user)
-            )
+
             await bot.send_message(
                 message.from_user.id,
                 user.message.BOT_MESSAGE,
