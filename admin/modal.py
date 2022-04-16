@@ -5,8 +5,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  top: 50%;
-  left: 50%;
+  padding-top: 100px; /* Location of the box */
+  # top: 50%;
+  left: 20%;
   z-index: 1; /* Sit on top */
   width: 100%; /* Full width */
   height: 100%; /* Full height */
