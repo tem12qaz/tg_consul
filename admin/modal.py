@@ -2,7 +2,7 @@ html = '''<style>
 body {font-family: Arial, Helvetica, sans-serif;}
 
 /* The Modal (background) */
-.modal {
+.modal_chat_read {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   padding-top: 100px; /* Location of the box */
@@ -15,7 +15,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content_chat_read {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
@@ -24,15 +24,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 /* The Close Button */
-.close {
+.close_chat_read {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close_chat_read:hover,
+.close_chat_read:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -44,11 +44,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <button id="myBtn">Read</button>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="myModal" class="modal_chat_read">
 
   <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
+  <div class="modal-content_chat_read">
+    <span class="close_chat_read">&times;</span>
     <p>to_replace</p>
   </div>
 
