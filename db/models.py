@@ -215,7 +215,13 @@ class Restaurant(Model):
     def is_work(self):
         tz = pytz.timezone('Europe/Moscow')
         now = datetime.now(tz).time()
-        if tz.localize(self.start_time) < now < tz.localize(self.end_time):
+        print(type(self.start_time))
+        print(self.start_time)
+        print(type(self.end_time))
+        print(self.end_time)
+        print(type(now))
+        print(now)
+        if self.start_time < now < self.end_time:
             return True
         else:
             return False

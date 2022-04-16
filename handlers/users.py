@@ -74,7 +74,7 @@ async def lang_handler(callback: types.CallbackQuery, callback_data):
 
 
 async def compare_restaurants(user, rest, callback):
-    prod_from_cart = (await user.cart.all())[0]
+    prod_from_cart = await user.cart.first()
     if prod_from_cart:
         rest2 = await (await prod_from_cart.category).restaurant
         if rest2 != rest:
@@ -199,7 +199,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             except:
                 pass
 
-            prod_from_cart = (await user.cart.all())[0]
+            prod_from_cart = await user.cart.first()
             if prod_from_cart:
                 rest = await (await prod_from_cart.category).restaurant
                 await callback.message.edit_caption(
@@ -354,7 +354,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
         elif 'order' in select:
             cart = await user.cart.all()
-            rest = await cart[0].restaurant
+            rest = await (await user.cart.first()).restaurant
             if cart and rest.is_work() and sum([i.price for i in cart]) >= rest.min_sum:
                 if user.address:
                     message = user.message.USE_OLD_ADDRESS_MESSAGE
@@ -447,8 +447,7 @@ async def listen_handler(message: types.Message):
             return
 
         elif message.text == user.button.OLD_ADDRESS_BUTTON:
-            cart = await user.cart.all()
-            shop = await cart[0].restaurant
+            shop = await (await user.cart.first()).restaurant
             order = await Order.create(
                 shop=shop,
                 customer=user,

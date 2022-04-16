@@ -1,3 +1,4 @@
+import pytz
 from flask_security import UserMixin, RoleMixin
 
 from flask_app_init import db
@@ -17,6 +18,8 @@ CHAT_MESSAGE = '''Chat  Order #{id_}
 
 Send /exit to leave the chat
 '''
+
+tz = pytz.timezone('Europe/Moscow')
 
 
 class User(db.Model, UserMixin):
@@ -101,8 +104,8 @@ class Restaurant(db.Model):
     description_en = db.Column(db.String(512))
     contact = db.Column(db.BigInteger())
     photo = db.Column(db.String(64))
-    start_time = db.Column(db.Time())
-    end_time = db.Column(db.Time())
+    start_time = db.Column(db.Time(timezone=tz))
+    end_time = db.Column(db.Time(timezone=tz))
     min_sum = db.Column(db.Integer())
     delivery_price = db.Column(db.Integer())
     categories = db.relationship('RestaurantCategory', backref='restaurant', lazy=True)
@@ -167,7 +170,7 @@ class Message(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(128))
     text = db.Column(db.Text())
-    time = db.Column(db.Time())
+    time = db.Column(db.Time(timezone=tz))
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
 
 
