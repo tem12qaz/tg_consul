@@ -44,10 +44,10 @@ async def bot_start(message: types.Message):
 @dp.throttled(rate=FLOOD_RATE)
 async def chat(message: types.Message, regexp_command):
     user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
-    print(regexp_command.group(1))
     order = await Order.get_or_none(id=int(regexp_command.group(1)), active=True)
     if order is None:
         await message.delete()
+        return
 
     if (await order.customer).telegram_id == user.telegram_id:
         user.state = f'supplier_chat={order.id}'
@@ -59,6 +59,17 @@ async def chat(message: types.Message, regexp_command):
     )
     user.state = str(message.message_id) + ';' + user.state
     await user.save()
+
+
+@dp.message_handler(commands=['exit'])
+@dp.throttled(rate=FLOOD_RATE)
+async def chat(message: types.Message):
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
+    if user is None:
+        return
+    if 'chat=' in user.state:
+        user.state = ''
+        await user.save()
 
 
 @dp.callback_query_handler(lang_callback.filter())
