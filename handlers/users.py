@@ -711,6 +711,9 @@ async def listen_handler(message: types.Message):
                     else:
                         await message.delete()
 
+            else:
+                await message.delete()
+
         elif 'phone' in user.state:
             try:
                 int(message.text.replace('+', '').replace(' ', ''))
