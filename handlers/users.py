@@ -101,7 +101,7 @@ async def format_cart_rows(cart, user, buttons_=False, deal=False):
             await prod.save()
         sum_ = count * prod.price
         prods_text += CART_ROW.format(
-            num=i, name=prod.name, category=await prod.category,
+            num=i, name=prod.name, category=(await prod.category).name(user),
             price=prod.price, count=count, sum=sum_
         )
         if buttons_:
@@ -131,7 +131,6 @@ async def format_cart_message(user: TelegramUser):
         delivery=rest.delivery_price
     )
     keyboard = get_cart_keyboard(rest, order_sum, buttons, user)
-    print(text)
     return text, keyboard
 
 
