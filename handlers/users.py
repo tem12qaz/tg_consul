@@ -434,7 +434,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         return
 
 
-@dp.message_handler()
+@dp.message_handler(content_types=["location", "message"])
 @dp.throttled(rate=FLOOD_RATE)
 async def listen_handler(message: types.Message):
     message_ = message
