@@ -266,4 +266,4 @@ class ServiceOrderView(AdminMixin, ModelView, PhotoFormatter):
 class LogoutView(AdminMixin, BaseView):
     @expose('/')
     def logout_button(self):
-        return redirect(url_for('security.logout', next='/admin'))
+        return redirect(url_for('security.logout', next='/kaspi/admin'))
