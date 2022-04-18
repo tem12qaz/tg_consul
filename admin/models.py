@@ -45,7 +45,7 @@ class ServiceCategory(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name_ru = db.Column(db.String(64))
     name_en = db.Column(db.String(64))
-    shops = db.relationship('ServiceShop', backref='category', lazy=True)
+    shops = db.relationship('ServiceShop', backref='category', lazy=True, cascade='all,delete')
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
@@ -60,7 +60,7 @@ class ServiceShop(db.Model):
     description_en = db.Column(db.String(512))
     contact = db.Column(db.BigInteger())
     photo = db.Column(db.String)
-    products = db.relationship('Service', backref='shop', lazy=True)
+    products = db.relationship('Service', backref='shop', lazy=True, cascade='all,delete')
     orders = db.relationship('ServiceOrder', backref='shop', lazy=True)
     category_id = db.Column(db.Integer, db.ForeignKey('servicecategory.id'))
 
@@ -86,7 +86,7 @@ class MealCategory(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name_ru = db.Column(db.String(64))
     name_en = db.Column(db.String(64))
-    restaurants = db.relationship('Restaurant', backref='category', lazy=True)
+    restaurants = db.relationship('Restaurant', backref='category', lazy=True, cascade='all,delete')
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
@@ -104,7 +104,7 @@ class Restaurant(db.Model):
     end_time = db.Column(db.Time(timezone=tz))
     min_sum = db.Column(db.Integer())
     delivery_price = db.Column(db.Integer())
-    categories = db.relationship('RestaurantCategory', backref='restaurant', lazy=True)
+    categories = db.relationship('RestaurantCategory', backref='restaurant', lazy=True, cascade='all,delete')
     orders = db.relationship('Order', backref='restaurant', lazy=True)
     category_id = db.Column(db.Integer, db.ForeignKey('mealcategory.id'))
 
@@ -118,7 +118,7 @@ class RestaurantCategory(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name_ru = db.Column(db.String(64))
     name_en = db.Column(db.String(64))
-    products = db.relationship('Product', backref='category', lazy=True)
+    products = db.relationship('Product', backref='category', lazy=True, cascade='all,delete')
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
 
 
