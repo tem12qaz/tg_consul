@@ -26,15 +26,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 /* The Close Button */
-.close_chat_read {
+.close_chat_readid_replace {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close_chat_read:hover,
-.close_chat_read:focus {
+.close_chat_readid_replace:hover,
+.close_chat_readid_replace:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
