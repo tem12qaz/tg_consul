@@ -89,6 +89,12 @@ Send /chat{id_} to chat with user
 
 Отправьте /exit для выхода из чата'''
 
+    CHAT_MESSAGE_2 = '''Чат по заказу #{id_}
+
+{messages}
+
+Отправьте /chat{id_} чтобы ответить'''
+
 
 class En:
     BOT_MESSAGE = 'Bot info'
@@ -160,11 +166,16 @@ Send /chat{id_} to chat with the restaurant
     Delivery: {delivery} VND
     Total: {sum} VND'
 
-    Send /chat{id_} to 
+    Send /chat{id_} to chat with the restaurant
 '''
-    CHAT_MESSAGE = '''Chat  Order #{id_}
+    CHAT_MESSAGE = '''Chat Order #{id_}
 
 {messages}
 
 Send /exit to leave the chat
 '''
+    CHAT_MESSAGE_2 = '''Chat Order #{id_}
+
+    {messages}
+
+    Send /chat{id_} to chat'''

@@ -296,15 +296,16 @@ class Order(Model):
         print(text)
         return text
 
-    async def chat(self, user: TelegramUser):
+    async def chat(self, user: TelegramUser, opened=True):
         messages_ = ''
+        text = user.message.CHAT_MESSAGE if opened else user.message.CHAT_MESSAGE_2
         for mess in await self.messages:
             messages_ += MESSAGE.format(
                 time=str(mess.time)[:8],
                 name=mess.name,
                 text=mess.text
             )
-        text = user.message.CHAT_MESSAGE.format(
+        text = text.format(
             id_=self.id,
             messages=messages_
         )

@@ -63,13 +63,28 @@ async def chat(message: types.Message, regexp_command):
 
 @dp.message_handler(commands=['exit'])
 @dp.throttled(rate=FLOOD_RATE)
-async def chat(message: types.Message):
+async def chat_exit(message: types.Message):
     user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
     if user is None:
         return
     if 'chat=' in user.state:
+        order = await Order.get_or_none(id=int(user.state.split('=')[1]))
+        if order is None:
+            user.state = ''
+            await message.delete()
+            await user.save()
+            return
+
+        mess_id = int(user.state.split(';')[0])
+        await bot.edit_message_text(
+            await order.chat(user, False),
+            message.chat.id,
+            mess_id
+        )
+
         user.state = ''
         await user.save()
+        await message.delete()
 
 
 @dp.callback_query_handler(lang_callback.filter())
@@ -596,7 +611,7 @@ async def listen_handler(message: types.Message):
 
             await bot.send_message(
                 tg_id,
-                await order.chat(user),
+                await order.chat(user, False),
             )
 
             await Message.create(
