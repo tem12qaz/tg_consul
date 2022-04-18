@@ -246,7 +246,7 @@ class OrderView(AdminMixin, ModelView, PhotoFormatter):
 
     def chat_button(view, context, model, name):
         return Markup(
-            modal.html.replace('to_replace', model.__chat__()).replace('id_replace', model.id)
+            modal.html.replace('to_replace', model.__chat__()).replace('id_replace', str(model.id))
         )
 
     column_formatters = {
