@@ -315,6 +315,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
             keyboard = await get_service_keyboard(service, user)
 
+            await callback.message.edit_media(
+                InputMedia(media=open('admin/files/' + service.photo, 'rb'), type='photo'),
+                reply_markup=keyboard
+            )
+
         elif 'prod=' in select or 'add' in select:
             product = await Product.get_or_none(id=id_)
             if product is None:

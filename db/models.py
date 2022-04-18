@@ -155,6 +155,7 @@ class Service(Model):
     description_ru = fields.CharField(512)
     description_en = fields.CharField(512)
     price = fields.IntField()
+    photo = fields.TextField()
     shop = fields.ForeignKeyField('models.ServiceShop', related_name='products', index=True)
 
     def name(self, user: TelegramUser):

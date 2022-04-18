@@ -75,6 +75,7 @@ class Service(db.Model):
     name_en = db.Column(db.String(64))
     description_ru = db.Column(db.String(512))
     description_en = db.Column(db.String(512))
+    photo = db.Column(db.String)
     price = db.Column(db.Integer())
     orders = db.relationship('ServiceOrder', backref='product', lazy=True)
     shop_id = db.Column(db.Integer, db.ForeignKey('serviceshop.id'))

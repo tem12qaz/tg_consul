@@ -43,14 +43,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </head>
 <body>
 <!-- Trigger/Open The Modal -->
-<button id="myBtn">Read</button>
+<button id="myBtnid_replace">Read</button>
 
 <!-- The Modal -->
-<div id="myModal" class="modal_chat_read">
+<div id="myModalid_replace" class="modal_chat_read">
 
   <!-- Modal content -->
   <div class="modal-content_chat_read">
-    <span class="close_chat_read">&times;</span>
+    <span class="close_chat_readid_replace">&times;</span>
     <p>to_replace</p>
   </div>
 
@@ -58,28 +58,28 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 <script>
 // Get the modal
-var modal = document.getElementById("myModal");
+var modalid_replace = document.getElementById("myModalid_replace");
 
 // Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+var btnid_replace = document.getElementById("myBtnid_replace");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close_chat_read")[0];
+var spanid_replace = document.getElementsByClassName("close_chat_readid_replace")[0];
 
 // When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
+btnid_replace.onclick = function() {
+  modalid_replace.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+spanid_replace.onclick = function() {
+  modalid_replace.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+  if (event.target == modalid_replace) {
+    modalid_replace.style.display = "none";
   }
 }
 </script>'''
