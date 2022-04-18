@@ -20,7 +20,7 @@ class Cart:
             string = f';{product.id}='
         if string in self.user.cart_:
             count = int(self.user.cart_.split(string)[1].split(';')[0])
-            self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count+1}')
+            self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count + 1}')
         else:
             self.user.cart_ += f'{string}1;'
 
@@ -31,7 +31,7 @@ class Cart:
         if string in self.user.cart_:
             count = int(self.user.cart_.split(string)[1].split(';')[0])
             if count > 1:
-                self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count-1}')
+                self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count - 1}')
             else:
                 self.user.cart_ = self.user.cart_.replace(f'{string}{count}', '')
 
@@ -218,7 +218,9 @@ class Restaurant(Model):
     def is_work(self):
         tz = pytz.timezone('Europe/Moscow')
         now = datetime.now(tz).time()
-        if self.start_time.replace(tzinfo=tz) <= now.replace(tzinfo=tz) <= self.end_time.replace(tzinfo=tz):
+        if self.start_time.replace(tzinfo=tz) <= now.replace(tzinfo=tz) <= self.end_time.replace(tzinfo=tz) or \
+                ((self.start_time.replace(tzinfo=tz) >= self.end_time.replace(tzinfo=tz)) and
+                 self.start_time.replace(tzinfo=tz) <= now.replace(tzinfo=tz)):
             return True
         else:
             return False
@@ -268,8 +270,10 @@ class Product(Model):
 
 class Order(Model):
     id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True, on_delete='SET NULL', null=True)
-    customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True, on_delete='SET NULL', null=True)
+    shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True, on_delete='SET NULL',
+                                  null=True)
+    customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True, on_delete='SET NULL',
+                                      null=True)
     address = fields.TextField(default='')
     name = fields.CharField(128, default='')
     communication = fields.CharField(32, default='Telegram')
@@ -314,9 +318,12 @@ class Order(Model):
 
 class ServiceOrder(Model):
     id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.ServiceShop', related_name='orders', index=True, on_delete='SET NULL', null=True)
-    product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET NULL', null=True)
-    customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True, on_delete='SET NULL', null=True)
+    shop = fields.ForeignKeyField('models.ServiceShop', related_name='orders', index=True, on_delete='SET NULL',
+                                  null=True)
+    product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET NULL',
+                                     null=True)
+    customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True,
+                                      on_delete='SET NULL', null=True)
 
 
 class Message(Model):
