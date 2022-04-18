@@ -572,6 +572,7 @@ async def listen_handler(message: types.Message):
             if 'supplier_chat' in user.state:
                 if await order.customer == user:
                     name = order.name
+                    tg_id = (await order.shop).contact
                 else:
                     user.state = ''
                     await user.save()
@@ -580,6 +581,8 @@ async def listen_handler(message: types.Message):
             elif 'shop_chat' in user.state:
                 if (await order.shop).contact == user.telegram_id or (await order.shop).contact == message.chat.id:
                     name = (await order.shop).name_
+                    tg_id = (await order.customer).telegram_id
+
                 else:
                     user.state = ''
                     await user.save()
@@ -590,6 +593,11 @@ async def listen_handler(message: types.Message):
             mess_id = int(user.state.split(';')[0])
             tz = pytz.timezone('Europe/Moscow')
             now = datetime.now(tz).time()
+
+            await bot.send_message(
+                tg_id,
+                await order.chat(user),
+            )
 
             await Message.create(
                 order=order,
