@@ -1,9 +1,9 @@
 PG_HOST = 'localhost'
-PG_PASSWORD = '7pY1dPSiD0jfNPTOco5H'
-PG_USER = 'myuser'
-PG_DATABASE = 'db'
+PG_PASSWORD = 'fcgfTC545Kwed99erg6BHJfg'
+PG_USER = 'tg_bot'
+PG_DATABASE = 'tg_bot'
 database_uri = f'postgres://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DATABASE}'
 
-BOT_TOKEN = '5044373533:AAFe9yq9F9MR-LfzQtK0kM79zkufd-U1dIY'
+BOT_TOKEN = '5333769009:AAFpKnc9bagEyZ8mymEj-yUNukFrEizcULA'
 
 FLOOD_RATE = 0.2
