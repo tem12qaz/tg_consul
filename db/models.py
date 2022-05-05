@@ -1,67 +1,6 @@
-from datetime import datetime
-
-import pytz
 from tortoise.models import Model
 from tortoise import fields
 from flask_security import UserMixin, RoleMixin
-
-from data import buttons, messages
-from data.messages import MESSAGE
-
-
-class Cart:
-    def __init__(self, user):
-        self.user = user
-
-    async def add(self, product):
-        if self.user.cart_[-1] == ';':
-            string = f'{product.id}='
-        else:
-            string = f';{product.id}='
-        if string in self.user.cart_:
-            count = int(self.user.cart_.split(string)[1].split(';')[0])
-            self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count + 1}')
-        else:
-            self.user.cart_ += f'{string}1;'
-
-        await self.user.save()
-
-    async def remove(self, product):
-        string = f';{product.id}='
-        if string in self.user.cart_:
-            count = int(self.user.cart_.split(string)[1].split(';')[0])
-            if count > 1:
-                self.user.cart_ = self.user.cart_.replace(f'{string}{count}', f'{string}{count - 1}')
-            else:
-                self.user.cart_ = self.user.cart_.replace(f'{string}{count}', '')
-
-        await self.user.save()
-
-    async def clear(self):
-        self.user.cart_ = ';'
-        await self.user.save()
-
-    async def all(self):
-        prods = {}
-        for prod in self.user.cart_.split(';'):
-            if prod == '':
-                continue
-            prod_id, count = prod.split('=')
-            product = await Product.get_or_none(id=int(prod_id))
-            if not product:
-                continue
-
-            prods[product] = int(count)
-        return prods
-
-    async def first(self):
-        try:
-            print(self.user.cart_)
-            prod_id, count = self.user.cart_.split(';')[1].split('=')
-        except (IndexError, ValueError):
-            return None
-        else:
-            return await Product.get_or_none(id=int(prod_id))
 
 
 class TelegramUser(Model):
@@ -69,269 +8,246 @@ class TelegramUser(Model):
     telegram_id = fields.BigIntField(unique=True, index=True)
     username = fields.CharField(128, unique=True, null=True)
     state = fields.CharField(64, default='')
-    lang = fields.CharField(4, default='ru')
-    cart_ = fields.TextField(default=';')
-    address = fields.TextField(null=True)
-    name = fields.CharField(128, null=True)
+    max_field = fields.CharField(32, default='start')
+    active = fields.BooleanField(default=False)
+    inviter = fields.ForeignKeyField('models.TelegramUser', related_name='referrals', index=True, null=True)
+    referral_url = fields.CharField(32, null=True)
 
-    @property
-    def cart(self):
-        return Cart(self)
+    wood_key = fields.SmallIntField(default=0)
+    bronze_key = fields.SmallIntField(default=0)
+    silver_key = fields.SmallIntField(default=0)
+    gold_key = fields.SmallIntField(default=0)
+    platinum_key = fields.SmallIntField(default=0)
+    legendary_key = fields.SmallIntField(default=0)
 
-    async def prod_count(self, product):
-        count = 0
-        for prod in self.cart.all():
-            if prod == product:
-                count += 1
+    async def games(self):
+        donors = (
+            await self.game_donor1,
+            await self.game_donor2,
+            await self.game_donor3,
+            await self.game_donor4,
+            await self.game_donor5,
+            await self.game_donor6,
+            await self.game_donor7,
+            await self.game_donor8,
+        )
+        partners = (
+            await self.game_partner1,
+            await self.game_partner2,
+            await self.game_partner3,
+            await self.game_partner4,
+        )
+        mentors = (
+            await self.game_mentor1,
+            await self.game_mentor2,
+        )
+        master = await self.game_master
 
-        return count
+        games = {}
 
-    @property
-    def button(self):
-        if self.lang == 'ru':
-            return buttons.Ru
-        elif self.lang == 'en':
-            return buttons.En
+        for i in donors:
+            if i:
+                games[i] = f'donor{donors.index(i)+1}'
 
-    @property
-    def message(self):
-        if self.lang == 'ru':
-            return messages.Ru
-        elif self.lang == 'en':
-            return messages.En
+        for i in partners:
+            if i:
+                games[i] = f'partner{partners.index(i)+1}'
 
-    def __str__(self):
-        return str(self.telegram_id)
+        for i in mentors:
+            if i:
+                games[i] = f'mentor{mentors.index(i)+1}'
+
+        if master:
+            games[master] = 'master'
+
+        return games
 
 
-class ServiceCategory(Model):
-    button_type = 'servicecat'
-    back_to = 'main'
-
+class Field(Model):
     id = fields.IntField(pk=True)
-    name_ru = fields.CharField(64)
-    name_en = fields.CharField(64)
+    type = fields.CharField(32, default='start', index=True)
+    donor1 = fields.OneToOneField('models.TelegramUser', related_name='game_donor1', null=True)
+    donor2 = fields.OneToOneField('models.TelegramUser', related_name='game_donor2', null=True)
+    donor3 = fields.OneToOneField('models.TelegramUser', related_name='game_donor3', null=True)
+    donor4 = fields.OneToOneField('models.TelegramUser', related_name='game_donor4', null=True)
+    donor5 = fields.OneToOneField('models.TelegramUser', related_name='game_donor5', null=True)
+    donor6 = fields.OneToOneField('models.TelegramUser', related_name='game_donor6', null=True)
+    donor7 = fields.OneToOneField('models.TelegramUser', related_name='game_donor7', null=True)
+    donor8 = fields.OneToOneField('models.TelegramUser', related_name='game_donor8', null=True)
 
-    def name(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.name_ru
-        elif user.lang == 'en':
-            return self.name_en
+    partner1 = fields.OneToOneField('models.TelegramUser', related_name='game_partner1', null=True)
+    partner2 = fields.OneToOneField('models.TelegramUser', related_name='game_partner2', null=True)
+    partner3 = fields.OneToOneField('models.TelegramUser', related_name='game_partner3', null=True)
+    partner4 = fields.OneToOneField('models.TelegramUser', related_name='game_partner4', null=True)
 
+    mentor1 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor1')
+    mentor2 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor2')
 
-class ServiceShop(Model):
-    button_type = 'shop'
-    back_to = 'service'
+    master = fields.OneToOneField('models.TelegramUser', related_name='game_master')
 
-    id = fields.IntField(pk=True)
-    name_ru = fields.CharField(64)
-    name_en = fields.CharField(64)
-    contact = fields.BigIntField()
-    description_ru = fields.CharField(512)
-    description_en = fields.CharField(512)
-    photo = fields.TextField()
-    category = fields.ForeignKeyField('models.ServiceCategory', related_name='shops', index=True)
+    donor1_notify = fields.BooleanField(default=False)
+    donor2_notify = fields.BooleanField(default=False)
+    donor3_notify = fields.BooleanField(default=False)
+    donor4_notify = fields.BooleanField(default=False)
+    donor5_notify = fields.BooleanField(default=False)
+    donor6_notify = fields.BooleanField(default=False)
+    donor7_notify = fields.BooleanField(default=False)
+    donor8_notify = fields.BooleanField(default=False)
 
-    def name(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.name_ru
-        elif user.lang == 'en':
-            return self.name_en
+    donor_1_mentor1 = fields.BooleanField(default=False)
+    donor_1_mentor2 = fields.BooleanField(default=False)
+    donor_1_master = fields.BooleanField(default=False)
 
-    def description(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.description_ru
-        elif user.lang == 'en':
-            return self.description_en
+    donor_2_mentor1 = fields.BooleanField(default=False)
+    donor_2_mentor2 = fields.BooleanField(default=False)
+    donor_2_master = fields.BooleanField(default=False)
 
+    donor_3_mentor1 = fields.BooleanField(default=False)
+    donor_3_mentor2 = fields.BooleanField(default=False)
+    donor_3_master = fields.BooleanField(default=False)
 
-class Service(Model):
-    button_type = 'shop_prod'
-    back_to = 'servicecat'
+    donor_4_mentor1 = fields.BooleanField(default=False)
+    donor_4_mentor2 = fields.BooleanField(default=False)
+    donor_4_master = fields.BooleanField(default=False)
 
-    id = fields.IntField(pk=True)
-    name_ru = fields.CharField(64)
-    name_en = fields.CharField(64)
-    description_ru = fields.CharField(512)
-    description_en = fields.CharField(512)
-    price = fields.IntField()
-    photo = fields.TextField()
-    shop = fields.ForeignKeyField('models.ServiceShop', related_name='products', index=True)
+    donor_5_mentor1 = fields.BooleanField(default=False)
+    donor_5_mentor2 = fields.BooleanField(default=False)
+    donor_5_master = fields.BooleanField(default=False)
 
-    def name(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.name_ru
-        elif user.lang == 'en':
-            return self.name_en
+    donor_6_mentor1 = fields.BooleanField(default=False)
+    donor_6_mentor2 = fields.BooleanField(default=False)
+    donor_6_master = fields.BooleanField(default=False)
 
-    def description(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.description_ru
-        elif user.lang == 'en':
-            return self.description_en
+    donor_7_mentor1 = fields.BooleanField(default=False)
+    donor_7_mentor2 = fields.BooleanField(default=False)
+    donor_7_master = fields.BooleanField(default=False)
 
+    donor_8_mentor1 = fields.BooleanField(default=False)
+    donor_8_mentor2 = fields.BooleanField(default=False)
+    donor_8_master = fields.BooleanField(default=False)
 
-class MealCategory(Model):
-    button_type = 'mealcat'
-    back_to = 'main'
+    async def add_donor(self, user: TelegramUser):
+        for i in range(1, 8):
+            if await getattr(self, f'donor{i}') is None:
+                setattr(self, f'donor{i}', user)
+                await self.save()
 
-    id = fields.IntField(pk=True)
-    name_ru = fields.CharField(64)
-    name_en = fields.CharField(64)
+    async def remove_donor(self, user: TelegramUser):
+        for i in range(1, 8):
+            if await getattr(self, f'donor{i}') == user:
+                setattr(self, f'donor{i}', None)
+                await self.save()
 
-    def name(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.name_ru
-        elif user.lang == 'en':
-            return self.name_en
-
-
-class Restaurant(Model):
-    button_type = 'rest'
-    back_to = 'meal'
-
-    id = fields.IntField(pk=True)
-    name_ = fields.CharField(64)
-    contact = fields.BigIntField(index=True)
-    description_ru = fields.CharField(512)
-    description_en = fields.CharField(512)
-    photo = fields.TextField()
-    start_time = fields.TimeField()
-    end_time = fields.TimeField()
-    min_sum = fields.IntField(default=0)
-    delivery_price = fields.IntField(default=0)
-    category = fields.ForeignKeyField('models.MealCategory', related_name='restaurants', index=True)
-
-    def name(self, _):
-        if self.is_work():
-            prefix = '✅'
-        else:
-            prefix = '🕐'
-        return prefix + self.name_
-
-    def description(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.description_ru
-        elif user.lang == 'en':
-            return self.description_en
-
-    def is_work(self):
-        tz = pytz.timezone('Europe/Moscow')
-        now = datetime.now(tz).time()
-        if self.start_time.replace(tzinfo=tz) <= now.replace(tzinfo=tz) <= self.end_time.replace(tzinfo=tz) or \
-                ((self.start_time.replace(tzinfo=tz) >= self.end_time.replace(tzinfo=tz)) and
-                 self.start_time.replace(tzinfo=tz) <= now.replace(tzinfo=tz)):
-            return True
-        else:
+    def donor_valid(self, donor_num: int):
+        if not (1 <= donor_num <= 8):
             return False
 
+        if self.type == 'start':
+            return getattr(self, f'donor_{donor_num}_master')
 
-class RestaurantCategory(Model):
-    button_type = 'restcat'
-    back_to = 'mealcat'
+        partner_valid = getattr(self, f'donor_{donor_num}_mentor1')
+        mentor_valid = getattr(self, f'donor_{donor_num}_mentor2')
+        master_valid = getattr(self, f'donor_{donor_num}_master')
 
-    id = fields.IntField(pk=True)
-    restaurant = fields.ForeignKeyField('models.Restaurant', related_name='categories', index=True)
-    name_ru = fields.CharField(64)
-    name_en = fields.CharField(64)
+        return partner_valid and mentor_valid and master_valid
 
-    def name(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.name_ru
-        elif user.lang == 'en':
-            return self.name_en
-
-
-class Product(Model):
-    button_type = 'restprod'
-    back_to = 'rest'
-
-    id = fields.IntField(pk=True)
-    name_ru = fields.CharField(64)
-    name_en = fields.CharField(64)
-    description_ru = fields.CharField(512)
-    description_en = fields.CharField(512)
-    price = fields.IntField()
-    category = fields.ForeignKeyField('models.RestaurantCategory', related_name='products', index=True)
-    deals = fields.IntField(default=0)
-
-    def description(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.description_ru
-        elif user.lang == 'en':
-            return self.description_en
-
-    def name(self, user: TelegramUser):
-        if user.lang == 'ru':
-            return self.name_ru
-        elif user.lang == 'en':
-            return self.name_en
-
-
-class Order(Model):
-    id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.Restaurant', related_name='orders', index=True, on_delete='SET NULL',
-                                  null=True)
-    customer = fields.ForeignKeyField('models.TelegramUser', related_name='orders', index=True, on_delete='SET NULL',
-                                      null=True)
-    address = fields.TextField(default='')
-    name = fields.CharField(128, default='')
-    communication = fields.CharField(32, default='Telegram')
-    delivery_time = fields.CharField(64, default='')
-    cart_ = fields.TextField(default=';')
-    active = fields.BooleanField(default=False)
+    async def users(self):
+        users = {
+            'donors': (
+                await self.donor1,
+                await self.donor2,
+                await self.donor3,
+                await self.donor4,
+                await self.donor5,
+                await self.donor6,
+                await self.donor7,
+                await self.donor8,
+            ),
+            'partners': (
+                await self.partner1,
+                await self.partner2,
+                await self.partner3,
+                await self.partner4,
+            ),
+            'mentors': (
+                await self.mentor1,
+                await self.mentor2,
+            ),
+            'master': await self.master
+        }
+        return users
 
     @property
-    def cart(self):
-        return Cart(self)
+    async def is_full(self):
+        if self.type == 'start':
+            if await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4:
+                return True
+            else:
+                return False
+        else:
+            if (await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4 and
+                    await self.donor5 and await self.donor6 and await self.donor7 and await self.donor8):
+                return True
+            else:
+                return False
 
-    async def message(self, rows, order_sum):
-        text = messages.Ru.REST_ORDER_MESSAGE.format(
-            id_=self.id,
-            lang=(await self.customer).lang,
-            name=self.name,
-            communication=self.communication,
-            time=self.delivery_time,
-            address=self.address,
-            rows=rows,
-            delivery=(await self.shop).delivery_price,
-            sum=order_sum
-        )
-        print(text)
-        return text
+    @property
+    async def not_full(self):
+        if self.type == 'start':
+            if not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4:
+                return True
+            else:
+                return False
+        else:
+            if (not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4 or
+                    not await self.donor5 or not await self.donor6 or not await self.donor7 or not await self.donor8):
+                return True
+            else:
+                return False
 
-    async def chat(self, user: TelegramUser, opened=True):
-        messages_ = ''
-        text = user.message.CHAT_MESSAGE if opened else user.message.CHAT_MESSAGE_2
-        for mess in await self.messages:
-            messages_ += MESSAGE.format(
-                time=str(mess.time)[:8],
-                name=mess.name,
-                text=mess.text
-            )
-        text = text.format(
-            id_=self.id,
-            messages=messages_
-        )
-        return text
-
-
-class ServiceOrder(Model):
-    id = fields.IntField(pk=True)
-    shop = fields.ForeignKeyField('models.ServiceShop', related_name='orders', index=True, on_delete='SET NULL',
-                                  null=True)
-    product = fields.ForeignKeyField('models.Service', related_name='orders', index=True, on_delete='SET NULL',
-                                     null=True)
-    customer = fields.ForeignKeyField('models.TelegramUser', related_name='service_orders', index=True,
-                                      on_delete='SET NULL', null=True)
+    def donor_count(self):
+        return len([await getattr(self, f'donor{i}') for i in range(1, 8) if await getattr(self, f'donor{i}')])
 
 
 class Message(Model):
     id = fields.IntField(pk=True)
-    order = fields.ForeignKeyField('models.Order', related_name='messages', index=True)
-    name = fields.CharField(128)
+    name = fields.CharField(64, unique=True, index=True)
     text = fields.TextField()
-    time = fields.TimeField()
+
+    @classmethod
+    async def from_name(cls, name):
+        return (await cls.get_or_none(name=name)).text
+
+
+class Button(Model):
+    id = fields.IntField(pk=True)
+    name = fields.CharField(64, unique=True, index=True)
+    text = fields.CharField(128)
+
+    @classmethod
+    async def from_name(cls, name):
+        return (await cls.get_or_none(name=name)).text
+
+
+class Config(Model):
+    id = fields.IntField(pk=True)
+    support_url = fields.CharField(128)
+    pdf = fields.TextField()
+    about_photo = fields.TextField()
+    channel = fields.CharField(32)
+    chat = fields.CharField(32)
+    keys_system = fields.BooleanField(default=True)
+
+
+class TablePrice(Model):
+    id = fields.IntField(pk=True)
+    start = fields.IntField()
+    wood = fields.IntField()
+    bronze = fields.IntField()
+    silver = fields.IntField()
+    gold = fields.IntField()
+    platinum = fields.IntField()
+    legendary = fields.IntField()
 
 
 class User(Model, UserMixin):
@@ -348,3 +264,7 @@ class Role(Model, RoleMixin):
     id = fields.IntField(pk=True)
     name = fields.CharField(100, unique=True)
     description = fields.CharField(255)
+
+
+get_message = Message.from_name
+get_button = Button.from_name

@@ -1,405 +1,341 @@
+import random
+
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.callback_data import CallbackData
 from tortoise import Model
 
 from data.buttons import *
-from db.models import TelegramUser, MealCategory, Restaurant, RestaurantCategory, Product, ServiceCategory, ServiceShop, \
-    Service
+from data.config import tables_order, TELEGRAM_URL
+from db.models import TelegramUser, Field, get_button, Config, TablePrice
 
 select_callback = CallbackData("main", 'select')
-lang_callback = CallbackData("language", 'lang')
 
 
-def get_main_keyboard(user: TelegramUser):
+async def get_main_keyboard():
     main_keyboard = ReplyKeyboardMarkup(
         [
-            [KeyboardButton(user.button.CART_BUTTON)],
-            [KeyboardButton(user.button.MAIN_MENU_BUTTON), KeyboardButton(user.button.SETTINGS_BUTTON)]
+            [KeyboardButton(await get_button('open')), KeyboardButton(await get_button('about'))],
+            [KeyboardButton(await get_button('pdf')), KeyboardButton(await get_button('status'))],
+            [KeyboardButton(await get_button('reff')), KeyboardButton(await get_button('suppport'))]
         ],
         resize_keyboard=True
     )
     return main_keyboard
 
 
-def get_address_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.OLD_ADDRESS_BUTTON)],
-            [KeyboardButton(user.button.NEW_ADDRESS_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_time_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.FASTER_BUTTON)],
-            [KeyboardButton(user.button.CANCEL_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_area_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.CENTER_BUTTON)],
-            [KeyboardButton(user.button.SOUTH_BUTTON)],
-            [KeyboardButton(user.button.NORTH_BUTTON)],
-            [KeyboardButton(user.button.BIGC_BUTTON)],
-            [KeyboardButton(user.button.CANCEL_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_geo_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.GEO_BUTTON, request_location=True)],
-            [KeyboardButton(user.button.CANCEL_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_ads_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.NO_ADS_BUTTON)],
-            [KeyboardButton(user.button.CANCEL_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_communication_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.TELEGRAM_BUTTON)],
-            [KeyboardButton(user.button.PHONE_BUTTON)],
-            [KeyboardButton(user.button.WHATSAPP_BUTTON)],
-            [KeyboardButton(user.button.CANCEL_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_end_order_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.NEW_ORDER_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_cancel_keyboard(user: TelegramUser):
-    main_keyboard = ReplyKeyboardMarkup(
-        [
-            [KeyboardButton(user.button.CANCEL_BUTTON)]
-        ],
-        resize_keyboard=True
-    )
-    return main_keyboard
-
-
-def get_meal_or_service_keyboard(user: TelegramUser):
+async def get_support_keyboard():
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(text=user.button.MEAL_BUTTON, callback_data=select_callback.new(select='meal')),
-                InlineKeyboardButton(text=user.button.SERVICE_BUTTON, callback_data=select_callback.new(select='service')),
+                InlineKeyboardButton(text=await get_button('support'), url=(await Config.get_or_none(id=1)).support_url)
             ]
         ]
     )
     return keyboard
 
 
-def get_table_buttons(objects, user: TelegramUser):
-    inline_keyboard = []
-    for i in range(0, len(objects), 2):
-        if i != len(objects) - 1:
-            inline_keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        text=objects[i].name(user), callback_data=select_callback.new(
-                            select=objects[i].button_type + '=' + str(objects[i].id)
-                        )
-                    ),
-                    InlineKeyboardButton(
-                        text=objects[i+1].name(user), callback_data=select_callback.new(
-                            select=objects[i+1].button_type + '=' + str(objects[i+1].id)
-                        )
-                    ),
-                ]
-            )
-        else:
-            inline_keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        text=objects[i].name(user), callback_data=select_callback.new(
-                            select=objects[i].button_type + '=' + str(objects[i].id)
-                        )
-                    )
-                ]
-            )
-    return inline_keyboard
-
-
-async def get_top_products(user: TelegramUser):
-    prods = await Product.all().order_by('deals').limit(10)
-    inline_keyboard = get_table_buttons(prods, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select='meal'
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_open_rest_keyboard(user: TelegramUser):
-    rests = await Restaurant.all()
-    rests = [rest for rest in rests if rest.is_work()]
-    inline_keyboard = get_table_buttons(rests, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select='meal'
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_meal_cat_keyboard(user: TelegramUser):
-    cats = await MealCategory.all()
-    inline_keyboard = get_table_buttons(cats, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.TOP_BUTTON, callback_data=select_callback.new(
-                select='top10'
-            )
-        )]
-    )
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.OPEN_NOW_BUTTON, callback_data=select_callback.new(
-                select='open_now'
-            )
-        )]
-    )
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=MealCategory.back_to
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_rest_keyboard(category: MealCategory, user: TelegramUser):
-    rests = await category.restaurants.all()
-    inline_keyboard = get_table_buttons(rests, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=Restaurant.back_to
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_rest_cat_keyboard(rest: Restaurant, user: TelegramUser):
-    cats = await rest.categories.all()
-    meal_cat = await rest.category
-    inline_keyboard = get_table_buttons(cats, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=RestaurantCategory.back_to + '=' + str(meal_cat.id)
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_products_keyboard(category: RestaurantCategory, user: TelegramUser):
-    prods = await category.products.all()
-    rest = await category.restaurant
-    inline_keyboard = get_table_buttons(prods, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=Product.back_to + '=' + str(rest.id)
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_product_keyboard(product: Product, user: TelegramUser):
-    rest_cat = await product.category
-    count = (await user.cart.all()).get(product)
-    if not count:
-        count = 0
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(
-                text=user.button.ADD_BUTTON.format(count=count),
-                callback_data=select_callback.new(
-                    select='add=' + str(product.id)
-                )
-            )],
-            [InlineKeyboardButton(
-                text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                    select='restcat=' + str(rest_cat.id)
-                )
-            )]
-        ]
-    )
-    return keyboard
-
-
-def get_order_keyboard(rest: Restaurant, user: TelegramUser):
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(
-                text=user.button.CONTINUE_ORDER_BUTTON,
-                callback_data=select_callback.new(
-                    select='rest=' + str(rest.id)
-                )
-            )],
-            [InlineKeyboardButton(
-                text=user.button.CLEAR_CART_BUTTON, callback_data=select_callback.new(
-                    select='clear_cart'
-                )
-            )]
-        ]
-    )
-    return keyboard
-
-
-def get_cart_keyboard(rest: Restaurant, sum_,  buttons, user: TelegramUser):
-    inline_keyboard = []
-    for button in buttons:
-        inline_keyboard.append(
-            [InlineKeyboardButton(
-                text=button[0], callback_data=select_callback.new(
-                    select=f'remove={button[1]}')
-            )]
-        )
-    if sum_ < rest.min_sum:
-        text = user.button.MIN_SUM_BUTTON
-        select = 'nothing'
-    elif not rest.is_work():
-        text = user.button.REST_CLOSED_BUTTON
-        select = 'nothing'
-    else:
-        text = user.button.CONFIRM_ORDER_BUTTON
-        select = 'order'
-    inline_keyboard.append(
+def get_captcha_keyboard(result, to, back, field_id=''):
+    inline_keyboard = [
         [
-            InlineKeyboardButton(
-                text=text, callback_data=select_callback.new(select=select)
-            )
-        ]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_service_cat_keyboard(user: TelegramUser):
-    cats = await ServiceCategory.all()
-    inline_keyboard = get_table_buttons(cats, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=ServiceCategory.back_to
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_shops_keyboard(category: ServiceCategory, user: TelegramUser):
-    shops = await category.shops.all()
-    inline_keyboard = get_table_buttons(shops, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=ServiceShop.back_to
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_services_keyboard(shop: ServiceShop, user: TelegramUser):
-    shops = await shop.products.all()
-    inline_keyboard = get_table_buttons(shops, user)
-    inline_keyboard.append(
-        [InlineKeyboardButton(
-            text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                select=Service.back_to + f'={(await shop.category).id}'
-            )
-        )]
-    )
-    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-
-
-async def get_service_keyboard(service: Service, user: TelegramUser):
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(
-                text=user.button.CONFIRM_ORDER_BUTTON,
-                callback_data=select_callback.new(
-                    select='service_order=' + str(service.id)
-                )
-            )],
-            [InlineKeyboardButton(
-                text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                    select='shop=' + str((await service.shop).id)
-                )
-            )]
-        ]
-    )
-    return keyboard
-
-
-def go_main_keyboard(user: TelegramUser):
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(
-                text=user.button.BACK_BUTTON, callback_data=select_callback.new(
-                    select='main'
-                )
-            )]
-        ]
-    )
-    return keyboard
-
-
-lang_keyboard = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text=RU_BUTTON, callback_data=lang_callback.new(lang='ru')),
+            InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
+                select=f'captcha;{to};{back};{field_id}'
+            )),
         ],
         [
-            InlineKeyboardButton(text=EN_BUTTON, callback_data=lang_callback.new(lang='en'))
+            InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
+                select=f'captcha;{to};{back};{field_id}'
+            )),
+        ],
+        [
+            InlineKeyboardButton(await get_button('cancel'), callback_data=select_callback.new(
+                select=back
+            )),
         ]
     ]
-)
+    true_button = InlineKeyboardButton(text=str(result), callback_data=select_callback.new(
+            select=f'to_{field_id}'
+    ))
+    false_button = InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
+            select=f'captcha;{to};{back};{field_id}'
+    ))
 
+    row = random.randint(0, 1)
+    col = random.randint(0, 1)
+
+    inline_keyboard[row - 1].insert(0, false_button)
+
+    if not col:
+        inline_keyboard[row].insert(0, true_button)
+    else:
+        inline_keyboard[row].append(true_button)
+
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
+
+async def get_status_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('channel'), url=(await Config.get_or_none(id=1)).channel),
+                InlineKeyboardButton(text=await get_button('chat'), url=(await Config.get_or_none(id=1)).chat)
+            ]
+        ]
+    )
+    return keyboard
+
+
+async def get_player_keyboard(field: Field, role):
+    me = await get_button('me_emoji')
+    inline_keyboard = [
+        [
+            InlineKeyboardButton(text=await get_button('master') + (me if role == 'master' else ''),
+                                 callback_data=select_callback.new(select=f'field_master_{field.id}')),
+        ],
+        [
+            InlineKeyboardButton(text=await get_button('mentor1' + (me if role == 'mentor1' else '')),
+                                 callback_data=select_callback.new(select=f'field_mentor1_{field.id}')),
+
+            InlineKeyboardButton(text=await get_button('mentor2' + (me if role == 'mentor2' else '')),
+                                 callback_data=select_callback.new(select=f'field_mentor2_{field.id}')),
+
+        ]
+    ]
+    if field.type != 'start':
+        inline_keyboard.append(
+            [
+                InlineKeyboardButton(text=await get_button('partner1' + (me if role == 'partner1' else '')),
+                                     callback_data=select_callback.new(select=f'field_partner1_{field.id}')),
+
+                InlineKeyboardButton(text=await get_button('partner2' + (me if role == 'partner2' else '')),
+                                     callback_data=select_callback.new(select=f'field_partner2_{field.id}')),
+
+            ],
+        )
+        inline_keyboard.append(
+            [
+                InlineKeyboardButton(text=await get_button('partner3' + (me if role == 'partner3' else '')),
+                                     callback_data=select_callback.new(select=f'field_mentor3_{field.id}')),
+
+                InlineKeyboardButton(text=await get_button('partner4' + (me if role == 'partner4' else '')),
+                                     callback_data=select_callback.new(select=f'field_partner4_{field.id}')),
+
+            ],
+        )
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('team_list'),
+                                 callback_data=select_callback.new(select=f'field_team_list_{field.id}')),
+
+        ],
+    )
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('see_donors'),
+                                 callback_data=select_callback.new(select=f'field_donors_{field.id}')),
+
+        ],
+    )
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('back_to_tables'),
+                                 callback_data=select_callback.new(select=f'open')),
+
+        ],
+    )
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
+
+async def donors_keyboard(field: Field, role):
+    inline_keyboard = []
+
+    def valid(i):
+        if getattr(field, f'donor_{i}_{role}'):
+            return '✅'
+        else:
+            return '❌'
+
+    async def donor_text(i):
+        donor = await getattr(field, f'donor{i}')
+        if donor:
+            return donor.username + valid(i)
+        else:
+            return await get_button(f'donor{i}')
+
+    max_donor = 4 if field.type == 'start' else 8
+
+    for i in range(1, max_donor, 2):
+        inline_keyboard.append(
+            [
+                InlineKeyboardButton(text=await donor_text(i),
+                                     callback_data=select_callback.new(select=f'field_donor{i}_{field.id}')),
+                InlineKeyboardButton(text=await donor_text(i),
+                                     callback_data=select_callback.new(select=f'field_donor{i}_{field.id}')),
+            ],
+        )
+
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('donor_list'),
+                                 callback_data=select_callback.new(select=f'field_donor_list_{field.id}')),
+
+        ],
+    )
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('back'),
+                                 callback_data=select_callback.new(select=f'open_{field.id}')),
+
+        ],
+    )
+
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
+
+
+async def get_about_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('tables_info'),
+                                     callback_data=select_callback.new(select='table_info')),
+            ],
+            [
+                InlineKeyboardButton(text=await get_button('donor'),
+                                     callback_data=select_callback.new(select='donor_info')),
+                InlineKeyboardButton(text=await get_button('partner'),
+                                     callback_data=select_callback.new(select='partner_info')),
+
+            ],
+            [
+                InlineKeyboardButton(text=await get_button('mentor'),
+                                     callback_data=select_callback.new(select='mentor_info')),
+                InlineKeyboardButton(text=await get_button('master'),
+                                     callback_data=select_callback.new(select='master_info')),
+
+            ],
+        ]
+    )
+    return keyboard
+
+
+async def back_on_table(field: Field):
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('back'),
+                                     callback_data=select_callback.new(select=f'open_{field.type}')),
+            ],
+        ]
+    )
+    return keyboard
+
+
+async def get_donor_keyboard(field: Field, role):
+    inline_keyboard = [
+        [
+            InlineKeyboardButton(text=await get_button('make_a_gift'),
+                                 callback_data=select_callback.new(select=f'make_gift_{field.id}')),
+        ]
+    ]
+    if not field.donor_valid(int(role[-1])):
+        inline_keyboard.append(
+            [InlineKeyboardButton(text=await get_button('exit'),
+                                  callback_data=select_callback.new(select=f'exit_{field.id}'))]
+        )
+
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('back_to_tables'),
+                                 callback_data=select_callback.new(select=f'open')),
+
+        ],
+    )
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=inline_keyboard
+    )
+    return keyboard
+
+
+async def get_donor_gift_keyboard(field: Field, price):
+    master_un = (await field.master()).username
+    inline_keyboard = [
+        [
+            InlineKeyboardButton(text=(await get_button('gift_master')).format(
+                user=master_un, sum=price
+            ), url=TELEGRAM_URL.format(username=master_un))
+        ]
+    ]
+    if not field.type != 'start':
+        mentor1_un = (await field.mentor1()).username
+        mentor2_un = (await field.mentor2()).username
+
+        inline_keyboard += [
+            [
+                InlineKeyboardButton(text=(await get_button('gift_mentor1')).format(
+                    user=mentor1_un, sum=price//2
+                ), url=TELEGRAM_URL.format(username=mentor1_un))
+            ],
+            [
+                InlineKeyboardButton(text=(await get_button('gift_mentor2')).format(
+                    user=mentor2_un, sum=price//2
+                ), url=TELEGRAM_URL.format(username=mentor2_un))
+            ]
+        ]
+
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('notify_users'),
+                                 callback_data=select_callback.new(select=f'notify_users_{field.id}')),
+
+        ]
+    )
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=inline_keyboard
+    )
+    return keyboard
+
+
+async def get_tables(user: TelegramUser):
+    buttons = []
+    shift = 0
+    if user.max_field != 'start':
+        shift = 1
+    for table in tables_order[shift:]:
+        buttons.append(
+            [
+                InlineKeyboardButton(text=await get_button(f'{table}_name'),
+                                     callback_data=select_callback.new(select=f'open_{table}')),
+            ]
+        )
+        if table == user.max_field:
+            break
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+async def open_field():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('table_info'),
+                                     callback_data=select_callback.new(select='table_info')),
+            ],
+            [
+                InlineKeyboardButton(text=await get_button('donor'),
+                                     callback_data=select_callback.new(select='donor_info')),
+                InlineKeyboardButton(text=await get_button('partner'),
+                                     callback_data=select_callback.new(select='partner_info')),
+
+            ],
+            [
+                InlineKeyboardButton(text=await get_button('mentor'),
+                                     callback_data=select_callback.new(select='mentor_info')),
+                InlineKeyboardButton(text=await get_button('master'),
+                                     callback_data=select_callback.new(select='master_info')),
+
+            ],
+        ]
+    )
+    return keyboard

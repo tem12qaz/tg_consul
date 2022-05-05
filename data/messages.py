@@ -1,181 +1,63 @@
-SELECT_LANG_MESSAGE = 'Choose language/Выберите язык:'
-CART_ROW = '''
-{num} {name} ({category})
-{price} VND x {count} = {sum} VND
-'''
-ORDER_SHOP_MESSAGE = '''
-Order #{id_}
-User @{username}
-Service <b>{name_ru}/{name_en}</b>
-'''
-
-MESSAGE = '''<code>{time}</code> <b>{name}</b>
-{text}
+START_TABLE = '''Стартовый стол ({status})
+Всего дарителей: {count} из 4
 
 '''
 
+WOOD_TABLE = '''Деревянный стол ({status})
+Всего дарителей: {count} из 8
 
-class Ru:
-    BOT_MESSAGE = 'Информация о боте'
-    START_MESSAGE = 'Выберете раздел'
-    SELECT_CATEGORY = 'Выберете категорию'
-    SELECTED_KITCHEN_MESSAGE = '''Выбранная кухня: <b>{name}</b>
-
-Выберите ресторан:'''
-    REST_MESSAGE = '''<b>{name}</b>
-{description}
-Минимальная сумма заказа: {min_price} VND
-Стоимость доставки: {delivery} VND
-Время работы: {time}
-
-Выберите категорию блюда:
 '''
-    SELECT_REST_MESSAGE = 'Выберите ресторан:'
-    PRODUCT_MESSAGE = '''Ресторан: <b>{rest}</b>
 
-<b>{name}</b>
-{description}
-Цена: {price}VND
+BRONZE_TABLE = '''Бронзовый стол ({status})
+Всего дарителей: {count} из 8
+
 '''
-    ORDER_EXISTING_MESSAGE = '''В вашей корзине уже есть заказ. Нажмите Корзина 🛒, чтобы перейти к его оформлению или Очистить корзину 🏃‍♂️, чтобы очистить корзину и начать заказ заново.'''
-    SELECT_DISH_MESSAGE = 'Выбери одно из блюд'
-    CART_MESSAGE = '''{rest}
 
-{rows}
-Итого: <b>{sum}</b> VND
-Доставка: {delivery} VND
+SILVER_TABLE = '''Серебряный стол ({status})
+Всего дарителей: {count} из 8
 
-Нажмите Подтвердить ✅ для подтверждения заказа, а если вы хотите удалить одно из блюд, нажмите ❌'''
-    CART_EMPTY_MESSAGE = 'Ваша корзина пуста. Нажмите кнопку "Главное меню 🏠" в самом низу, чтобы перейти к выбору кухни.'
-    SERVICE_TYPE_MESSAGE = '''<b>{name}</b>
-Выберете тип услуги'''
-    SERVICE_SHOP_MESSAGE = '''<b>{name}</b>
-{description}'''
-    INPUT_ADDRESS_MESSAGE = 'Отправьте свою геолокацию или напишите адрес'
-    USE_OLD_ADDRESS_MESSAGE = 'Использовать данные для доставки, которые были при прошлом заказе?'
-    SELECT_TIME_MESSAGE = 'Укажите время доставки:'
-    SELECT_AREA_MESSAGE = 'Выберите район доставки'
-    ADDRESS_APPS_MESSAGE = 'Дополнения к адресу (название отеля, номер дома и т.д). Дополнения лучше писать на английском языке, если вы заказываете не из ресторана русской кухни'
-    NAME_MESSAGE = 'Как вас зовут?'
-    COMMUNICATION_MESSAGE = 'Укажите, как с вами связаться для подтверждения заказа'
-    PHONE_MESSAGE = 'Пожалуйста, напишите ваш телефонный номер'
-    WHATSAPP_MESSAGE = 'Пожалуйста, напишите номер вашего WhatsApp в международном формате (11 цифр и + в начале)'
-    SERVICE_ORDER_MESSAGE = '''Ваш заказ #{id_} принят и отправлен в обработку! В ближайшее время магазин свяжется с вами для подтверждения.'''
-    ORDER_MESSAGE = '''Ваш заказ #{id_} принят и отправлен в обработку! В ближайшее время ресторан свяжется с вами для подтверждения. Вот состав вашей корзины:
-
-<code>{rows}</code>
-Доставка: {delivery} VND
-Итого: {sum} VND'
-
-Отправьте /chat{id_} для чата с рестораном
 '''
-    REST_ORDER_MESSAGE = '''Order #{id_}:
-    
-Name: {name}
-Language: {lang}
-Communication: {communication}
-Delivery time: {time}
-{address}
 
-<code>{rows}</code>
-Delivery: {delivery} VND
-Total: {sum} VND'
+GOLD_TABLE = '''Золотой стол ({status})
+Всего дарителей: {count} из 8
 
-Send /chat{id_} to chat with user
 '''
-    CHAT_MESSAGE = '''Чат по заказу #{id_}
 
-{messages}
+PLATINUM_TABLE = '''Платиновый стол ({status})
+Всего дарителей: {count} из 8
 
-Отправьте /exit для выхода из чата'''
-
-    CHAT_MESSAGE_2 = '''Чат по заказу #{id_}
-
-{messages}
-
-Отправьте /chat{id_} чтобы ответить'''
-
-
-class En:
-    BOT_MESSAGE = 'Bot info'
-
-    START_MESSAGE = 'Select category'
-    SELECT_CATEGORY = 'Select category'
-    SELECTED_KITCHEN_MESSAGE = '''Selected cuisine: <b>{name}</b>
-
-Choose the restaurant:'''
-    SELECT_REST_MESSAGE = 'Select restaurant:'
-    REST_MESSAGE = '''<b>{name}</b>
-{description}
-Minimal order: {min_price}VND
-Delivery cost: {delivery}VND
-Working hours: {time}
-
-Choose the dish category:
 '''
-    PRODUCT_MESSAGE = '''Restaurant: <b>{rest}</b>
-    
-<b>{name}</b>
-{description}
-Price: {price}VND
+
+LEGENDARY_TABLE = '''Легендарныф стол ({status})
+Всего дарителей: {count} из 8
+
 '''
-    ORDER_EXISTING_MESSAGE = '''There is already an order in your cart. Press Cart 🛒 to proceed to checkout or press Remove order 🏃‍♂️ to remove order'''
-    SELECT_DISH_MESSAGE = 'Select one of top dishes'
-    CART_MESSAGE = '''{rest}
 
-{rows}
 
-Subtotal: <b>{sum}</b> VND
-Delivery cost: {delivery} VND
+tables_text = {
+    'start': START_TABLE,
+    'wood': WOOD_TABLE,
+    'bronze': BRONZE_TABLE,
+    'silver': SILVER_TABLE,
+    'gold': GOLD_TABLE,
+    'platinum': PLATINUM_TABLE,
+    'legendary': LEGENDARY_TABLE
+}
 
-Press Confirm your order ✅ to continue or ❌ to remove one of the dishes'''
-    CART_EMPTY_MESSAGE = 'Your cart is empty. Please press "Home 🏠" button to make an order'
-    SERVICE_TYPE_MESSAGE = '''<b>{name}</b>
-Select service type'''
-    SERVICE_SHOP_MESSAGE = '''<b>{name}</b>
-{description}'''
-    INPUT_ADDRESS_MESSAGE = 'Send your location or shipping address'
-    USE_OLD_ADDRESS_MESSAGE = 'Should I use the delivery data that was with the previous order?'
-    SELECT_TIME_MESSAGE = 'Delivery time:'
-    SELECT_AREA_MESSAGE = 'Select delivery area'
-    ADDRESS_APPS_MESSAGE = 'Additional information about your address if you have (hotel name, number of your house, etc)'
-    NAME_MESSAGE = 'Please send you name'
-    COMMUNICATION_MESSAGE = 'How to contact you to confirm the order'
-    PHONE_MESSAGE = 'Enter your phone number'
-    WHATSAPP_MESSAGE = 'Enter your WhatsApp number in international format with plus in front of number'
-    SERVICE_ORDER_MESSAGE = '''We got your order #{id_}.
-The shop will contact you shortly to confirm it.'''
-    ORDER_MESSAGE = '''We got your order #{id_}.
-The restaurant will contact you shortly to confirm it. :
-
-<code>{rows}</code>
-Delivery: {delivery} VND
-Total payable: {sum} VND
-
-Send /chat{id_} to chat with the restaurant
-'''
-    REST_ORDER_MESSAGE = '''Order #{id_}:
-
-    Username: @{username}
-    Name: {name}
-    Communication: {communication}
-    Delivery time: {time}
-    Address: {address}
-
-    <code>{rows}</code>
-    Delivery: {delivery} VND
-    Total: {sum} VND'
-
-    Send /chat{id_} to chat with the restaurant
-'''
-    CHAT_MESSAGE = '''Chat Order #{id_}
-
-{messages}
-
-Send /exit to leave the chat
-'''
-    CHAT_MESSAGE_2 = '''Chat Order #{id_}
-
-    {messages}
-
-    Send /chat{id_} to chat'''
+roles_en_ru = {
+    'donor1': 'Даритель 1',
+    'donor2': 'Даритель 2',
+    'donor3': 'Даритель 3',
+    'donor4': 'Даритель 4',
+    'donor5': 'Даритель 5',
+    'donor6': 'Даритель 6',
+    'donor7': 'Даритель 7',
+    'donor8': 'Даритель 8',
+    'partner1': 'Партнер 1',
+    'partner2': 'Партнер 2',
+    'partner3': 'Партнер 3',
+    'partner4': 'Партнер 4',
+    'mentor1': 'Ментор 1',
+    'mentor2': 'Ментор 2',
+    'master': 'Мастер',
+}
