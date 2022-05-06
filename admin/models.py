@@ -77,137 +77,49 @@ class Table(db.Model):
         return 'id' + str(self.id) + ' ' + self.name_ru
 
 
-class ServiceShop(db.Model):
-    __tablename__ = 'serviceshop'
-    id = db.Column(db.Integer(), primary_key=True)
-    name_ru = db.Column(db.String(64))
-    name_en = db.Column(db.String(64))
-    description_ru = db.Column(db.String(512))
-    description_en = db.Column(db.String(512))
-    contact = db.Column(db.BigInteger())
-    photo = db.Column(db.String)
-    products = db.relationship('Service', backref='shop', lazy=True, cascade='all,delete')
-    orders = db.relationship('ServiceOrder', backref='shop', lazy=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('servicecategory.id'))
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name_ru
-
-
-class Service(db.Model):
-    __tablename__ = 'service'
-    id = db.Column(db.Integer(), primary_key=True)
-    name_ru = db.Column(db.String(64))
-    name_en = db.Column(db.String(64))
-    description_ru = db.Column(db.String(512))
-    description_en = db.Column(db.String(512))
-    photo = db.Column(db.String)
-    price = db.Column(db.Integer())
-    orders = db.relationship('ServiceOrder', backref='product', lazy=True)
-    shop_id = db.Column(db.Integer, db.ForeignKey('serviceshop.id'))
-
-
-class MealCategory(db.Model):
-    __tablename__ = 'mealcategory'
-    id = db.Column(db.Integer(), primary_key=True)
-    name_ru = db.Column(db.String(64))
-    name_en = db.Column(db.String(64))
-    restaurants = db.relationship('Restaurant', backref='category', lazy=True, cascade='all,delete')
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name_ru
-
-
-class Restaurant(db.Model):
-    __tablename__ = 'restaurant'
-    id = db.Column(db.Integer(), primary_key=True)
-    name_ = db.Column(db.String(64))
-    description_ru = db.Column(db.String(512))
-    description_en = db.Column(db.String(512))
-    contact = db.Column(db.BigInteger())
-    photo = db.Column(db.String(64))
-    start_time = db.Column(db.Time(timezone=tz))
-    end_time = db.Column(db.Time(timezone=tz))
-    min_sum = db.Column(db.Integer())
-    delivery_price = db.Column(db.Integer())
-    categories = db.relationship('RestaurantCategory', backref='restaurant', lazy=True, cascade='all,delete')
-    orders = db.relationship('Order', backref='restaurant', lazy=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('mealcategory.id'))
-
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name_
-
-
-class RestaurantCategory(db.Model):
-    __tablename__ = 'restaurantcategory'
-    id = db.Column(db.Integer(), primary_key=True)
-    name_ru = db.Column(db.String(64))
-    name_en = db.Column(db.String(64))
-    products = db.relationship('Product', backref='category', lazy=True, cascade='all,delete')
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
-
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name_ru
-
-
-class Order(db.Model):
-    __tablename__ = 'order'
-    id = db.Column(db.Integer(), primary_key=True)
-    address = db.Column(db.Text())
-    name = db.Column(db.String(128))
-    communication = db.Column(db.String(32))
-    delivery_time = db.Column(db.String(64))
-    active = db.Column(db.Boolean())
-    messages = db.relationship('Message', backref='order', lazy=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    shop_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
-
-    def __chat__(self):
-        messages_ = ''
-        for mess in self.messages:
-            messages_ += MESSAGE.format(
-                time=str(mess.time)[:8],
-                name=mess.name,
-                text=mess.text
-            )
-        text = CHAT_MESSAGE.format(
-            id_=self.id,
-            messages=messages_
-        )
-        return text
-
-
-class ServiceOrder(db.Model):
-    __tablename__ = 'serviceorder'
-    id = db.Column(db.Integer(), primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('service.id'))
-    shop_id = db.Column(db.Integer, db.ForeignKey('serviceshop.id'))
-
-
 class Message(db.Model):
     __tablename__ = 'message'
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(128))
+    name = db.Column(db.String(64))
     text = db.Column(db.Text())
-    time = db.Column(db.Time(timezone=tz))
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
+
+    def __repr__(self):
+        return 'id' + str(self.id) + ' ' + self.name
 
 
-class Product(db.Model):
-    __tablename__ = 'product'
+class Button(db.Model):
+    __tablename__ = 'button'
     id = db.Column(db.Integer(), primary_key=True)
-    name_ru = db.Column(db.String(64))
-    name_en = db.Column(db.String(64))
-    description_ru = db.Column(db.String(512))
-    description_en = db.Column(db.String(512))
-    price = db.Column(db.Integer())
-    deals = db.Column(db.Integer(), default=0)
-    category_id = db.Column(db.Integer, db.ForeignKey('restaurantcategory.id'))
+    name = db.Column(db.String(64))
+    text = db.Column(db.String(128))
 
+    def __repr__(self):
+        return 'id' + str(self.id) + ' ' + self.name
+
+
+class TablePrice(db.Model):
+    __tablename__ = 'tableprice'
+    id = db.Column(db.Integer(), primary_key=True)
+    start = db.Column(db.Integer())
+    wood = db.Column(db.Integer())
+    bronze = db.Column(db.Integer())
+    silver = db.Column(db.Integer())
+    gold = db.Column(db.Integer())
+    platinum = db.Column(db.Integer())
+    legendary = db.Column(db.Integer())
+
+
+class Config(db.Model):
+    __tablename__ = 'config'
+    id = db.Column(db.Integer(), primary_key=True)
+    support_url = db.Column(db.String(128))
+    pdf = db.Column(db.String(128))
+    about_photo = db.Column(db.String(128))
+    channel = db.Column(db.String(128))
+    chat = db.Column(db.String(128))
+    keys_system = db.Column(db.String(128))
+    delete_time = db.Column(db.Integer())
+    block_time = db.Column(db.Integer())
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
-
