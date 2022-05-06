@@ -377,7 +377,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
 
                     if field.donor_valid(donor_num):
-                        if await field.is_full:
+                        if await field.is_full():
                             max_donor = 9
                             if field.type == 'start':
                                 max_donor = 5

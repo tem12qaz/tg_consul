@@ -198,7 +198,7 @@ class Table(Model):
         }
         return users
 
-    @property
+    # @property
     async def is_full(self):
         if self.type == 'start':
             if await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4:
@@ -212,7 +212,7 @@ class Table(Model):
             else:
                 return False
 
-    @property
+    # @property
     async def not_full(self):
         if self.type == 'start':
             if not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4:
