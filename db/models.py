@@ -1,3 +1,5 @@
+import time
+
 from tortoise.models import Model
 from tortoise import fields
 from flask_security import UserMixin, RoleMixin
@@ -12,6 +14,14 @@ class TelegramUser(Model):
     active = fields.BooleanField(default=False)
     inviter = fields.ForeignKeyField('models.TelegramUser', related_name='referrals', index=True, null=True)
     referral_url = fields.CharField(32, null=True)
+
+    start_block = fields.IntField(null=True)
+    wood_block = fields.IntField(null=True)
+    bronze_block = fields.IntField(null=True)
+    silver_block = fields.IntField(null=True)
+    gold_block = fields.IntField(null=True)
+    platinum_block = fields.IntField(null=True)
+    legendary_block = fields.IntField(null=True)
 
     wood_key = fields.SmallIntField(default=0)
     bronze_key = fields.SmallIntField(default=0)
@@ -63,7 +73,7 @@ class TelegramUser(Model):
         return games
 
 
-class Field(Model):
+class Table(Model):
     id = fields.IntField(pk=True)
     type = fields.CharField(32, default='start', index=True)
     donor1 = fields.OneToOneField('models.TelegramUser', related_name='game_donor1', null=True)
@@ -80,10 +90,18 @@ class Field(Model):
     partner3 = fields.OneToOneField('models.TelegramUser', related_name='game_partner3', null=True)
     partner4 = fields.OneToOneField('models.TelegramUser', related_name='game_partner4', null=True)
 
-    mentor1 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor1')
-    mentor2 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor2')
+    mentor1 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor1', null=True)
+    mentor2 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor2', null=True)
 
-    master = fields.OneToOneField('models.TelegramUser', related_name='game_master')
+    master = fields.OneToOneField('models.TelegramUser', related_name='game_master', null=True)
+
+    donor1_time = fields.IntField(null=True, index=True)
+    donor2_time = fields.IntField(null=True, index=True)
+    donor3_time = fields.IntField(null=True, index=True)
+    donor5_time = fields.IntField(null=True, index=True)
+    donor6_time = fields.IntField(null=True, index=True)
+    donor7_time = fields.IntField(null=True, index=True)
+    donor8_time = fields.IntField(null=True, index=True)
 
     donor1_notify = fields.BooleanField(default=False)
     donor2_notify = fields.BooleanField(default=False)
@@ -130,6 +148,10 @@ class Field(Model):
         for i in range(1, 8):
             if await getattr(self, f'donor{i}') is None:
                 setattr(self, f'donor{i}', user)
+                shift = (await Config.get(id=1)).delete_time * 3600
+                block_time = time.time() + shift
+                setattr(self, f'donor{i}', user)
+                setattr(self, f'donor{i}_time', block_time)
                 await self.save()
 
     async def remove_donor(self, user: TelegramUser):
@@ -151,7 +173,7 @@ class Field(Model):
 
         return partner_valid and mentor_valid and master_valid
 
-    async def users(self):
+    async def users(self, list_=False):
         users = {
             'donors': (
                 await self.donor1,
@@ -173,7 +195,7 @@ class Field(Model):
                 await self.mentor1,
                 await self.mentor2,
             ),
-            'master': await self.master
+            'master': [await self.master] if list_ else await self.master
         }
         return users
 
@@ -237,6 +259,8 @@ class Config(Model):
     channel = fields.CharField(32)
     chat = fields.CharField(32)
     keys_system = fields.BooleanField(default=True)
+    delete_time = fields.IntField()
+    block_time = fields.IntField()
 
 
 class TablePrice(Model):

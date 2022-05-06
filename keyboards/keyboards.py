@@ -7,7 +7,7 @@ from tortoise import Model
 
 from data.buttons import *
 from data.config import tables_order, TELEGRAM_URL
-from db.models import TelegramUser, Field, get_button, Config, TablePrice
+from db.models import TelegramUser, Table, get_button, Config, TablePrice
 
 select_callback = CallbackData("main", 'select')
 
@@ -39,12 +39,12 @@ def get_captcha_keyboard(result, to, back, field_id=''):
     inline_keyboard = [
         [
             InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
-                select=f'captcha;{to};{back};{field_id}'
+                select=f'captcha.{to}.{back}.{field_id}'
             )),
         ],
         [
             InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
-                select=f'captcha;{to};{back};{field_id}'
+                select=f'captcha.{to}.{back}.{field_id}'
             )),
         ],
         [
@@ -54,10 +54,10 @@ def get_captcha_keyboard(result, to, back, field_id=''):
         ]
     ]
     true_button = InlineKeyboardButton(text=str(result), callback_data=select_callback.new(
-            select=f'to_{field_id}'
+            select=f'{to}_{field_id}'
     ))
     false_button = InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
-            select=f'captcha;{to};{back};{field_id}'
+            select=f'captcha.{to}.{back}.{field_id}'
     ))
 
     row = random.randint(0, 1)
@@ -85,7 +85,23 @@ async def get_status_keyboard():
     return keyboard
 
 
-async def get_player_keyboard(field: Field, role):
+def get_user_keyboard(field, user):
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('send_message'),
+                                    url=TELEGRAM_URL.format(username=user.username)),
+            ],
+            [
+                InlineKeyboardButton(text=await get_button('back'),
+                                     callback_data=select_callback.new(select=f'open_{field.type}')),
+            ],
+        ]
+    )
+    return keyboard
+
+
+async def get_player_keyboard(field: Table, role):
     me = await get_button('me_emoji')
     inline_keyboard = [
         [
@@ -146,7 +162,7 @@ async def get_player_keyboard(field: Field, role):
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
-async def donors_keyboard(field: Field, role):
+async def donors_keyboard(field: Table, role):
     inline_keyboard = []
 
     def valid(i):
@@ -168,9 +184,9 @@ async def donors_keyboard(field: Field, role):
         inline_keyboard.append(
             [
                 InlineKeyboardButton(text=await donor_text(i),
-                                     callback_data=select_callback.new(select=f'field_donor{i}_{field.id}')),
+                                     callback_data=select_callback.new(select=f'field_donor_{i}_{field.id}')),
                 InlineKeyboardButton(text=await donor_text(i),
-                                     callback_data=select_callback.new(select=f'field_donor{i}_{field.id}')),
+                                     callback_data=select_callback.new(select=f'field_donor_{i}_{field.id}')),
             ],
         )
 
@@ -191,6 +207,40 @@ async def donors_keyboard(field: Field, role):
 
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
+
+async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
+    inline_keyboard = [
+        [
+            InlineKeyboardButton(text=await get_button('send_message'),
+                                 url=TELEGRAM_URL.format(username=donor.username)),
+        ],
+        [
+            InlineKeyboardButton(text=await get_button('back'),
+                                 callback_data=select_callback.new(select=f'open_{field.type}')),
+        ]
+    ]
+    if not valid:
+        if role == 'master' and not (
+                getattr(field, f'donor_{donor_num}_mentor1') or
+                getattr(field, f'donor_{donor_num}_mentor1')):
+            inline_keyboard.insert(
+                0,
+                [
+                    InlineKeyboardButton(text=await get_button('delete_donor'),
+                                         callback_data=select_callback.new(
+                                             select=f'captcha.field_delete_{donor_num}.open_{field.type}.{field.id}')
+                                         ),
+                ]
+            )
+        inline_keyboard.insert(
+            0,
+            [
+                InlineKeyboardButton(text=await get_button('valid_donor'),
+                                     callback_data=select_callback.new(
+                                         select=f'captcha.field_valid_{donor_num}.open_{field.type}.{field.id}')
+                                     ),
+            ]
+        )
 
 
 async def get_about_keyboard():
@@ -219,7 +269,7 @@ async def get_about_keyboard():
     return keyboard
 
 
-async def back_on_table(field: Field):
+async def back_on_table(field: Table):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
@@ -231,7 +281,7 @@ async def back_on_table(field: Field):
     return keyboard
 
 
-async def get_donor_keyboard(field: Field, role):
+async def get_donor_keyboard(field: Table, role):
     inline_keyboard = [
         [
             InlineKeyboardButton(text=await get_button('make_a_gift'),
@@ -258,7 +308,7 @@ async def get_donor_keyboard(field: Field, role):
     return keyboard
 
 
-async def get_donor_gift_keyboard(field: Field, price):
+async def get_donor_gift_keyboard(field: Table, price):
     master_un = (await field.master()).username
     inline_keyboard = [
         [

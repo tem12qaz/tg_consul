@@ -8,12 +8,6 @@ roles_users = db.Table('roles_users',
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
                        )
 
-MESSAGE = '''<code>{time}</code> <b>{name}</b> {text}<br>'''
-CHAT_MESSAGE = '''Chat  Order #{id_}
-<br>
-{messages}
-'''
-
 tz = pytz.timezone('Europe/Moscow')
 
 
@@ -36,16 +30,48 @@ class TelegramUser(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     telegram_id = db.Column(db.BigInteger())
     username = db.Column(db.String(128))
-    orders = db.relationship('Order', backref='customer', lazy=True)
-    service_orders = db.relationship('ServiceOrder', backref='customer', lazy=True)
+    donor1_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor2_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor3_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor4_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor5_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor6_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor7_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    donor8_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+    partner1_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    partner2_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    partner3_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    partner4_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+    mentor1_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    mentor2_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+
+    mentor_id = db.Column(db.Integer, db.ForeignKey('table.id'))
 
 
-class ServiceCategory(db.Model):
-    __tablename__ = 'servicecategory'
+class Table(db.Model):
+    __tablename__ = 'table'
     id = db.Column(db.Integer(), primary_key=True)
-    name_ru = db.Column(db.String(64))
-    name_en = db.Column(db.String(64))
-    shops = db.relationship('ServiceShop', backref='category', lazy=True, cascade='all,delete')
+    type = db.Column(db.String(32))
+    donor1 = db.relationship("TelegramUser", uselist=False, backref="game_donor1")
+    donor2 = db.relationship("TelegramUser", uselist=False, backref="game_donor2")
+    donor3 = db.relationship("TelegramUser", uselist=False, backref="game_donor3")
+    donor4 = db.relationship("TelegramUser", uselist=False, backref="game_donor4")
+    donor5 = db.relationship("TelegramUser", uselist=False, backref="game_donor5")
+    donor6 = db.relationship("TelegramUser", uselist=False, backref="game_donor6")
+    donor7 = db.relationship("TelegramUser", uselist=False, backref="game_donor7")
+    donor8 = db.relationship("TelegramUser", uselist=False, backref="game_donor8")
+
+    partner1 = db.relationship("TelegramUser", uselist=False, backref="game_partner1")
+    partner2 = db.relationship("TelegramUser", uselist=False, backref="game_partner2")
+    partner3 = db.relationship("TelegramUser", uselist=False, backref="game_partner3")
+    partner4 = db.relationship("TelegramUser", uselist=False, backref="game_partner4")
+
+    mentor1 = db.relationship("TelegramUser", uselist=False, backref="game_mentor1")
+    mentor2 = db.relationship("TelegramUser", uselist=False, backref="game_mentor2")
+
+    master = db.relationship("TelegramUser", uselist=False, backref="game_master")
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
