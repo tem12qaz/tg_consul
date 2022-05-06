@@ -1,7 +1,7 @@
 PG_HOST = 'localhost'
 PG_PASSWORD = 'pass'
 PG_USER = 'myuser'
-PG_DATABASE = 'meal_db'
+PG_DATABASE = 'db'
 database_uri = f'postgres://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DATABASE}'
 
 BOT_TOKEN = '1671620851:AAFJCnwlJXzMHyyc-E-mQ9ivXYpL9JVtwYU'

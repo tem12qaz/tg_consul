@@ -10,7 +10,6 @@ class TelegramUser(Model):
     telegram_id = fields.BigIntField(unique=True, index=True)
     username = fields.CharField(128, unique=True, null=True)
     state = fields.CharField(64, default='')
-    max_field = fields.CharField(32, default='start')
     active = fields.BooleanField(default=False)
     inviter = fields.ForeignKeyField('models.TelegramUser', related_name='referrals', index=True, null=True)
     referral_url = fields.CharField(32, null=True)

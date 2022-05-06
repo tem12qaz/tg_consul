@@ -13,8 +13,6 @@ from jinja2 import Markup
 from werkzeug.utils import secure_filename
 from wtforms import ValidationError
 
-import modal
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 file_path = os.path.join(basedir, 'files')
 
@@ -27,62 +25,37 @@ class AdminMixin:
         return redirect(url_for('security.login', next=request.url))
 
 
-class PhotoFormatter:
-    def name_gen(obj, file_data):
-        parts = op.splitext(file_data.filename)
-        return secure_filename(f'file-{time.time()}%s%s' % parts)
-
-    def picture_validation(form, field):
-        if field.data:
-            filename = field.data.filename
-            if filename[-4:] != '.jpg' and filename[-4:] != '.png':
-                raise ValidationError('file must be .jpg or .png')
-        data = field.data.stream.read()
-        field.data = data
-        return True
-
-    # @staticmethod
-    def picture_formatter(view, context, model, name):
-        return '' if not getattr(model, name) else 'a picture'
-
-    # column_formatters = dict(photo=picture_formatter)
-    # form_overrides = dict(photo=FileUploadField)
-    # form_args = dict(photo=dict(validators=[picture_validation]))
-
-    def _list_thumbnail(view, context, model, name):
-        if not model.photo:
-            return ''
-
-        return Markup(
-            '<img src="%s">' %
-            url_for('static',
-                    filename=form.thumbgen_filename(model.photo))
-        )
-
-    column_formatters = {
-        'photo': _list_thumbnail
-    }
-
-    form_extra_fields = {
-        'photo': ImageUploadField(
-            'photo', base_path=file_path, thumbnail_size=(100, 100, True), namegen=name_gen)
-    }
-
-
 class HomeAdminView(AdminMixin, AdminIndexView):
     @expose('/')
     def index(self):
         return self.render('admin_home.html')
 
 
-class ServiceCategoryView(AdminMixin, ModelView):
-    column_list = ('id', 'name_ru', 'name_en', 'shops')
-    form_columns = ('name_ru', 'name_en', 'shops')
+class TelegramUserView(AdminMixin, ModelView):
+    column_list = ('id', 'telegram_id', 'username', 'max_field')
+    form_columns = ('telegram_id', 'username', 'max_field')
 
 
-class ServiceShopView(AdminMixin, ModelView, PhotoFormatter):
-    column_list = ('id', 'name_ru', 'name_en', 'description_ru', 'description_en', 'contact', 'photo', 'category')
-    form_columns = ('name_ru', 'name_en', 'description_ru', 'description_en', 'contact', 'photo', 'category')
+class MessageView(AdminMixin, ModelView):
+    column_list = ('id', 'name', 'text')
+    form_columns = ('name', 'text')
+
+
+class ButtonView(AdminMixin, ModelView):
+    column_list = ('id', 'name', 'text')
+    form_columns = ('name', 'text')
+
+
+class TablePrice(AdminMixin, ModelView):
+    column_list = ('id', 'start', 'wood', 'bronze', 'silver', 'gold', 'platinum', 'legendary')
+    form_columns = ('start', 'wood', 'bronze', 'silver', 'gold', 'platinum', 'legendary')
+
+
+class ServiceShopView(AdminMixin, ModelView):
+    column_list = ('id', 'support_url', 'pdf', 'about_photo', 'channel',
+                   'chat', 'keys_system', 'delete_time', 'block_time')
+    form_columns = ('support_url', 'pdf', 'about_photo', 'channel',
+                    'chat', 'keys_system', 'delete_time', 'block_time')
 
     def name_gen(obj, file_data):
         parts = op.splitext(file_data.filename)
@@ -116,12 +89,12 @@ class ServiceShopView(AdminMixin, ModelView, PhotoFormatter):
         )
 
     column_formatters = {
-        'photo': _list_thumbnail
+        'about_photo': _list_thumbnail
     }
 
     form_extra_fields = {
-        'photo': ImageUploadField(
-            'photo', base_path=file_path, thumbnail_size=(100, 100, True), namegen=name_gen)
+        'about_photo': ImageUploadField(
+            'about_photo', base_path=file_path, thumbnail_size=(100, 100, True), namegen=name_gen)
     }
 
 
@@ -170,97 +143,13 @@ class ServiceView(AdminMixin, ModelView):
     }
 
 
-class MealCategoryView(AdminMixin, ModelView):
-    column_list = ('id', 'name_ru', 'name_en', 'restaurants')
-    form_columns = ('name_ru', 'name_en', 'restaurants')
-
-
-class RestaurantView(AdminMixin, ModelView, PhotoFormatter):
-    column_list = (
-        'id', 'name_', 'description_ru', 'description_en', 'contact', 'photo',
-        'start_time', 'end_time', 'min_sum', 'delivery_price', 'category'
-    )
-    form_columns = (
-        'name_', 'description_ru', 'description_en', 'contact', 'photo',
-        'start_time', 'end_time', 'min_sum', 'delivery_price', 'category'
-    )
-
-    def name_gen(obj, file_data):
-        parts = op.splitext(file_data.filename)
-        return secure_filename(f'file-{time.time()}%s%s' % parts)
-
-    def picture_validation(form, field):
-        if field.data:
-            filename = field.data.filename
-            if filename[-4:] != '.jpg' and filename[-4:] != '.png':
-                raise ValidationError('file must be .jpg or .png')
-        data = field.data.stream.read()
-        field.data = data
-        return True
-
-    # @staticmethod
-    def picture_formatter(view, context, model, name):
-        return '' if not getattr(model, name) else 'a picture'
-
-    # column_formatters = dict(photo=picture_formatter)
-    # form_overrides = dict(photo=FileUploadField)
-    # form_args = dict(photo=dict(validators=[picture_validation]))
-
-    def _list_thumbnail(view, context, model, name):
-        if not model.photo:
-            return ''
-
-        return Markup(
-            '<img src="%s">' %
-            url_for('static',
-                    filename=form.thumbgen_filename(model.photo))
-        )
-
-    column_formatters = {
-        'photo': _list_thumbnail
-    }
-
-    form_extra_fields = {
-        'photo': ImageUploadField(
-            'photo', base_path=file_path, thumbnail_size=(100, 100, True), namegen=name_gen)
-    }
-
-
-class RestaurantCategoryView(AdminMixin, ModelView):
-    column_list = ('id', 'name_ru', 'name_en', 'restaurant')
-    form_columns = ('name_ru', 'name_en', 'restaurant')
-
-
-class ProductView(AdminMixin, ModelView):
-    column_list = ('id', 'name_ru', 'name_en', 'description_ru', 'description_en', 'price', 'category')
-    form_columns = ('name_ru', 'name_en', 'description_ru', 'description_en', 'price', 'category')
-
-
-class OrderView(AdminMixin, ModelView, PhotoFormatter):
-    column_list = (
-        'id', 'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'messages'
-    )
-    form_columns = (
-        'address', 'name', 'communication', 'delivery_time', 'active', 'restaurant', 'customer', 'messages'
-    )
-
-    def chat_button(view, context, model, name):
-        return Markup(
-            modal.html.replace('to_replace', model.__chat__()).replace('id_replace', str(model.id))
-        )
-
-    column_formatters = {
-        'messages': chat_button
-    }
-
-
-class ServiceOrderView(AdminMixin, ModelView, PhotoFormatter):
-    column_list = (
-        'id', 'shop', 'customer', 'product'
-    )
-    form_columns = (
-        'shop', 'customer', 'product'
-    )
+class TableView(AdminMixin, ModelView):
+    column_list = ('id', 'donor1', 'donor2', 'donor3', 'donor4', 'donor5',
+                   'donor6', 'donor7', 'donor8', 'partner1', 'partner2'
+                                                             'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
+    form_columns = ('donor1', 'donor2', 'donor3', 'donor4', 'donor5',
+                    'donor6', 'donor7', 'donor8', 'partner1', 'partner2'
+                                                              'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
 
 
 class LogoutView(AdminMixin, BaseView):
