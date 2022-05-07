@@ -15,22 +15,18 @@ migrate = Migrate(app, db, directory=MIGRATION_DIR)
 
 
 # FLASK-ADMIN
-from models import User, Role, ServiceShop, ServiceCategory, MealCategory, Service, Restaurant, RestaurantCategory, \
-    Product, Order, ServiceOrder
-from views import HomeAdminView, ServiceCategoryView, LogoutView, ServiceShopView, ServiceView, MealCategoryView, \
-    RestaurantView, RestaurantCategoryView, ProductView, ServiceOrderView, OrderView
+from models import User, Role, TelegramUser, Table, Config, Message, Button, TablePrice
+from views import HomeAdminView, LogoutView, TelegramUserView, TableView, ButtonView, MessageView, \
+    TablePriceView, ConfigView
 
 admin = Admin(app, 'TGbot', url='/admin', index_view=HomeAdminView())
 
-admin.add_view(ServiceCategoryView(ServiceCategory, db.session))
-admin.add_view(ServiceShopView(ServiceShop, db.session))
-admin.add_view(ServiceView(Service, db.session))
-admin.add_view(MealCategoryView(MealCategory, db.session))
-admin.add_view(RestaurantView(Restaurant, db.session))
-admin.add_view(RestaurantCategoryView(RestaurantCategory, db.session))
-admin.add_view(ProductView(Product, db.session))
-admin.add_view(OrderView(Order, db.session))
-admin.add_view(ServiceOrderView(ServiceOrder, db.session))
+admin.add_view(TelegramUserView(TelegramUser, db.session))
+admin.add_view(TableView(Table, db.session))
+admin.add_view(ConfigView(Config, db.session))
+admin.add_view(TablePriceView(TablePrice, db.session))
+admin.add_view(MessageView(Message, db.session))
+admin.add_view(ButtonView(Button, db.session))
 
 admin.add_view(LogoutView(name='Logout', endpoint='admin/logout_redirect'))
 

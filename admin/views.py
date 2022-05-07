@@ -46,12 +46,12 @@ class ButtonView(AdminMixin, ModelView):
     form_columns = ('name', 'text')
 
 
-class TablePrice(AdminMixin, ModelView):
+class TablePriceView(AdminMixin, ModelView):
     column_list = ('id', 'start', 'wood', 'bronze', 'silver', 'gold', 'platinum', 'legendary')
     form_columns = ('start', 'wood', 'bronze', 'silver', 'gold', 'platinum', 'legendary')
 
 
-class ServiceShopView(AdminMixin, ModelView):
+class ConfigView(AdminMixin, ModelView):
     column_list = ('id', 'support_url', 'pdf', 'about_photo', 'channel',
                    'chat', 'keys_system', 'delete_time', 'block_time')
     form_columns = ('support_url', 'pdf', 'about_photo', 'channel',
