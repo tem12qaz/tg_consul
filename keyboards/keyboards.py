@@ -333,8 +333,8 @@ async def get_donor_gift_keyboard(field: Table, price):
         ]
     ]
     if not field.type != 'start':
-        mentor1_un = (await field.mentor1()).username
-        mentor2_un = (await field.mentor2()).username
+        mentor1_un = (await field.mentor1).username
+        mentor2_un = (await field.mentor2).username
 
         inline_keyboard += [
             [
