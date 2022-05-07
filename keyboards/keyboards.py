@@ -181,10 +181,13 @@ async def donors_keyboard(field: Table, role):
     inline_keyboard = []
 
     def valid(i):
-        if getattr(field, f'donor_{i}_{role}'):
-            return '✅'
+        if 'master' in role or ('mentor' in role and field.type != 'start'):
+            if getattr(field, f'donor_{i}_{role}'):
+                return '✅'
+            else:
+                return '❌'
         else:
-            return '❌'
+            return ''
 
     async def donor_text(i):
         donor = await getattr(field, f'donor{i}')
