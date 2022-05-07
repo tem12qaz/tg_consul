@@ -322,7 +322,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 reply_markup=await back_on_table(field)
             )
 
-        elif 'see_donors' in select:
+        elif 'field_donors' in select:
             await callback.message.edit_reply_markup(
                 reply_markup=await donors_keyboard(field, role)
             )
@@ -535,17 +535,18 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
         else:
             users = await field.users()
+            num = select.split('_')[1][-1]
             if 'master' in select:
                 player = users['master']
                 role = 'Мастер'
 
             elif 'mentor' in select:
-                player = users['mentors'][int(select[-1])]
-                role = f'Ментор {select[-1]}'
+                player = users['mentors'][int(num)]
+                role = f'Ментор {num}'
 
             elif 'patrner' in select:
-                player = users['partners'][int(select[-1])]
-                role = f'Партнер {select[-1]}'
+                player = users['partners'][int(num)]
+                role = f'Партнер {num}'
             else:
                 return
 
