@@ -388,7 +388,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     await field.save()
                     await bot.send_message(
                         donor.telegram_id,
-                        await (await get_message('you_valid')).format(
+                        (await get_message('you_valid')).format(
                             username=user.username,
                             type=await get_button(f'{field.type}_name')
                         )
