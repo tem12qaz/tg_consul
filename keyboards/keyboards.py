@@ -231,7 +231,7 @@ async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
         ],
         [
             InlineKeyboardButton(text=await get_button('back'),
-                                 callback_data=select_callback.new(select=f'open_{field.type}')),
+                                 callback_data=select_callback.new(select=f'field_donors_{field.id}')),
         ]
     ]
     if not valid:
@@ -252,7 +252,7 @@ async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
             [
                 InlineKeyboardButton(text=await get_button('valid_donor'),
                                      callback_data=select_callback.new(
-                                         select=f'captcha.open_{field.type}.field_valid_{donor_num}.{field.id}')
+                                         select=f'captcha.field_donors_{field.id}.field_valid_{donor_num}.{field.id}')
                                      ),
             ]
         )
