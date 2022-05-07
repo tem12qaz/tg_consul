@@ -145,7 +145,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                 return
 
-        keys = getattr(user, f'{table}_key')
+        if table != 'start':
+            keys = getattr(user, f'{table}_key')
         block = getattr(user, f'{table}_block')
         if block:
             if block < time.time():
@@ -171,7 +172,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     InputMedia(open(f'photo/{game.type}.png', 'rb'))
                 )
                 await field.add_donor(user)
-                if (await Config.get(id=1)).keys_system and keys > 1:
+                if table != 'start' and (await Config.get(id=1)).keys_system and keys > 1:
                     setattr(user, f'{table}_key', keys - 1)
                     await user.save()
 
