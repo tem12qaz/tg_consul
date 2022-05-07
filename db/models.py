@@ -1,3 +1,4 @@
+import asyncio
 import time
 
 from tortoise.models import Model
@@ -29,46 +30,48 @@ class TelegramUser(Model):
     legendary_key = fields.SmallIntField(default=0)
 
     async def games(self):
-        donors = (
-            await self.game_donor1,
-            await self.game_donor2,
-            await self.game_donor3,
-            await self.game_donor4,
-            await self.game_donor5,
-            await self.game_donor6,
-            await self.game_donor7,
-            await self.game_donor8,
-        )
-        partners = (
-            await self.game_partner1,
-            await self.game_partner2,
-            await self.game_partner3,
-            await self.game_partner4,
-        )
-        mentors = (
-            await self.game_mentor1,
-            await self.game_mentor2,
-        )
-        master = await self.game_master
-
-        games = {}
-
-        for i in donors:
-            if i:
-                games[i] = f'donor{donors.index(i)+1}'
-
-        for i in partners:
-            if i:
-                games[i] = f'partner{partners.index(i)+1}'
-
-        for i in mentors:
-            if i:
-                games[i] = f'mentor{mentors.index(i)+1}'
-
-        if master:
-            games[master] = 'master'
-
-        return games
+        await asyncio.sleep(1)
+        pass
+        # donors = (
+        #     await self.game_donor1,
+        #     await self.game_donor2,
+        #     await self.game_donor3,
+        #     await self.game_donor4,
+        #     await self.game_donor5,
+        #     await self.game_donor6,
+        #     await self.game_donor7,
+        #     await self.game_donor8,
+        # )
+        # partners = (
+        #     await self.game_partner1,
+        #     await self.game_partner2,
+        #     await self.game_partner3,
+        #     await self.game_partner4,
+        # )
+        # mentors = (
+        #     await self.game_mentor1,
+        #     await self.game_mentor2,
+        # )
+        # master = await self.game_master
+        #
+        # games = {}
+        #
+        # for i in donors:
+        #     if i:
+        #         games[i] = f'donor{donors.index(i)+1}'
+        #
+        # for i in partners:
+        #     if i:
+        #         games[i] = f'partner{partners.index(i)+1}'
+        #
+        # for i in mentors:
+        #     if i:
+        #         games[i] = f'mentor{mentors.index(i)+1}'
+        #
+        # if master:
+        #     games[master] = 'master'
+        #
+        # return games
 
 
 class Table(Model):
