@@ -172,11 +172,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
             return
         while True:
-            field = (await Table.filter(
-                Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
-                  Q(donor4=None), Q(donor5=None), Q(donor6=None),
-                  Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
-            ).limit(1))[0]
+            if table != 'start':
+                field = (await Table.filter(
+                    Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                      Q(donor4=None), Q(donor5=None), Q(donor6=None),
+                      Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
+                ).limit(1))[0]
+            else:
+                field = (await Table.filter(
+                    Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                      Q(donor4=None), join_type="OR") & Q(type=table)
+                ).limit(1))[0]
             if field:
                 await callback.message.edit_media(
                     InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
