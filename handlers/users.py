@@ -217,7 +217,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         await get_captcha(callback, back, to, field_id)
 
     elif 'make_gift_' in select:
-        field = await Table.get_or_none(id=int(select.replace('make_gift_')))
+        field = await Table.get_or_none(id=int(select.replace('make_gift_', '')))
         if not field:
             await callback.message.delete()
             return
@@ -238,7 +238,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         )
 
     elif 'notify_users_' in select:
-        field = await Table.get_or_none(id=int(select.replace('notify_users_')))
+        field = await Table.get_or_none(id=int(select.replace('notify_users_', '')))
         if not field:
             await callback.message.delete()
             return
@@ -553,7 +553,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
 
     elif 'confirm_exit' in select:
-        field = await Table.get_or_none(id=int(select.replace('exit_')))
+        field = await Table.get_or_none(id=int(select.replace('exit_', '')))
         if not field:
             await callback.message.delete()
             return
@@ -574,7 +574,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         await callback.message.delete()
 
     elif 'exit_' in select:
-        field = await Table.get_or_none(id=int(select.replace('exit_')))
+        field = await Table.get_or_none(id=int(select.replace('exit_', '')))
         if not field:
             await callback.message.delete()
             return
