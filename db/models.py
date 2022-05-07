@@ -9,7 +9,6 @@ class TelegramUser(Model):
     id = fields.IntField(pk=True)
     telegram_id = fields.BigIntField(unique=True, index=True)
     username = fields.CharField(128, unique=True, null=True)
-    state = fields.CharField(64, default='')
     active = fields.BooleanField(default=False)
     inviter = fields.ForeignKeyField('models.TelegramUser', related_name='referrals', index=True, null=True)
     referral_url = fields.CharField(32, null=True)
@@ -289,5 +288,5 @@ class Role(Model, RoleMixin):
     description = fields.CharField(255)
 
 
-get_message = Message.from_name
-get_button = Button.from_name
+# get_message = Message.from_name
+# get_button = Button.from_name
