@@ -324,7 +324,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await callback.message.delete()
                 return
 
-            def status_text():
+            async def status_text():
                 if 'master' in role or 'mentor' in role:
                     if getattr(field, f'donor_{donor_num}_{role}'):
                         return await get_message('donor_is_valid'), True
@@ -333,7 +333,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 else:
                     return '', True
 
-            status_text_,  valid = status_text()
+            status_text_, valid = await status_text()
             text = (await get_message('field_donor_info')).format(
                 status=status_text_,
                 role = f'Даритель {donor_num}',
