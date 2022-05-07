@@ -32,6 +32,7 @@ async def bot_start(message: types.Message):
                 inviter = await TelegramUser.get_or_none(id=id_)
             except:
                 await message.delete()
+                return
             if inviter:
                 if inviter.referral_url == referral_url:
                     user.inviter = inviter
@@ -103,8 +104,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         )
 
     elif select == 'info':
-        text = await get_message(select)
-
         await bot.edit_message_caption(
             user.telegram_id,
             callback.message.message_id,
