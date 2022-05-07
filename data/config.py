@@ -28,4 +28,4 @@ tables_order = (
     'legendary'
 )
 
-TELEGRAM_URL = 'htttp://t.me/{username}'
+TELEGRAM_URL = 'http://t.me/{username}'
