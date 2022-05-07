@@ -21,6 +21,7 @@ from loader import dp, bot
 async def bot_start(message: types.Message):
     user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
     if user is None or not await user.inviter:
+        print(message.text)
         if user is None:
             user = await TelegramUser.create(
                 telegram_id=message.from_user.id,
@@ -645,7 +646,7 @@ async def listen_handler(message: types.Message):
             table_text = ''
             for table, role in tables.items():
                 table_text += tables_text[table.type].format(
-                    status=await get_button(role),
+                    status=await get_button(role[:-1]),
                     count=len((await table.users())['donors'])
                 )
 
