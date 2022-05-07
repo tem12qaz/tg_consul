@@ -324,7 +324,7 @@ async def get_donor_keyboard(field: Table, role):
 
 
 async def get_donor_gift_keyboard(field: Table, price):
-    master_un = (await field.master()).username
+    master_un = (await field.master).username
     inline_keyboard = [
         [
             InlineKeyboardButton(text=(await get_button('gift_master')).format(
