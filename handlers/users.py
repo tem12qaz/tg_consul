@@ -6,12 +6,11 @@ from datetime import datetime
 import pytz
 from aiogram.dispatcher.filters import CommandStart, RegexpCommandsFilter
 from aiogram.types import InputMedia
-from flask_security.utils import get_message
 
 from data.config import tables_order, FLOOD_RATE
 from data.messages import tables_text, roles_en_ru
 from data.passgen import get_secret
-from db.models import TelegramUser, Table
+from db.models import TelegramUser, Table, get_message
 from keyboards.keyboards import *
 from loader import dp, bot
 
