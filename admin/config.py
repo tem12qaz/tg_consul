@@ -1,8 +1,8 @@
 
 PG_HOST = 'localhost'
-PG_PASSWORD = 'fcgfTC545Kwed99erg6BHJfg'
-PG_USER = 'tg_bot'
-PG_DATABASE = 'tg_bot'
+PG_PASSWORD = 'pass'
+PG_USER = 'gift'
+PG_DATABASE = 'gift_db'
 
 
 
