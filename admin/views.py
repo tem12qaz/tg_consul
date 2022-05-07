@@ -85,7 +85,7 @@ class ConfigView(AdminMixin, ModelView):
         return Markup(
             '<img src="%s">' %
             url_for('static',
-                    filename=form.thumbgen_filename(model.photo))
+                    filename=form.thumbgen_filename(model.about_photo))
         )
 
     column_formatters = {
