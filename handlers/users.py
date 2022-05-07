@@ -6,6 +6,7 @@ from datetime import datetime
 import pytz
 from aiogram.dispatcher.filters import CommandStart, RegexpCommandsFilter
 from aiogram.types import InputMedia
+from tortoise.expressions import Q
 
 from data.config import tables_order, FLOOD_RATE
 from data.messages import tables_text, roles_en_ru
@@ -166,7 +167,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
             return
         while True:
-            field = (await Table.filter(not_full=True, type=table).limit(1))[0]
+            field = (await Table.filter(
+                Q(Q(donor1__isnull=True), Q(donor2__isnull=True), Q(donor3__isnull=True),
+                  Q(donor4__isnull=True), Q(donor5__isnull=True), Q(donor6__isnull=True),
+                  Q(donor7__isnull=True), Q(donor8__isnull=True), join_type="OR") & Q(type=table)
+            ).limit(1))[0]
             if field:
                 await callback.message.edit_media(
                     InputMedia(open(f'photo/{game.type}.png', 'rb'))
