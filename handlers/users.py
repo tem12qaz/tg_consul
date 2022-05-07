@@ -143,60 +143,60 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         ),
                         reply_markup=await get_donor_keyboard(game, role)
                     )
+                return
+
+        keys = getattr(user, f'{table}_key')
+        block = getattr(user, f'{table}_block')
+        if block:
+            if block < time.time():
+                setattr(user, f'{table}_block', None)
+                await user.save()
             else:
-                keys = getattr(user, f'{table}_key')
-                block = getattr(user, f'{table}_block')
-                if block:
-                    if block < time.time():
-                        setattr(user, f'{table}_block', None)
-                        await user.save()
-                    else:
-                        await callback.answer(
-                            (await get_message('you_block')),
-                            show_alert=True
-                        )
-                        return
+                await callback.answer(
+                    (await get_message('you_block')),
+                    show_alert=True
+                )
+                return
 
-                if table != 'start' and (await Config.get(id=1)).keys_system and keys < 1:
-                    await callback.answer(
-                        (await get_message('need_referrals')).format(count=2 - len(await user.referrals.all()) % 2),
-                        show_alert=True
-                    )
-                    return
-                while True:
-                    field = (await Table.filter(type=table).limit(1))[0]
-                    print(field)
-                    if field:
-                        await callback.message.edit_media(
-                            InputMedia(open(f'photo/{game.type}.png', 'rb'))
-                        )
-                        await field.add_donor(user)
-                        if (await Config.get(id=1)).keys_system and keys > 1:
-                            setattr(user, f'{table}_key', keys - 1)
-                            await user.save()
+        if table != 'start' and (await Config.get(id=1)).keys_system and keys < 1:
+            await callback.answer(
+                (await get_message('need_referrals')).format(count=2 - len(await user.referrals.all()) % 2),
+                show_alert=True
+            )
+            return
+        while True:
+            field = (await Table.filter(not_full=True, type=table).limit(1))[0]
+            if field:
+                await callback.message.edit_media(
+                    InputMedia(open(f'photo/{game.type}.png', 'rb'))
+                )
+                await field.add_donor(user)
+                if (await Config.get(id=1)).keys_system and keys > 1:
+                    setattr(user, f'{table}_key', keys - 1)
+                    await user.save()
 
-                        await callback.message.edit_caption(
-                            caption=(await get_message('table_donor_info')).format(
-                                name=await get_button(f'{table}_name'),
-                                id=game.id,
-                                count=game.donor_count(),
-                                max=4 if game.type == 'start' else 8,
-                                role=await get_button(role)
-                            ),
-                            reply_markup=await get_donor_keyboard(game, role)
+                await callback.message.edit_caption(
+                    caption=(await get_message('table_donor_info')).format(
+                        name=await get_button(f'{table}_name'),
+                        id=game.id,
+                        count=game.donor_count(),
+                        max=4 if game.type == 'start' else 8,
+                        role=await get_button(role)
+                    ),
+                    reply_markup=await get_donor_keyboard(game, role)
+                )
+                for a, users in (await field.users()).items():
+                    for player in users:
+                        await bot.send_message(
+                            player.telegram_id,
+                            (await get_message('new_donor')).format(
+                                table=await get_button(f'{field.type}_name')
+                            )
                         )
-                        for a, users in (await field.users()).items():
-                            for player in users:
-                                await bot.send_message(
-                                    player.telegram_id,
-                                    (await get_message('new_donor')).format(
-                                        table=await get_button(f'{field.type}_name')
-                                    )
-                                )
-                        break
-                    else:
-                        await callback.answer('full')
-                        return
+            else:
+                await callback.answer()
+                return
+
     elif select == 'open':
         await callback.message.edit_media(
             InputMedia(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'))
