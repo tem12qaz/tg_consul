@@ -246,7 +246,7 @@ async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
                 [
                     InlineKeyboardButton(text=await get_button('delete_donor'),
                                          callback_data=select_callback.new(
-                                             select=f'captcha.open_{field.type}.field_delete_{donor_num}.{field.id}')
+                                             select=f'captcha.field_delete_{donor_num}.field_donor_{donor_num}_{field.id}.{field.id}')
                                          ),
                 ]
             )
