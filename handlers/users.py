@@ -168,9 +168,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             return
         while True:
             field = (await Table.filter(
-                Q(Q(donor1__isnull=True), Q(donor2__isnull=True), Q(donor3__isnull=True),
-                  Q(donor4__isnull=True), Q(donor5__isnull=True), Q(donor6__isnull=True),
-                  Q(donor7__isnull=True), Q(donor8__isnull=True), join_type="OR") & Q(type=table)
+                Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                  Q(donor4=None), Q(donor5=None), Q(donor6=None),
+                  Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
             ).limit(1))[0]
             if field:
                 await callback.message.edit_media(
