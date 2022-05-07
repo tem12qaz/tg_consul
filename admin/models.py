@@ -30,55 +30,57 @@ class TelegramUser(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     telegram_id = db.Column(db.BigInteger())
     username = db.Column(db.String(128))
-    donor1_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor2_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor3_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor4_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor5_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor6_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor7_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    donor8_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-
-    partner1_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    partner2_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    partner3_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    partner4_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-
-    mentor1_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    mentor2_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-
-    mentor_id = db.Column(db.Integer, db.ForeignKey('table.id'))
 
 
 class Table(db.Model):
     __tablename__ = 'table'
     id = db.Column(db.Integer(), primary_key=True)
     type = db.Column(db.String(32))
-    donor1 = db.relationship("TelegramUser", uselist=False, backref="game_donor1")
-    donor2 = db.relationship("TelegramUser", uselist=False, backref="game_donor2")
-    donor3 = db.relationship("TelegramUser", uselist=False, backref="game_donor3")
-    donor4 = db.relationship("TelegramUser", uselist=False, backref="game_donor4")
-    donor5 = db.relationship("TelegramUser", uselist=False, backref="game_donor5")
-    donor6 = db.relationship("TelegramUser", uselist=False, backref="game_donor6")
-    donor7 = db.relationship("TelegramUser", uselist=False, backref="game_donor7")
-    donor8 = db.relationship("TelegramUser", uselist=False, backref="game_donor8")
 
-    partner1 = db.relationship("TelegramUser", uselist=False, backref="game_partner1")
-    partner2 = db.relationship("TelegramUser", uselist=False, backref="game_partner2")
-    partner3 = db.relationship("TelegramUser", uselist=False, backref="game_partner3")
-    partner4 = db.relationship("TelegramUser", uselist=False, backref="game_partner4")
+    donor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor5_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor6_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor7_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor8_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
 
-    mentor1 = db.relationship("TelegramUser", uselist=False, backref="game_mentor1")
-    mentor2 = db.relationship("TelegramUser", uselist=False, backref="game_mentor2")
+    partner1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    partner2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    partner3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    partner4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
 
-    master = db.relationship("TelegramUser", uselist=False, backref="game_master")
+    mentor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    mentor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+
+    master_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+
+    donor1 = db.relationship("TelegramUser", uselist=False, backref="game_donor1", foreign_keys=[donor1_id])
+    donor2 = db.relationship("TelegramUser", uselist=False, backref="game_donor2", foreign_keys=[donor2_id])
+    donor3 = db.relationship("TelegramUser", uselist=False, backref="game_donor3", foreign_keys=[donor3_id])
+    donor4 = db.relationship("TelegramUser", uselist=False, backref="game_donor4", foreign_keys=[donor4_id])
+    donor5 = db.relationship("TelegramUser", uselist=False, backref="game_donor5", foreign_keys=[donor5_id])
+    donor6 = db.relationship("TelegramUser", uselist=False, backref="game_donor6", foreign_keys=[donor6_id])
+    donor7 = db.relationship("TelegramUser", uselist=False, backref="game_donor7", foreign_keys=[donor7_id])
+    donor8 = db.relationship("TelegramUser", uselist=False, backref="game_donor8", foreign_keys=[donor8_id])
+
+    partner1 = db.relationship("TelegramUser", uselist=False, backref="game_partner1", foreign_keys=[partner1_id])
+    partner2 = db.relationship("TelegramUser", uselist=False, backref="game_partner2", foreign_keys=[partner2_id])
+    partner3 = db.relationship("TelegramUser", uselist=False, backref="game_partner3", foreign_keys=[partner3_id])
+    partner4 = db.relationship("TelegramUser", uselist=False, backref="game_partner4", foreign_keys=[partner4_id])
+
+    mentor1 = db.relationship("TelegramUser", uselist=False, backref="game_mentor1", foreign_keys=[mentor1_id])
+    mentor2 = db.relationship("TelegramUser", uselist=False, backref="game_mentor2", foreign_keys=[mentor2_id])
+
+    master = db.relationship("TelegramUser", uselist=False, backref="game_master", foreign_keys=[master_id])
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
 
 
 class Message(db.Model):
-    __tablename__ = 'message'
+    __telegramusername__ = 'message'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(64))
     text = db.Column(db.Text())
