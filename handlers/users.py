@@ -39,7 +39,7 @@ async def bot_start(message: types.Message):
                 if inviter.referral_url == referral_url:
                     user.inviter = inviter
                     await user.save()
-                    if len(inviter.referrals.all()) % 2 == 0:
+                    if len(await inviter.referrals.all()) % 2 == 0:
                         inviter.wood_key += 1
                         inviter.bronze_key += 1
                         inviter.silver_key += 1
