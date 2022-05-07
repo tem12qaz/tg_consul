@@ -30,6 +30,7 @@ class TelegramUser(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     telegram_id = db.Column(db.BigInteger())
     username = db.Column(db.String(128))
+    max_field = db.Column(db.String(32), default='start')
 
 
 class Table(db.Model):
