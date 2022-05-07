@@ -187,7 +187,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             )
     elif select == 'open':
         await callback.message.edit_media(
-            InputMedia(open((await Config.get(id=1)).about_photo, 'rb'))
+            InputMedia(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'))
         )
         await callback.message.edit_caption(
             caption=await get_message('open_table'),
@@ -602,14 +602,14 @@ async def listen_handler(message: types.Message):
 
     elif message.text == await get_button('open'):
         await message.answer_photo(
-            photo=open((await Config.get(id=1)).about_photo, 'rb'),
+            photo=open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'),
             caption=await get_message('open_table'),
             reply_markup=await get_tables(user)
         )
 
     elif message.text == await get_button('about'):
         await message.answer_photo(
-            photo=open((await Config.get(id=1)).about_photo, 'rb'),
+            photo=open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'),
             caption=await get_message('about'),
             reply_markup=await get_about_keyboard()
         )
@@ -658,7 +658,7 @@ async def listen_handler(message: types.Message):
                 )
             )
 
-    elif message.text == await get_button('suppport'):
+    elif message.text == await get_button('support'):
         await message.answer(
             await get_message('support'),
             reply_markup=await get_support_keyboard()
