@@ -27,9 +27,9 @@ async def bot_start(message: types.Message):
                 telegram_id=message.from_user.id,
                 username=message.from_user.username,
             )
-        if '=' in message.text:
+        if ' ' in message.text:
             try:
-                referral_url = message.text.split('=')[-1]
+                referral_url = message.text.split(' ')[-1]
                 id_ = referral_url.split('_')[-1]
                 inviter = await TelegramUser.get_or_none(id=id_)
             except:
@@ -647,7 +647,7 @@ async def listen_handler(message: types.Message):
             for table, role in tables.items():
                 table_text += tables_text[table.type].format(
                     status=await get_button(role[:-1]),
-                    count=len((await table.users())['donors'])
+                    count=await table.donor_count()
                 )
 
         else:
