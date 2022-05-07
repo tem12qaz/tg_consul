@@ -1,17 +1,14 @@
-import random
 import time
 import traceback
-from datetime import datetime
 
-import pytz
-from aiogram.dispatcher.filters import CommandStart, RegexpCommandsFilter
+from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import InputMedia
 from tortoise.expressions import Q
 
-from data.config import tables_order, FLOOD_RATE
-from data.messages import tables_text, roles_en_ru
+from data.config import FLOOD_RATE
+from data.messages import tables_text
 from data.passgen import get_secret
-from db.models import TelegramUser, Table, get_message
+from db.models import get_message
 from keyboards.keyboards import *
 from loader import dp, bot
 
@@ -152,6 +149,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                 return
 
+        keys = 1
         if table != 'start':
             keys = getattr(user, f'{table}_key')
         block = getattr(user, f'{table}_block')
@@ -235,7 +233,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         price = getattr(await TablePrice.get(id=1), field.type)
 
         if field == 'start':
-            text = await get_message('start_make_gift').format(
+            text = (await get_message('start_make_gift')).format(
                 master_price=price
             )
         else:
@@ -390,7 +388,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     await field.save()
                     await bot.send_message(
                         donor.telegram_id,
-                        await get_message('you_valid').format(
+                        await (await get_message('you_valid')).format(
                             username=user.username,
                             type=await get_button(f'{field.type}_name')
                         )
@@ -412,7 +410,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             donor.active = True
                             await donor.save()
 
-                        if await field.is_full():
+                        if await field.is_full:
                             max_donor = 9
                             if field.type == 'start':
                                 max_donor = 5
@@ -439,7 +437,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                     master.max_field = tables_order[tables_order.index(master.max_field) + 1]
                                     await master.save()
 
-                            text = get_message('table_update').format(
+                            text = (await get_message('table_update')).format(
                                 type=await get_button(f'{field.type}_name'),
                             )
                             for role, players in (await field.users(list_=True)).items():
@@ -613,6 +611,7 @@ async def listen_handler(message: types.Message):
             inviter = await TelegramUser.get_or_none(id=int(message.text.split('_')[-1]))
         except:
             await message.delete()
+            return
         if inviter is None:
             await message.answer(
                 await get_message('incorrect_id')
