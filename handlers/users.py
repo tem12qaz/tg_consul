@@ -541,11 +541,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 role = 'Мастер'
 
             elif 'mentor' in select:
-                player = users['mentors'][int(num)]
+                player = users['mentors'][int(num)-1]
                 role = f'Ментор {num}'
 
             elif 'patrner' in select:
-                player = users['partners'][int(num)]
+                player = users['partners'][int(num)-1]
                 role = f'Партнер {num}'
             else:
                 return
