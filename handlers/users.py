@@ -98,7 +98,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         back, to, field_id = select.split('.')[1:]
         await get_captcha(callback, back, to, field_id)
 
-    if '_info' in select:
+    elif '_info' in select:
         text = await get_message(select)
 
         await bot.edit_message_caption(
