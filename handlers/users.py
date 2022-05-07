@@ -174,9 +174,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             ).limit(1))[0]
             if field:
                 await callback.message.edit_media(
-                    InputMedia(open(f'photo/{game.type}.png', 'rb'))
+                    InputMedia(open(f'photo/{table}.png', 'rb'))
                 )
-                await field.add_donor(user)
+                donor_num = await field.add_donor(user)
                 if table != 'start' and (await Config.get(id=1)).keys_system and keys > 1:
                     setattr(user, f'{table}_key', keys - 1)
                     await user.save()

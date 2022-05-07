@@ -144,7 +144,7 @@ class Table(Model):
     donor_8_master = fields.BooleanField(default=False)
 
     async def add_donor(self, user: TelegramUser):
-        for i in range(1, 8):
+        for i in range(1, 9):
             if await getattr(self, f'donor{i}') is None:
                 setattr(self, f'donor{i}', user)
                 shift = (await Config.get(id=1)).delete_time * 3600
@@ -152,9 +152,10 @@ class Table(Model):
                 setattr(self, f'donor{i}', user)
                 setattr(self, f'donor{i}_time', block_time)
                 await self.save()
+                return i
 
     async def remove_donor(self, user: TelegramUser):
-        for i in range(1, 8):
+        for i in range(1, 9):
             if await getattr(self, f'donor{i}') == user:
                 setattr(self, f'donor{i}', None)
                 await self.save()
@@ -228,7 +229,7 @@ class Table(Model):
 
     async def donor_count(self):
         donors = 0
-        for i in range(1, 8):
+        for i in range(1, 9):
             donor = await getattr(self, f'donor{i}')
             if donor:
                 donors += 1
