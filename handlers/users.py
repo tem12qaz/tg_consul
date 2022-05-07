@@ -277,10 +277,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             await callback.message.delete()
             return
         role = None
-        break_ = False
+        break_ = True
         for game, role in (await user.games()).items():
             if game == field:
-                break_ = True
+                break_ = False
                 role = role
 
         if break_:
