@@ -367,8 +367,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 status=status_text_,
                 role=f'Даритель {donor_num}',
                 name=donor.username,
+                id=donor.id,
                 inviter=(await donor.inviter).username,
-                refs=len(await donor.referrals),
+                count=len(await donor.referrals),
             )
 
             await callback.message.edit_caption(
