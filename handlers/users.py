@@ -127,7 +127,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         caption=(await get_message('table_info')).format(
                             name = await get_button(f'{table}_name'),
                             id=game.id,
-                            count=game.donor_count(),
+                            count=await game.donor_count(),
                             max=4 if game.type == 'start' else 8,
                             role=await get_button(role)
                         ),
@@ -138,7 +138,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         caption=(await get_message('table_donor_info')).format(
                             name=await get_button(f'{table}_name'),
                             id=game.id,
-                            count=game.donor_count(),
+                            count=await game.donor_count(),
                             max=4 if game.type == 'start' else 8,
                             role=await get_button(role)
                         ),
@@ -185,7 +185,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     caption=(await get_message('table_donor_info')).format(
                         name=await get_button(f'{table}_name'),
                         id=field.id,
-                        count=field.donor_count(),
+                        count=await field.donor_count(),
                         max=4 if field.type == 'start' else 8,
                         role=(await get_button('donor')) + str(donor_num)
                     ),
