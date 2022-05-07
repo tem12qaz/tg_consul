@@ -86,8 +86,6 @@ async def get_captcha(callback, back, to, field=None):
 @dp.throttled(rate=FLOOD_RATE)
 async def main_menu(callback: types.CallbackQuery, callback_data):
     await callback.answer()
-    tables_order.index()
-
     user = await TelegramUser.get_or_none(telegram_id=callback.from_user.id)
     if user is None:
         return
