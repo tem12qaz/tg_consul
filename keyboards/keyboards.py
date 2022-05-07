@@ -124,10 +124,10 @@ async def get_player_keyboard(field: Table, role):
                                  callback_data=select_callback.new(select=f'field_master_{field.id}')),
         ],
         [
-            InlineKeyboardButton(text=await get_button('mentor1' + (me if role == 'mentor1' else '')),
+            InlineKeyboardButton(text=await get_button('mentor1') + (me if role == 'mentor1' else ''),
                                  callback_data=select_callback.new(select=f'field_mentor1_{field.id}')),
 
-            InlineKeyboardButton(text=await get_button('mentor2' + (me if role == 'mentor2' else '')),
+            InlineKeyboardButton(text=await get_button('mentor2') + (me if role == 'mentor2' else ''),
                                  callback_data=select_callback.new(select=f'field_mentor2_{field.id}')),
 
         ]
@@ -135,20 +135,20 @@ async def get_player_keyboard(field: Table, role):
     if field.type != 'start':
         inline_keyboard.append(
             [
-                InlineKeyboardButton(text=await get_button('partner1' + (me if role == 'partner1' else '')),
+                InlineKeyboardButton(text=await get_button('partner1') + (me if role == 'partner1' else ''),
                                      callback_data=select_callback.new(select=f'field_partner1_{field.id}')),
 
-                InlineKeyboardButton(text=await get_button('partner2' + (me if role == 'partner2' else '')),
+                InlineKeyboardButton(text=await get_button('partner2') + (me if role == 'partner2' else ''),
                                      callback_data=select_callback.new(select=f'field_partner2_{field.id}')),
 
             ],
         )
         inline_keyboard.append(
             [
-                InlineKeyboardButton(text=await get_button('partner3' + (me if role == 'partner3' else '')),
+                InlineKeyboardButton(text=await get_button('partner3') + (me if role == 'partner3' else ''),
                                      callback_data=select_callback.new(select=f'field_mentor3_{field.id}')),
 
-                InlineKeyboardButton(text=await get_button('partner4' + (me if role == 'partner4' else '')),
+                InlineKeyboardButton(text=await get_button('partner4') + (me if role == 'partner4' else ''),
                                      callback_data=select_callback.new(select=f'field_partner4_{field.id}')),
 
             ],
