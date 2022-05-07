@@ -120,7 +120,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         for game, role in (await user.games()).items():
             if game.type == table:
                 await callback.message.edit_media(
-                    InputMedia(open(f'photo/{game.type}.png', 'rb'))
+                    InputMedia(media=open(f'photo/{game.type}.png', 'rb'), type='photo')
                 )
                 if 'donor' not in role:
                     await callback.message.edit_caption(
@@ -174,7 +174,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             ).limit(1))[0]
             if field:
                 await callback.message.edit_media(
-                    InputMedia(open(f'photo/{table}.png', 'rb'))
+                    InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
                 )
                 donor_num = await field.add_donor(user)
                 if table != 'start' and (await Config.get(id=1)).keys_system and keys > 1:
@@ -205,7 +205,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
     elif select == 'open':
         await callback.message.edit_media(
-            InputMedia(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'))
+            InputMedia(media=(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb')), type='photo')
         )
         await callback.message.edit_caption(
             caption=await get_message('open_table'),
