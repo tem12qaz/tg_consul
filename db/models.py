@@ -230,7 +230,10 @@ class Table(Model):
     async def donor_count(self):
         donors = 0
         for i in range(1, 9):
-            donor = await getattr(self, f'donor{i}')
+            try:
+                donor = await getattr(self, f'donor{i}')
+            except:
+                continue
             if donor:
                 donors += 1
         return donors

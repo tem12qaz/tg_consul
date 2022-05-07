@@ -511,7 +511,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 return
             if not (
                     getattr(field, f'donor_{donor_num}_mentor1') or
-                    getattr(field, f'donor_{donor_num}_mentor1')):
+                    getattr(field, f'donor_{donor_num}_mentor2')):
                 setattr(field, f'donor{donor_num}', None)
                 setattr(field, f'donor_{donor_num}_mentor1', False)
                 setattr(field, f'donor_{donor_num}_mentor2', False)
