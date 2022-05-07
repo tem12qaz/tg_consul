@@ -247,15 +247,16 @@ async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
                                          ),
                 ]
             )
-        inline_keyboard.insert(
-            0,
-            [
-                InlineKeyboardButton(text=await get_button('valid_donor'),
-                                     callback_data=select_callback.new(
-                                         select=f'captcha.field_valid_{donor_num}.field_donor_{donor_num}_{field.id}.{field.id}')
-                                     ),
-            ]
-        )
+        if field.type != 'start' or role == 'master':
+            inline_keyboard.insert(
+                0,
+                [
+                    InlineKeyboardButton(text=await get_button('valid_donor'),
+                                         callback_data=select_callback.new(
+                                             select=f'captcha.field_valid_{donor_num}.field_donor_{donor_num}_{field.id}.{field.id}')
+                                         ),
+                ]
+            )
 
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 

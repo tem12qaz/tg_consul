@@ -353,7 +353,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 return
 
             async def status_text():
-                if 'master' in role or 'mentor' in role:
+                if 'master' in role or ('mentor' in role and field.type != 'start'):
                     if getattr(field, f'donor_{donor_num}_{role}'):
                         return await get_message('donor_is_valid'), True
                     else:
