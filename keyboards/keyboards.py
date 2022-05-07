@@ -191,7 +191,7 @@ async def donors_keyboard(field: Table, role):
         if donor:
             return donor.username + valid(i)
         else:
-            return (await get_button(f'donor')) + str(i)
+            return (await get_button(f'donor')) + ' ' + str(i)
 
     max_donor = 4 if field.type == 'start' else 8
 

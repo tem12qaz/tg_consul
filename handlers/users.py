@@ -130,7 +130,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 if 'donor' not in role:
                     await callback.message.edit_caption(
                         caption=(await get_message('table_info')).format(
-                            name = await get_button(f'{table}_name'),
+                            name=await get_button(f'{table}_name'),
                             id=game.id,
                             count=await game.donor_count(),
                             max=4 if game.type == 'start' else 8,
@@ -240,7 +240,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         else:
             text = (await get_message('make_gift')).format(
                 master_price=price,
-                mentor_price=price//2
+                mentor_price=price // 2
             )
         await callback.message.edit_caption(
             caption=text,
@@ -293,9 +293,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             users = await field.users()
             text += row.format(
                 role='Мастер',
-                username = users['master'].username,
-                inviter = (await users['master'].inviter).username,
-                refs = len(await users['master'].referrals),
+                username=users['master'].username,
+                inviter=(await users['master'].inviter).username,
+                refs=len(await users['master'].referrals),
             )
             i = 0
             for mentor in users['mentors']:
@@ -351,7 +351,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             donor_num = select.split('_')[2]
             donor = await getattr(field, f'donor{donor_num}')
             if not donor:
-                await callback.message.delete()
                 return
 
             async def status_text():
@@ -366,10 +365,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             status_text_, valid = await status_text()
             text = (await get_message('field_donor_info')).format(
                 status=status_text_,
-                role = f'Даритель {donor_num}',
-                username = donor.username,
-                inviter = (await donor.inviter).username,
-                refs = len(await donor.referrals),
+                role=f'Даритель {donor_num}',
+                name=donor.username,
+                inviter=(await donor.inviter).username,
+                refs=len(await donor.referrals),
             )
 
             await callback.message.edit_caption(
@@ -433,7 +432,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                 )
                             )
                             if master.max_field != 'legendary':
-                                if master.max_field != 'start' or (master.max_field == 'start' and len(await master.referrals.all()) > 2):
+                                if master.max_field != 'start' or (
+                                        master.max_field == 'start' and len(await master.referrals.all()) > 2):
                                     master.max_field = tables_order[tables_order.index(master.max_field) + 1]
                                     await master.save()
 
@@ -510,9 +510,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await callback.message.delete()
                 return
             if not (
-                getattr(field, f'donor_{donor_num}_mentor1') or
-                getattr(field, f'donor_{donor_num}_mentor1')):
-
+                    getattr(field, f'donor_{donor_num}_mentor1') or
+                    getattr(field, f'donor_{donor_num}_mentor1')):
                 setattr(field, f'donor{donor_num}', None)
                 setattr(field, f'donor_{donor_num}_mentor1', False)
                 setattr(field, f'donor_{donor_num}_mentor2', False)
@@ -542,11 +541,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 role = 'Мастер'
 
             elif 'mentor' in select:
-                player = users['mentors'][int(num)-1]
+                player = users['mentors'][int(num) - 1]
                 role = f'Ментор {num}'
 
             elif 'patrner' in select:
-                player = users['partners'][int(num)-1]
+                player = users['partners'][int(num) - 1]
                 role = f'Партнер {num}'
             else:
                 return
@@ -692,10 +691,3 @@ async def listen_handler(message: types.Message):
             await get_message('support'),
             reply_markup=await get_support_keyboard()
         )
-
-
-
-
-
-
-
