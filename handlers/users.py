@@ -635,7 +635,7 @@ async def listen_handler(message: types.Message):
         await message.answer(
             (await get_message('status')).format(
                 id=user.telegram_id, name=user.username,
-                iviter=(await user.inviter).username,
+                inviter=(await user.inviter).username,
                 count=len(await user.referrals.all()),
                 tables=table_text
             ),
