@@ -214,7 +214,7 @@ class Table(Model):
             else:
                 return False
 
-    # @property
+    @property
     async def not_full(self):
         if self.type == 'start':
             if not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4:
@@ -228,8 +228,8 @@ class Table(Model):
             else:
                 return False
 
-    def donor_count(self):
-        return len([await getattr(self, f'donor{i}') for i in range(1, 8) if await getattr(self, f'donor{i}')])
+    # def donor_count(self):
+    #     return len([await getattr(self, f'donor{i}') for i in range(1, 8) if await getattr(self, f'donor{i}')])
 
 
 class Message(Model):
