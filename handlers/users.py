@@ -184,10 +184,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await callback.message.edit_caption(
                     caption=(await get_message('table_donor_info')).format(
                         name=await get_button(f'{table}_name'),
-                        id=game.id,
+                        id=field.id,
                         count=game.donor_count(),
                         max=4 if game.type == 'start' else 8,
-                        role=await get_button(role)
+                        role=(await get_button('donor')) + str(donor_num)
                     ),
                     reply_markup=await get_donor_keyboard(game, role)
                 )
