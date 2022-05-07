@@ -120,7 +120,7 @@ class Config(db.Model):
     about_photo = db.Column(db.String(128))
     channel = db.Column(db.String(128))
     chat = db.Column(db.String(128))
-    keys_system = db.Column(db.String(128))
+    keys_system = db.Column(db.Boolean())
     delete_time = db.Column(db.Integer())
     block_time = db.Column(db.Integer())
 
