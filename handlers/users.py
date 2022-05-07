@@ -99,6 +99,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             user.telegram_id,
             callback.message.message_id,
             caption=text,
+            reply_markup=await get_back_to_info_keyboard()
+        )
+
+    elif select == 'info':
+        text = await get_message(select)
+
+        await bot.edit_message_caption(
+            user.telegram_id,
+            callback.message.message_id,
+            caption=await get_message('about'),
+            reply_markup=await get_about_keyboard()
         )
 
     elif 'open_' in select:
@@ -154,8 +165,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                     return
                 while True:
-                    id_ = random.randint(1, (await Table.all().count()))
-                    field = (await Table.filter(not_full=True, type=table, id=id_))[0]
+                    field = (await Table.filter(not_full=True, type=table).limit(1))[1]
                     if field:
                         await callback.message.edit_media(
                             InputMedia(open(f'photo/{game.type}.png', 'rb'))
@@ -175,14 +185,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             ),
                             reply_markup=await get_donor_keyboard(game, role)
                         )
-                    for a, users in (await field.users()).items():
-                        for player in users:
-                            await bot.send_message(
-                                player.telegram_id,
-                                (await get_message('new_donor')).format(
-                                    table=await get_button(f'{field.type}_name')
+                        for a, users in (await field.users()).items():
+                            for player in users:
+                                await bot.send_message(
+                                    player.telegram_id,
+                                    (await get_message('new_donor')).format(
+                                        table=await get_button(f'{field.type}_name')
+                                    )
                                 )
-                            )
+                    else:
+                        await callback.answer()
+                        return
     elif select == 'open':
         await callback.message.edit_media(
             InputMedia(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'))

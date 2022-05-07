@@ -101,6 +101,18 @@ async def get_user_keyboard(field, user):
     return keyboard
 
 
+async def get_back_to_info_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('back'),
+                                     callback_data=select_callback.new(select=f'info')),
+            ],
+        ]
+    )
+    return keyboard
+
+
 async def get_player_keyboard(field: Table, role):
     me = await get_button('me_emoji')
     inline_keyboard = [
