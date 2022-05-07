@@ -17,7 +17,7 @@ async def get_main_keyboard():
         [
             [KeyboardButton(await get_button('open')), KeyboardButton(await get_button('about'))],
             [KeyboardButton(await get_button('pdf')), KeyboardButton(await get_button('status'))],
-            [KeyboardButton(await get_button('reff')), KeyboardButton(await get_button('suppport'))]
+            [KeyboardButton(await get_button('reff')), KeyboardButton(await get_button('support'))]
         ],
         resize_keyboard=True
     )
@@ -176,7 +176,7 @@ async def donors_keyboard(field: Table, role):
         if donor:
             return donor.username + valid(i)
         else:
-            return await get_button(f'donor{i}')
+            return (await get_button(f'donor')) + str(i)
 
     max_donor = 4 if field.type == 'start' else 8
 
@@ -248,7 +248,7 @@ async def get_about_keyboard():
         inline_keyboard=[
             [
                 InlineKeyboardButton(text=await get_button('tables_info'),
-                                     callback_data=select_callback.new(select='table_info')),
+                                     callback_data=select_callback.new(select='tables_info')),
             ],
             [
                 InlineKeyboardButton(text=await get_button('donor'),
@@ -323,12 +323,12 @@ async def get_donor_gift_keyboard(field: Table, price):
 
         inline_keyboard += [
             [
-                InlineKeyboardButton(text=(await get_button('gift_mentor1')).format(
+                InlineKeyboardButton(text=(await get_button('gift_mentor')).format(
                     user=mentor1_un, sum=price//2
                 ), url=TELEGRAM_URL.format(username=mentor1_un))
             ],
             [
-                InlineKeyboardButton(text=(await get_button('gift_mentor2')).format(
+                InlineKeyboardButton(text=(await get_button('gift_mentor')).format(
                     user=mentor2_un, sum=price//2
                 ), url=TELEGRAM_URL.format(username=mentor2_un))
             ]

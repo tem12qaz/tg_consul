@@ -70,8 +70,7 @@ async def get_captcha(callback, back, to, field=None):
     result = num1 + num2
     text = (await get_message('captcha')).format(
         num1=num1,
-        num2=num2,
-        result=result
+        num2=num2
     )
     keyboard = await get_captcha_keyboard(result, to, back, field if field else '')
     await callback.message.edit_caption(
@@ -366,16 +365,20 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
                     await callback.message.edit_caption(
                         caption=(await get_message('table_info')).format(
-                            name=await get_button(f'{field}_name'),
+                            name=await get_button(f'{field.type}_name'),
                             id=field.id,
                             count=await field.donor_count(),
                             max=4 if field.type == 'start' else 8,
-                            role=await get_button(field)
+                            role=await get_button(role)
                         ),
                         reply_markup=await get_player_keyboard(field, role)
                     )
 
                     if field.donor_valid(donor_num):
+                        if field.type == 'start':
+                            donor.active = True
+                            await donor.save()
+
                         if await field.is_full():
                             max_donor = 9
                             if field.type == 'start':
@@ -394,7 +397,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             await bot.send_message(
                                 master.telegram_id,
                                 (await get_message('field_finish')).format(
-                                    await get_button(f'{field.type}_name')
+                                    type=await get_button(f'{field.type}_name')
                                 )
                             )
                             if master.max_field != 'legendary':
@@ -403,7 +406,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                     await master.save()
 
                             text = get_message('table_update').format(
-                                await get_button(f'{field}_name'),
+                                type=await get_button(f'{field.type}_name'),
                             )
                             for role, players in (await field.users()).items():
                                 for player in players:
@@ -485,16 +488,16 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await bot.send_message(
                     donor.telegram_id,
                     (await get_message('you_excluded')).format(
-                        await get_button(f'{field.type}_name')
+                        type=await get_button(f'{field.type}_name')
                     )
                 )
                 await callback.message.edit_caption(
                     caption=(await get_message('table_info')).format(
-                        name=await get_button(f'{field}_name'),
+                        name=await get_button(f'{field.type}_name'),
                         id=field.id,
                         count=await field.donor_count(),
                         max=4 if field.type == 'start' else 8,
-                        role=await get_button(field)
+                        role=await get_button(role)
                     ),
                     reply_markup=await get_player_keyboard(field, role)
                 )
@@ -515,7 +518,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             else:
                 return
 
-            text = (await get_message('user_info')).format(
+            text = (await get_message('team_list_row')).format(
                 role=role,
                 username=player.username,
                 inviter=(await player.inviter).username,
