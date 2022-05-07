@@ -164,7 +164,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                     return
                 while True:
-                    field = (await Table.filter(type=table).limit(1))[1]
+                    print('edwewdeew')
+                    field = (await Table.filter(type=table).limit(1))[0]
+                    print(field)
                     if field:
                         await callback.message.edit_media(
                             InputMedia(open(f'photo/{game.type}.png', 'rb'))
