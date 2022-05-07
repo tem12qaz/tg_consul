@@ -257,6 +257,8 @@ async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
             ]
         )
 
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
 
 async def get_about_keyboard():
     keyboard = InlineKeyboardMarkup(
