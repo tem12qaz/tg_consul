@@ -74,7 +74,7 @@ async def get_captcha(callback, back, to, field=None):
         num2=num2,
         result=result
     )
-    keyboard = get_captcha_keyboard(result, to, back, field if field else '')
+    keyboard = await get_captcha_keyboard(result, to, back, field if field else '')
     await callback.message.edit_caption(
         caption=text,
         reply_markup=keyboard

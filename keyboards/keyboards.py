@@ -35,7 +35,7 @@ async def get_support_keyboard():
     return keyboard
 
 
-def get_captcha_keyboard(result, to, back, field_id=''):
+async def get_captcha_keyboard(result, to, back, field_id=''):
     inline_keyboard = [
         [
             InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
@@ -85,7 +85,7 @@ async def get_status_keyboard():
     return keyboard
 
 
-def get_user_keyboard(field, user):
+async def get_user_keyboard(field, user):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
