@@ -37,7 +37,7 @@ class TelegramUser(db.Model):
 class Table(db.Model):
     __tablename__ = 'table'
     id = db.Column(db.Integer(), primary_key=True)
-    type = db.Column(db.String(32))
+    type = db.Column(db.String(32), default='start')
 
     donor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
     donor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
