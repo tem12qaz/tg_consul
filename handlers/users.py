@@ -189,7 +189,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         max=4 if field.type == 'start' else 8,
                         role=(await get_button('donor')) + str(donor_num)
                     ),
-                    reply_markup=await get_donor_keyboard(game, role)
+                    reply_markup=await get_donor_keyboard(field, f'donor{donor_num}')
                 )
                 for a, users in (await field.users()).items():
                     for player in users:
