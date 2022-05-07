@@ -164,7 +164,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                     return
                 while True:
-                    print('edwewdeew')
                     field = (await Table.filter(type=table).limit(1))[0]
                     print(field)
                     if field:
