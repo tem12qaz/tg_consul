@@ -654,7 +654,7 @@ async def listen_handler(message: types.Message):
             table_text = ''
             for table, role in tables.items():
                 table_text += tables_text[table.type].format(
-                    status=await get_button(role[:-1]),
+                    status=await get_button(role[:-1] if role != 'master' else role),
                     count=await table.donor_count()
                 )
 
