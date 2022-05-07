@@ -96,7 +96,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     select = callback_data.get('select')
 
     if 'captcha' in select:
-        back, to, field_id = select.split('.')[1:]
+        to, back, field_id = select.split('.')[1:]
         print(back, to, field_id)
         await get_captcha(callback, back, to, field_id)
 
