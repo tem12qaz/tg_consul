@@ -1,4 +1,3 @@
-import asyncio
 import time
 
 from tortoise.models import Model
@@ -30,48 +29,46 @@ class TelegramUser(Model):
     legendary_key = fields.SmallIntField(default=0)
 
     async def games(self):
-        await asyncio.sleep(1)
-        pass
-        # donors = (
-        #     await self.game_donor1,
-        #     await self.game_donor2,
-        #     await self.game_donor3,
-        #     await self.game_donor4,
-        #     await self.game_donor5,
-        #     await self.game_donor6,
-        #     await self.game_donor7,
-        #     await self.game_donor8,
-        # )
-        # partners = (
-        #     await self.game_partner1,
-        #     await self.game_partner2,
-        #     await self.game_partner3,
-        #     await self.game_partner4,
-        # )
-        # mentors = (
-        #     await self.game_mentor1,
-        #     await self.game_mentor2,
-        # )
-        # master = await self.game_master
-        #
-        # games = {}
-        #
-        # for i in donors:
-        #     if i:
-        #         games[i] = f'donor{donors.index(i)+1}'
-        #
-        # for i in partners:
-        #     if i:
-        #         games[i] = f'partner{partners.index(i)+1}'
-        #
-        # for i in mentors:
-        #     if i:
-        #         games[i] = f'mentor{mentors.index(i)+1}'
-        #
-        # if master:
-        #     games[master] = 'master'
-        #
-        # return games
+        donors = (
+            await self.game_donor1,
+            await self.game_donor2,
+            await self.game_donor3,
+            await self.game_donor4,
+            await self.game_donor5,
+            await self.game_donor6,
+            await self.game_donor7,
+            await self.game_donor8,
+        )
+        partners = (
+            await self.game_partner1,
+            await self.game_partner2,
+            await self.game_partner3,
+            await self.game_partner4,
+        )
+        mentors = (
+            await self.game_mentor1,
+            await self.game_mentor2,
+        )
+        master = await self.game_master
+
+        games = {}
+
+        for i in donors:
+            if i:
+                games[i] = f'donor{donors.index(i)+1}'
+
+        for i in partners:
+            if i:
+                games[i] = f'partner{partners.index(i)+1}'
+
+        for i in mentors:
+            if i:
+                games[i] = f'mentor{mentors.index(i)+1}'
+
+        if master:
+            games[master] = 'master'
+
+        return games
 
 
 class Table(Model):
@@ -200,7 +197,7 @@ class Table(Model):
         }
         return users
 
-    # @property
+    @property
     async def is_full(self):
         if self.type == 'start':
             if await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4:
@@ -228,8 +225,13 @@ class Table(Model):
             else:
                 return False
 
-    # def donor_count(self):
-    #     return len([await getattr(self, f'donor{i}') for i in range(1, 8) if await getattr(self, f'donor{i}')])
+    def donor_count(self):
+        donors = 0
+        for i in range(1, 8):
+            donor = await getattr(self, f'donor{i}')
+            if donor:
+                donors += 1
+        return donors
 
 
 class Message(Model):
