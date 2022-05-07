@@ -356,6 +356,13 @@ async def get_donor_gift_keyboard(field: Table, price):
 
         ]
     )
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(text=await get_button('back'),
+                                 callback_data=select_callback.new(select=f'open_{field.type}')),
+
+        ]
+    )
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=inline_keyboard
