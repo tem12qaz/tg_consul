@@ -225,7 +225,7 @@ class Table(Model):
             else:
                 return False
 
-    def donor_count(self):
+    async def donor_count(self):
         donors = 0
         for i in range(1, 8):
             donor = await getattr(self, f'donor{i}')

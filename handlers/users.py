@@ -369,7 +369,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         caption=(await get_message('table_info')).format(
                             name=await get_button(f'{field}_name'),
                             id=field.id,
-                            count=field.donor_count(),
+                            count=await field.donor_count(),
                             max=4 if field.type == 'start' else 8,
                             role=await get_button(field)
                         ),
@@ -493,7 +493,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     caption=(await get_message('table_info')).format(
                         name=await get_button(f'{field}_name'),
                         id=field.id,
-                        count=field.donor_count(),
+                        count=await field.donor_count(),
                         max=4 if field.type == 'start' else 8,
                         role=await get_button(field)
                     ),
