@@ -28,47 +28,47 @@ class TelegramUser(Model):
     platinum_key = fields.SmallIntField(default=0)
     legendary_key = fields.SmallIntField(default=0)
 
-    async def games(self):
-        donors = (
-            await self.game_donor1,
-            await self.game_donor2,
-            await self.game_donor3,
-            await self.game_donor4,
-            await self.game_donor5,
-            await self.game_donor6,
-            await self.game_donor7,
-            await self.game_donor8,
-        )
-        partners = (
-            await self.game_partner1,
-            await self.game_partner2,
-            await self.game_partner3,
-            await self.game_partner4,
-        )
-        mentors = (
-            await self.game_mentor1,
-            await self.game_mentor2,
-        )
-        master = await self.game_master
-
-        games = {}
-
-        for i in donors:
-            if i:
-                games[i] = f'donor{donors.index(i)+1}'
-
-        for i in partners:
-            if i:
-                games[i] = f'partner{partners.index(i)+1}'
-
-        for i in mentors:
-            if i:
-                games[i] = f'mentor{mentors.index(i)+1}'
-
-        if master:
-            games[master] = 'master'
-
-        return games
+    # async def games(self):
+    #     donors = (
+    #         await self.game_donor1,
+    #         await self.game_donor2,
+    #         await self.game_donor3,
+    #         await self.game_donor4,
+    #         await self.game_donor5,
+    #         await self.game_donor6,
+    #         await self.game_donor7,
+    #         await self.game_donor8,
+    #     )
+    #     partners = (
+    #         await self.game_partner1,
+    #         await self.game_partner2,
+    #         await self.game_partner3,
+    #         await self.game_partner4,
+    #     )
+    #     mentors = (
+    #         await self.game_mentor1,
+    #         await self.game_mentor2,
+    #     )
+    #     master = await self.game_master
+    #
+    #     games = {}
+    #
+    #     for i in donors:
+    #         if i:
+    #             games[i] = f'donor{donors.index(i)+1}'
+    #
+    #     for i in partners:
+    #         if i:
+    #             games[i] = f'partner{partners.index(i)+1}'
+    #
+    #     for i in mentors:
+    #         if i:
+    #             games[i] = f'mentor{mentors.index(i)+1}'
+    #
+    #     if master:
+    #         games[master] = 'master'
+    #
+    #     return games
 
 
 class Table(Model):
@@ -142,91 +142,91 @@ class Table(Model):
     donor_8_mentor2 = fields.BooleanField(default=False)
     donor_8_master = fields.BooleanField(default=False)
 
-    async def add_donor(self, user: TelegramUser):
-        for i in range(1, 8):
-            if await getattr(self, f'donor{i}') is None:
-                setattr(self, f'donor{i}', user)
-                shift = (await Config.get(id=1)).delete_time * 3600
-                block_time = time.time() + shift
-                setattr(self, f'donor{i}', user)
-                setattr(self, f'donor{i}_time', block_time)
-                await self.save()
-
-    async def remove_donor(self, user: TelegramUser):
-        for i in range(1, 8):
-            if await getattr(self, f'donor{i}') == user:
-                setattr(self, f'donor{i}', None)
-                await self.save()
-
-    def donor_valid(self, donor_num: int):
-        if not (1 <= donor_num <= 8):
-            return False
-
-        if self.type == 'start':
-            return getattr(self, f'donor_{donor_num}_master')
-
-        partner_valid = getattr(self, f'donor_{donor_num}_mentor1')
-        mentor_valid = getattr(self, f'donor_{donor_num}_mentor2')
-        master_valid = getattr(self, f'donor_{donor_num}_master')
-
-        return partner_valid and mentor_valid and master_valid
-
-    async def users(self, list_=False):
-        users = {
-            'donors': (
-                await self.donor1,
-                await self.donor2,
-                await self.donor3,
-                await self.donor4,
-                await self.donor5,
-                await self.donor6,
-                await self.donor7,
-                await self.donor8,
-            ),
-            'partners': (
-                await self.partner1,
-                await self.partner2,
-                await self.partner3,
-                await self.partner4,
-            ),
-            'mentors': (
-                await self.mentor1,
-                await self.mentor2,
-            ),
-            'master': [await self.master] if list_ else await self.master
-        }
-        return users
-
-    # @property
-    async def is_full(self):
-        if self.type == 'start':
-            if await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4:
-                return True
-            else:
-                return False
-        else:
-            if (await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4 and
-                    await self.donor5 and await self.donor6 and await self.donor7 and await self.donor8):
-                return True
-            else:
-                return False
-
-    # @property
-    async def not_full(self):
-        if self.type == 'start':
-            if not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4:
-                return True
-            else:
-                return False
-        else:
-            if (not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4 or
-                    not await self.donor5 or not await self.donor6 or not await self.donor7 or not await self.donor8):
-                return True
-            else:
-                return False
-
-    def donor_count(self):
-        return len([await getattr(self, f'donor{i}') for i in range(1, 8) if await getattr(self, f'donor{i}')])
+    # async def add_donor(self, user: TelegramUser):
+    #     for i in range(1, 8):
+    #         if await getattr(self, f'donor{i}') is None:
+    #             setattr(self, f'donor{i}', user)
+    #             shift = (await Config.get(id=1)).delete_time * 3600
+    #             block_time = time.time() + shift
+    #             setattr(self, f'donor{i}', user)
+    #             setattr(self, f'donor{i}_time', block_time)
+    #             await self.save()
+    #
+    # async def remove_donor(self, user: TelegramUser):
+    #     for i in range(1, 8):
+    #         if await getattr(self, f'donor{i}') == user:
+    #             setattr(self, f'donor{i}', None)
+    #             await self.save()
+    #
+    # def donor_valid(self, donor_num: int):
+    #     if not (1 <= donor_num <= 8):
+    #         return False
+    #
+    #     if self.type == 'start':
+    #         return getattr(self, f'donor_{donor_num}_master')
+    #
+    #     partner_valid = getattr(self, f'donor_{donor_num}_mentor1')
+    #     mentor_valid = getattr(self, f'donor_{donor_num}_mentor2')
+    #     master_valid = getattr(self, f'donor_{donor_num}_master')
+    #
+    #     return partner_valid and mentor_valid and master_valid
+    #
+    # async def users(self, list_=False):
+    #     users = {
+    #         'donors': (
+    #             await self.donor1,
+    #             await self.donor2,
+    #             await self.donor3,
+    #             await self.donor4,
+    #             await self.donor5,
+    #             await self.donor6,
+    #             await self.donor7,
+    #             await self.donor8,
+    #         ),
+    #         'partners': (
+    #             await self.partner1,
+    #             await self.partner2,
+    #             await self.partner3,
+    #             await self.partner4,
+    #         ),
+    #         'mentors': (
+    #             await self.mentor1,
+    #             await self.mentor2,
+    #         ),
+    #         'master': [await self.master] if list_ else await self.master
+    #     }
+    #     return users
+    #
+    # # @property
+    # async def is_full(self):
+    #     if self.type == 'start':
+    #         if await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4:
+    #             return True
+    #         else:
+    #             return False
+    #     else:
+    #         if (await self.donor1 and await self.donor2 and await self.donor3 and await self.donor4 and
+    #                 await self.donor5 and await self.donor6 and await self.donor7 and await self.donor8):
+    #             return True
+    #         else:
+    #             return False
+    #
+    # # @property
+    # async def not_full(self):
+    #     if self.type == 'start':
+    #         if not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4:
+    #             return True
+    #         else:
+    #             return False
+    #     else:
+    #         if (not await self.donor1 or not await self.donor2 or not await self.donor3 or not await self.donor4 or
+    #                 not await self.donor5 or not await self.donor6 or not await self.donor7 or not await self.donor8):
+    #             return True
+    #         else:
+    #             return False
+    #
+    # def donor_count(self):
+    #     return len([await getattr(self, f'donor{i}') for i in range(1, 8) if await getattr(self, f'donor{i}')])
 
 
 class Message(Model):
