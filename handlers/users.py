@@ -140,7 +140,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             id=game.id,
                             count=await game.donor_count(),
                             max=4 if game.type == 'start' else 8,
-                            role=await get_button(role)
+                            role=await get_button('donor') + role[-1]
                         ),
                         reply_markup=await get_donor_keyboard(game, role)
                     )
