@@ -334,12 +334,13 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             i = 0
             for donor in users['donors']:
                 i += 1
-                text += row.format(
-                    role=f'Даритель {i}',
-                    username=donor.username,
-                    inviter=(await donor.inviter).username,
-                    refs=len(await donor.referrals),
-                )
+                if donor:
+                    text += row.format(
+                        role=f'Даритель {i}',
+                        username=donor.username,
+                        inviter=(await donor.inviter).username,
+                        refs=len(await donor.referrals),
+                    )
 
             await callback.message.edit_caption(
                 caption=text,

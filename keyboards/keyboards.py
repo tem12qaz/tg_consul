@@ -200,8 +200,8 @@ async def donors_keyboard(field: Table, role):
             [
                 InlineKeyboardButton(text=await donor_text(i),
                                      callback_data=select_callback.new(select=f'field_donor_{i}_{field.id}')),
-                InlineKeyboardButton(text=await donor_text(i),
-                                     callback_data=select_callback.new(select=f'field_donor_{i}_{field.id}')),
+                InlineKeyboardButton(text=await donor_text(i+1),
+                                     callback_data=select_callback.new(select=f'field_donor_{i+1}_{field.id}')),
             ],
         )
 
@@ -215,7 +215,7 @@ async def donors_keyboard(field: Table, role):
     inline_keyboard.append(
         [
             InlineKeyboardButton(text=await get_button('back'),
-                                 callback_data=select_callback.new(select=f'open_{field.id}')),
+                                 callback_data=select_callback.new(select=f'open_{field.type}')),
 
         ],
     )
