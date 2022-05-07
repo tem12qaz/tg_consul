@@ -145,10 +145,10 @@ class ServiceView(AdminMixin, ModelView):
 
 class TableView(AdminMixin, ModelView):
     column_list = ('id', 'donor1', 'donor2', 'donor3', 'donor4', 'donor5',
-                   'donor6', 'donor7', 'donor8', 'partner1', 'partner2'
+                   'donor6', 'donor7', 'donor8', 'partner1', 'partner2',
                                                              'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
     form_columns = ('donor1', 'donor2', 'donor3', 'donor4', 'donor5',
-                    'donor6', 'donor7', 'donor8', 'partner1', 'partner2'
+                    'donor6', 'donor7', 'donor8', 'partner1', 'partner2',
                                                               'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
 
 
