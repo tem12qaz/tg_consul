@@ -191,14 +191,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     ),
                     reply_markup=await get_donor_keyboard(field, f'donor{donor_num}')
                 )
-                for a, users in (await field.users()).items():
+                for key, users in (await field.users()).items():
+                    if key == 'donors':
+                        continue
                     for player in users:
-                        await bot.send_message(
-                            player.telegram_id,
-                            (await get_message('new_donor')).format(
-                                table=await get_button(f'{field.type}_name')
+                        if player:
+                            await bot.send_message(
+                                player.telegram_id,
+                                (await get_message('new_donor')).format(
+                                    table=await get_button(f'{field.type}_name')
+                                )
                             )
-                        )
             else:
                 await callback.answer()
                 return
