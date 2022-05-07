@@ -31,6 +31,7 @@ class TelegramUser(db.Model):
     telegram_id = db.Column(db.BigInteger())
     username = db.Column(db.String(128))
     max_field = db.Column(db.String(32), default='start')
+    referral_url = db.Column(db.String(32))
 
 
 class Table(db.Model):

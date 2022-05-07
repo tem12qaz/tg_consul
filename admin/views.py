@@ -32,8 +32,8 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 
 class TelegramUserView(AdminMixin, ModelView):
-    column_list = ('id', 'telegram_id', 'username', 'max_field')
-    form_columns = ('telegram_id', 'username', 'max_field')
+    column_list = ('id', 'telegram_id', 'username', 'max_field', 'referral_url')
+    form_columns = ('telegram_id', 'username', 'max_field', 'referral_url')
 
 
 class MessageView(AdminMixin, ModelView):
