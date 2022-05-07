@@ -196,7 +196,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     ),
                     reply_markup=await get_donor_keyboard(field, f'donor{donor_num}')
                 )
-                for key, users in (await field.users()).items():
+                for key, users in (await field.users(list_=True)).items():
                     if key == 'donors':
                         continue
                     for player in users:
@@ -433,7 +433,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             text = get_message('table_update').format(
                                 type=await get_button(f'{field.type}_name'),
                             )
-                            for role, players in (await field.users()).items():
+                            for role, players in (await field.users(list_=True)).items():
                                 for player in players:
                                     await bot.send_message(
                                         player.telegram_id,
