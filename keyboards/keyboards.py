@@ -46,11 +46,6 @@ async def get_captcha_keyboard(result, to, back, field_id=''):
             InlineKeyboardButton(text=str(random.randint(20, 100)), callback_data=select_callback.new(
                 select=f'captcha.{to}.{back}.{field_id}'
             )),
-        ],
-        [
-            InlineKeyboardButton(await get_button('cancel'), callback_data=select_callback.new(
-                select=back
-            )),
         ]
     ]
     true_button = InlineKeyboardButton(text=str(result), callback_data=select_callback.new(
@@ -69,6 +64,14 @@ async def get_captcha_keyboard(result, to, back, field_id=''):
         inline_keyboard[row].insert(0, true_button)
     else:
         inline_keyboard[row].append(true_button)
+
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(await get_button('cancel'), callback_data=select_callback.new(
+                select=back
+            )),
+        ]
+    )
 
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 

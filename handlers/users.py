@@ -94,6 +94,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
     select = callback_data.get('select')
 
+    if 'captcha' in select:
+        back, to, field_id = select.split('.')[1:]
+        await get_captcha(callback, back, to, field_id)
+
     if '_info' in select:
         text = await get_message(select)
 
@@ -214,10 +218,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             caption=await get_message('open_table'),
             reply_markup=await get_tables(user)
         )
-
-    elif 'captcha' in select:
-        back, to, field_id = select.split('.')[1:]
-        await get_captcha(callback, back, to, field_id)
 
     elif 'make_gift_' in select:
         field = await Table.get_or_none(id=int(select.replace('make_gift_', '')))
@@ -554,9 +554,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 reply_markup=await get_user_keyboard(field, player)
             )
 
-
     elif 'confirm_exit' in select:
-        field = await Table.get_or_none(id=int(select.replace('exit_', '')))
+        field = await Table.get_or_none(id=int(select.replace('confirm_exit_', '')))
         if not field:
             await callback.message.delete()
             return
