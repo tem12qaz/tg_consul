@@ -26,9 +26,12 @@ async def bot_start(message: types.Message):
                 username=message.from_user.username,
             )
         if '=' in message.text:
-            referral_url = message.text.split('=')[-1]
-            id_ = referral_url.split('_')[-1]
-            inviter = await TelegramUser.get_or_none(id=id_)
+            try:
+                referral_url = message.text.split('=')[-1]
+                id_ = referral_url.split('_')[-1]
+                inviter = await TelegramUser.get_or_none(id=id_)
+            except:
+                await message.delete()
             if inviter:
                 if inviter.referral_url == referral_url:
                     user.inviter = inviter
@@ -576,7 +579,10 @@ async def listen_handler(message: types.Message):
         await message.delete()
 
     elif not user.inviter:
-        inviter = await TelegramUser.get_or_none(id=int(message.text.split('_')[-1]))
+        try:
+            inviter = await TelegramUser.get_or_none(id=int(message.text.split('_')[-1]))
+        except:
+            await message.delete()
         if inviter is None:
             await message.answer(
                 await get_message('incorrect_id')
