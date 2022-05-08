@@ -432,9 +432,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                 )
                             )
                             if master.max_field != 'legendary':
-                                if master.max_field != 'start' or (
-                                        master.max_field == 'start' and len(await master.referrals.all()) > 2) and \
-                                        master.max_field == field.master:
+                                if (master.max_field != 'start' or (
+                                        master.max_field == 'start' and len(await master.referrals.all()) > 2)) and \
+                                        master.max_field == field.type:
                                     master.max_field = tables_order[tables_order.index(master.max_field) + 1]
                                     await master.save()
 
