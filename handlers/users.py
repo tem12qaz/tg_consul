@@ -466,15 +466,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                 field.partner2 = await field.donor2
                                 field.partner3 = await field.donor3
                                 field.partner4 = await field.donor4
-                                field.donor1 = None
-                                field.donor2 = None
-                                field.donor3 = None
-                                field.donor4 = None
-                                field.donor5 = None
-                                field.donor6 = None
-                                field.donor7 = None
-                                field.donor8 = None
-
+                                field.clear_donors()
                                 await field.save()
 
                                 new_field = await Table.create(
@@ -495,10 +487,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                 field.master = await field.mentor1
                                 field.mentor1 = await field.donor1
                                 field.mentor2 = await field.donor2
-                                field.donor1 = None
-                                field.donor2 = None
-                                field.donor3 = None
-                                field.donor4 = None
+                                field.clear_donors()
 
                                 await field.save()
 

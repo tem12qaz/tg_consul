@@ -143,6 +143,15 @@ class Table(Model):
     donor_8_mentor2 = fields.BooleanField(default=False)
     donor_8_master = fields.BooleanField(default=False)
 
+    def clear_donors(self):
+        for i in range(1, 9):
+            setattr(self, f'donor{i}', None)
+            setattr(self, f'donor{i}_notify', None)
+            setattr(self, f'donor{i}_time', None)
+            setattr(self, f'donor_{i}_mentor1', None)
+            setattr(self, f'donor_{i}_mentor2', None)
+            setattr(self, f'donor_{i}_master', None)
+
     async def add_donor(self, user: TelegramUser):
         for i in range(1, 9):
             if await getattr(self, f'donor{i}') is None:
