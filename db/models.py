@@ -146,11 +146,11 @@ class Table(Model):
     def clear_donors(self):
         for i in range(1, 9):
             setattr(self, f'donor{i}', None)
-            setattr(self, f'donor{i}_notify', None)
+            setattr(self, f'donor{i}_notify', False)
             setattr(self, f'donor{i}_time', None)
-            setattr(self, f'donor_{i}_mentor1', None)
-            setattr(self, f'donor_{i}_mentor2', None)
-            setattr(self, f'donor_{i}_master', None)
+            setattr(self, f'donor_{i}_mentor1', False)
+            setattr(self, f'donor_{i}_mentor2', False)
+            setattr(self, f'donor_{i}_master', False)
 
     async def add_donor(self, user: TelegramUser):
         for i in range(1, 9):
