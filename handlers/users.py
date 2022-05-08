@@ -448,7 +448,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                             text
                                         )
 
-                            if field != 'start':
+                            if field.type != 'start':
                                 partner1 = await field.donor5,
                                 partner2 = await field.donor6,
                                 partner3 = await field.donor7,
