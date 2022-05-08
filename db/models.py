@@ -160,8 +160,8 @@ class Table(Model):
                 setattr(self, f'donor{i}', None)
                 await self.save()
 
-    def donor_valid(self, donor_num: int):
-        if not (1 <= donor_num <= 8):
+    def donor_valid(self, donor_num):
+        if not (1 <= int(donor_num) <= 8):
             return False
 
         if self.type == 'start':
