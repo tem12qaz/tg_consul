@@ -1,6 +1,7 @@
 import time
 import traceback
 
+import users as users
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import InputMedia
 from tortoise.expressions import Q
@@ -442,10 +443,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             )
                             for role, players in (await field.users(list_=True)).items():
                                 for player in players:
-                                    await bot.send_message(
-                                        player.telegram_id,
-                                        text
-                                    )
+                                    if player and role != 'master':
+                                        await bot.send_message(
+                                            player.telegram_id,
+                                            text
+                                        )
 
                             if field != 'start':
                                 partner1 = await field.donor5,
