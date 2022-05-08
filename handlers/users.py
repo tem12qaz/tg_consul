@@ -1,7 +1,6 @@
 import time
 import traceback
 
-import users as users
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import InputMedia
 from tortoise.expressions import Q
