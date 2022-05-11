@@ -419,13 +419,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
 
         elif 'picture' in select:
-            return
+            # return
             pic = await field.picture()
             await bot.send_photo(
                 user.telegram_id,
                 photo=pic,
                 reply_markup=await get_delete_keyboard()
             )
+
         elif 'field_valid_' in select:
             donor_num = select.split('_')[2]
             donor = await getattr(field, f'donor{donor_num}')

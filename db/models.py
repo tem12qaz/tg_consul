@@ -5,6 +5,8 @@ from tortoise.models import Model
 from tortoise import fields
 from flask_security import UserMixin, RoleMixin
 
+from picture_font import picture
+
 
 class Admin(Model):
     id = fields.IntField(pk=True)
@@ -266,13 +268,7 @@ class Table(Model):
     async def picture(self):
         im = Image.open(f'photo/{self.type}.png')
         users = await self.users()
-        draw_text = ImageDraw.Draw(im)
-        draw_text.text(
-            (100, 100),
-            'Test Text',
-            fill=('#1C0606')
-        )
-        im.show()
+        return picture.create(users, self.type)
 
 
 class Message(Model):
