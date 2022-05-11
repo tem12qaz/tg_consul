@@ -33,9 +33,9 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 class TelegramUserView(AdminMixin, ModelView):
     column_filters = ("telegram_id", "id", "username")
-    column_list = ('id', 'telegram_id', 'username', 'max_field', 'referral_url', 'wood_key', 'bronze_key',
+    column_list = ('id', 'telegram_id', 'username', 'max_field', 'active', 'referral_url', 'wood_key', 'bronze_key',
                    'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
-    form_columns = ('telegram_id', 'username', 'max_field', 'referral_url', 'wood_key', 'bronze_key',
+    form_columns = ('telegram_id', 'username', 'max_field', 'active', 'referral_url', 'wood_key', 'bronze_key',
                     'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
 
 
