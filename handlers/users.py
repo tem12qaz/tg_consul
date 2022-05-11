@@ -843,7 +843,7 @@ async def handle_photo(message: types.Message):
 
     if 'mail' == admin.state:
         admin.photo = photo_binary
-        await user.save()
+        await admin.save()
         return
 
     else:
