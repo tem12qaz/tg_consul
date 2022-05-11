@@ -333,12 +333,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             text = ''
             row = await get_message('team_list_row')
             users = await field.users()
+            summ = getattr(await TablePrice.get(id=1), field.type)
             text += row.format(
                 role='Мастер',
                 username=users['master'].username,
                 inviter=(await users['master'].inviter).username,
                 refs=len(await users['master'].referrals),
-                name=users['master'].name
+                name=users['master'].name,
+                sum=summ
             )
             i = 0
             for mentor in users['mentors']:
@@ -348,7 +350,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     username=mentor.username,
                     inviter=(await mentor.inviter).username,
                     refs=len(await mentor.referrals),
-                    name = mentor.name
+                    name = mentor.name,
+                    sum=summ//2 if field.type != 'start' else 'В очереди'
                 )
             i = 0
             if field.type != 'start':
@@ -360,6 +363,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         inviter=(await partner.inviter).username,
                         refs=len(await partner.referrals),
                         name=partner.name
+                        sum='В очереди'
                     )
 
             await callback.message.edit_caption(
