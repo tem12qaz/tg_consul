@@ -883,3 +883,28 @@ async def handle_docs(message: types.Message):
 
     else:
         await message.delete()
+
+
+@dp.message_handler(content_types=['video'])
+async def handle_docs(message: types.Message):
+    user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
+    if user is None:
+        return
+
+    admin = await user.admin
+
+    photo = message.video
+
+    name = f'files/{message.from_user.id}_{photo.file_id}.mp4'
+    await photo.download(destination_file=name)
+
+    photo_binary = open(name, 'rb').read()
+    os.remove(name)
+
+    if 'mail' == admin.state:
+        admin.photo = photo_binary
+        await user.save()
+        return
+
+    else:
+        await message.delete()
