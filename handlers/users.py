@@ -362,7 +362,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         username=partner.username,
                         inviter=(await partner.inviter).username,
                         refs=len(await partner.referrals),
-                        name=partner.name
+                        name=partner.name,
                         sum='В очереди'
                     )
 
