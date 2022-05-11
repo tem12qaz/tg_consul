@@ -807,20 +807,22 @@ async def listen_handler(message: types.Message):
                     if photo:
                         await bot.send_photo(
                             user_.telegram_id,
-                            photo=photo
+                            photo=photo,
+                            caption=message.text,
+                            reply_markup=await get_delete_keyboard()
                         )
-
-                    await bot.send_message(
-                        user_.telegram_id,
-                        message.text,
-                        reply_markup=await get_delete_keyboard()
-                    )
+                    else:
+                        await bot.send_message(
+                            user_.telegram_id,
+                            message.text,
+                            reply_markup=await get_delete_keyboard()
+                        )
                 except BotBlocked:
                     pass
                 except Exception as e:
                     print(traceback.format_exc())
-            user.state = ''
-            await user.save()
+            admin.state = ''
+            await admin.save()
             await message.answer(
                 await get_message('mailed')
             )
