@@ -678,6 +678,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         if admin and admin.state == 'mail':
             admin.state = ''
             admin.photo = None
+            admin.video = None
+            admin.document = None
             await admin.save()
 
 
@@ -813,6 +815,20 @@ async def listen_handler(message: types.Message):
                             caption=message.text,
                             reply_markup=await get_delete_keyboard()
                         )
+                    elif admin.document:
+                        await bot.send_document(
+                            user_.telegram_id,
+                            document=admin.document,
+                            caption=message.text,
+                            reply_markup=await get_delete_keyboard()
+                        )
+                    elif admin.video:
+                        await bot.send_video(
+                            user_.telegram_id,
+                            video=admin.video,
+                            caption=message.text,
+                            reply_markup=await get_delete_keyboard()
+                        )
                     else:
                         await bot.send_message(
                             user_.telegram_id,
@@ -824,6 +840,9 @@ async def listen_handler(message: types.Message):
                 except Exception as e:
                     print(traceback.format_exc())
             admin.state = ''
+            admin.photo = None
+            admin.video = None
+            admin.document = None
             await admin.save()
             await message.answer(
                 await get_message('mailed')
@@ -877,7 +896,7 @@ async def handle_docs(message: types.Message):
     os.remove(name)
 
     if 'mail' == admin.state:
-        admin.photo = photo_binary
+        admin.document = photo_binary
         await user.save()
         return
 
@@ -886,7 +905,7 @@ async def handle_docs(message: types.Message):
 
 
 @dp.message_handler(content_types=['video'])
-async def handle_docs(message: types.Message):
+async def handle_video(message: types.Message):
     user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
     if user is None:
         return
@@ -902,7 +921,7 @@ async def handle_docs(message: types.Message):
     os.remove(name)
 
     if 'mail' == admin.state:
-        admin.photo = photo_binary
+        admin.video = photo_binary
         await user.save()
         return
 

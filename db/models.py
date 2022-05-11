@@ -13,6 +13,8 @@ class Admin(Model):
     user = fields.OneToOneField('models.TelegramUser', related_name='admin', null=True)
     state = fields.CharField(8, default='')
     photo = fields.BinaryField(null=True)
+    video = fields.BinaryField(null=True)
+    document = fields.BinaryField(null=True)
 
 
 class Priority(Model):
