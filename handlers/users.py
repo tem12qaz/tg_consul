@@ -453,6 +453,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
 
                     if field.donor_valid(donor_num):
+                        setattr(field, f'donor{donor_num}_time', None)
+                        await field.save()
                         if field.type == 'start':
                             donor.active = True
                             await donor.save()
