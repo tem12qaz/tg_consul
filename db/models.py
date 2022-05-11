@@ -111,6 +111,7 @@ class Table(Model):
     donor1_time = fields.IntField(null=True, index=True)
     donor2_time = fields.IntField(null=True, index=True)
     donor3_time = fields.IntField(null=True, index=True)
+    donor4_time = fields.IntField(null=True, index=True)
     donor5_time = fields.IntField(null=True, index=True)
     donor6_time = fields.IntField(null=True, index=True)
     donor7_time = fields.IntField(null=True, index=True)
