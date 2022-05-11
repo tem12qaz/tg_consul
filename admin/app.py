@@ -1,7 +1,7 @@
 import os
 from flask_migrate import Migrate
 #from flask_script import Manager
-from flask_admin import Admin
+from flask_admin import Admin as Admin_
 
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
@@ -15,14 +15,16 @@ migrate = Migrate(app, db, directory=MIGRATION_DIR)
 
 
 # FLASK-ADMIN
-from models import User, Role, TelegramUser, Table, Config, Message, Button, TablePrice
+from models import User, Role, TelegramUser, Table, Config, Message, Button, TablePrice, Admin, Priority
 from views import HomeAdminView, LogoutView, TelegramUserView, TableView, ButtonView, MessageView, \
-    TablePriceView, ConfigView
+    TablePriceView, ConfigView, AdminView, PriorityView
 
-admin = Admin(app, 'TGbot', url='/admin', index_view=HomeAdminView())
+admin = Admin_(app, 'TGbot', url='/admin', index_view=HomeAdminView())
 
 admin.add_view(TelegramUserView(TelegramUser, db.session))
 admin.add_view(TableView(Table, db.session))
+admin.add_view(PriorityView(Priority, db.session))
+admin.add_view(AdminView(Admin, db.session))
 admin.add_view(ConfigView(Config, db.session))
 admin.add_view(TablePriceView(TablePrice, db.session))
 admin.add_view(MessageView(Message, db.session))

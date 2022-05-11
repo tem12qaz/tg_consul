@@ -1,8 +1,21 @@
 import time
 
+from PIL import Image, ImageDraw
 from tortoise.models import Model
 from tortoise import fields
 from flask_security import UserMixin, RoleMixin
+
+
+class Admin(Model):
+    id = fields.IntField(pk=True)
+    user = fields.OneToOneField('models.TelegramUser', related_name='admin', null=True)
+    state = fields.CharField(8, default='')
+    photo = fields.BinaryField(null=True)
+
+
+class Priority(Model):
+    id = fields.IntField(pk=True)
+    table = fields.OneToOneField('models.Table', related_name='priority', null=True)
 
 
 class TelegramUser(Model):
@@ -13,6 +26,7 @@ class TelegramUser(Model):
     active = fields.BooleanField(default=False)
     inviter = fields.ForeignKeyField('models.TelegramUser', related_name='referrals', index=True, null=True)
     referral_url = fields.CharField(32, null=True)
+    agree = fields.BooleanField(default=False)
 
     start_block = fields.IntField(null=True)
     wood_block = fields.IntField(null=True)
@@ -22,12 +36,12 @@ class TelegramUser(Model):
     platinum_block = fields.IntField(null=True)
     legendary_block = fields.IntField(null=True)
 
-    wood_key = fields.SmallIntField(default=0)
-    bronze_key = fields.SmallIntField(default=0)
-    silver_key = fields.SmallIntField(default=0)
-    gold_key = fields.SmallIntField(default=0)
-    platinum_key = fields.SmallIntField(default=0)
-    legendary_key = fields.SmallIntField(default=0)
+    wood_key = fields.FloatField(default=0)
+    bronze_key = fields.FloatField(default=0)
+    silver_key = fields.FloatField(default=0)
+    gold_key = fields.FloatField(default=0)
+    platinum_key = fields.FloatField(default=0)
+    legendary_key = fields.FloatField(default=0)
 
     async def games(self):
         donors = (
@@ -246,6 +260,17 @@ class Table(Model):
             if donor:
                 donors += 1
         return donors
+
+    async def picture(self):
+        im = Image.open(f'photo/{self.type}.png')
+        users = await self.users()
+        draw_text = ImageDraw.Draw(im)
+        draw_text.text(
+            (100, 100),
+            'Test Text',
+            fill=('#1C0606')
+        )
+        im.show()
 
 
 class Message(Model):

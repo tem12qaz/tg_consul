@@ -1,8 +1,10 @@
+import os
 import time
 import traceback
 
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import InputMedia
+from aiogram.utils.exceptions import BotBlocked
 from tortoise.expressions import Q
 
 from data.config import FLOOD_RATE
@@ -11,6 +13,23 @@ from data.passgen import get_secret
 from db.models import get_message
 from keyboards.keyboards import *
 from loader import dp, bot
+
+
+@dp.message_handler(commands=['mail'])
+@dp.throttled(rate=FLOOD_RATE)
+async def mail_handler(message: types.Message):
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
+    admin = await user.admin
+    if user is None or not admin:
+        await message.delete()
+        return
+
+    user.state = 'mail'
+    await admin.save()
+    await message.answer(
+        await get_message('mail'),
+        reply_markup=await get_delete_keyboard()
+    )
 
 
 @dp.message_handler(CommandStart())
@@ -36,24 +55,11 @@ async def bot_start(message: types.Message):
                 if inviter.referral_url == referral_url:
                     user.inviter = inviter
                     await user.save()
-                    if len(await inviter.referrals.all()) % 2 == 0:
-                        inviter.wood_key += 1
-                        inviter.bronze_key += 1
-                        inviter.silver_key += 1
-                        inviter.gold_key += 1
-                        inviter.platinum_key += 1
-                        inviter.legendary_key += 1
-                        await inviter.save()
 
                     await message.answer(
-                        await get_message('start'),
-                        reply_markup=await get_main_keyboard()
+                        await get_message('agreement'),
+                        reply_markup=await get_agreement_keyboard()
                     )
-                    await bot.send_message(
-                        inviter.telegram_id,
-                        (await get_message('new_referral')).format(name=user.username)
-                    )
-                    return
 
         await message.answer(
             await get_message('incorrect_id'),
@@ -61,10 +67,13 @@ async def bot_start(message: types.Message):
         await message.delete()
 
     else:
-        await message.answer(
-            await get_message('start'),
-            reply_markup=await get_main_keyboard()
-        )
+        if user.agree:
+            await message.answer(
+                await get_message('start'),
+                reply_markup=await get_main_keyboard()
+            )
+        else:
+            await message.delete()
 
 
 async def get_captcha(callback, back, to, field=None):
@@ -96,6 +105,21 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         to, back, field_id = select.split('.')[1:]
         print(back, to, field_id)
         await get_captcha(callback, back, to, field_id)
+
+    if 'agree' in select:
+        user.agree = True
+        await user.save()
+        id_ = user.referral_url.split('_')[-1]
+        inviter = await TelegramUser.get_or_none(id=id_)
+        await callback.message.edit_text(
+            await get_message('start'),
+            reply_markup=await get_main_keyboard()
+        )
+        await bot.send_message(
+            inviter.telegram_id,
+            (await get_message('new_referral')).format(name=user.username)
+        )
+        return
 
     elif '_info' in select:
         text = await get_message(select)
@@ -175,13 +199,28 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 field = (await Table.filter(
                     Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
                       Q(donor4=None), Q(donor5=None), Q(donor6=None),
-                      Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
-                ).limit(1))[0]
+                      Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table) & Q(priority__not_isnull=True)
+                ).limit(1))
+                if not field:
+                    field = (await Table.filter(
+                        Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                          Q(donor4=None), Q(donor5=None), Q(donor6=None),
+                          Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
+                    ).limit(1))[0]
+                else:
+                    field = field[0]
             else:
                 field = (await Table.filter(
                     Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
-                      Q(donor4=None), join_type="OR") & Q(type=table)
-                ).limit(1))[0]
+                      Q(donor4=None), join_type="OR") & Q(type=table) & Q(priority__not_isnull=True)
+                ).limit(1))
+                if not field:
+                    field = (await Table.filter(
+                        Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                          Q(donor4=None), join_type="OR") & Q(type=table)
+                    ).limit(1))[0]
+                else:
+                    field = field[0]
             if field:
                 await callback.message.edit_media(
                     InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
@@ -376,6 +415,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 reply_markup=await get_donor_info_keyboard(field, donor, valid, donor_num, role)
             )
 
+        elif 'picture' in select:
+            return
+            pic = await field.picture()
+            await bot.send_photo(
+                user.telegram_id,
+                photo=pic,
+                reply_markup=await get_delete_keyboard()
+            )
         elif 'field_valid_' in select:
             donor_num = select.split('_')[2]
             donor = await getattr(field, f'donor{donor_num}')
@@ -409,6 +456,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         if field.type == 'start':
                             donor.active = True
                             await donor.save()
+                            inviter = await donor.inviter
+                            inviter.wood_key += 0.5
+                            inviter.bronze_key += 0.5
+                            inviter.silver_key += 0.5
+                            inviter.gold_key += 0.5
+                            inviter.platinum_key += 0.5
+                            inviter.legendary_key += 0.5
+                            await inviter.save()
 
                         if await field.is_full:
                             max_donor = 9
@@ -600,6 +655,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await callback.answer(await get_message('exit_notification'), show_alert=True)
                 await get_captcha(callback, f'open_{field.type}', 'confirm_exit', field.id)
 
+    elif select == 'delete':
+        await callback.message.delete()
+        admin = await user.admin
+        if admin and admin.state == 'mail':
+            admin.state = ''
+            admin.photo = None
+            await admin.save()
+
 
 @dp.message_handler()
 @dp.throttled(rate=FLOOD_RATE)
@@ -624,8 +687,8 @@ async def listen_handler(message: types.Message):
                 user.inviter = inviter
                 await user.save()
                 await message.answer(
-                    await get_message('start'),
-                    reply_markup=await get_main_keyboard()
+                    await get_message('agreement'),
+                    reply_markup=await get_agreement_keyboard()
                 )
             else:
                 await message.answer(
@@ -658,7 +721,13 @@ async def listen_handler(message: types.Message):
             for table, role in tables.items():
                 table_text += tables_text[table.type].format(
                     status=await get_button(role[:-1] if role != 'master' else role),
-                    count=await table.donor_count()
+                    count=await table.donor_count(),
+                    wood=round(user.wood_key-0.1),
+                    bronze=round(user.bronze_key-0.1),
+                    silver=round(user.silver_key-0.1),
+                    gold=round(user.gold_key-0.1),
+                    platinum=round(user.platinum_key-0.1),
+                    legendary=round(user.legendary_key-0.1),
                 )
 
         else:
@@ -695,3 +764,88 @@ async def listen_handler(message: types.Message):
             await get_message('support'),
             reply_markup=await get_support_keyboard()
         )
+
+    elif await user.admin:
+        admin = await user.admin
+        if admin.state == 'mail':
+            users = await TelegramUser.all()
+            photo = admin.photo
+            user.state = ''
+            await user.save()
+            for user_ in users:
+                try:
+                    if photo:
+                        await bot.send_photo(
+                            user_.telegram_id,
+                            photo=photo
+                        )
+
+                    await bot.send_message(
+                        user_.telegram_id,
+                        message.text,
+                        reply_markup=await get_delete_keyboard()
+                    )
+                except BotBlocked:
+                    pass
+                except Exception as e:
+                    print(traceback.format_exc())
+            user.state = ''
+            await user.save()
+            await message.answer(
+                await get_message('mailed')
+            )
+
+
+@dp.message_handler(content_types=['photo'])
+async def handle_photo(message: types.Message):
+    user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
+    if user is None:
+        return
+
+    admin = await user.admin
+
+    photo = message.photo[-1]
+    name = f'files/{message.from_user.id}_{photo.file_id}.jpg'
+    await photo.download(destination_file=name)
+
+    photo_binary = open(name, 'rb').read()
+    os.remove(name)
+
+    if 'mail' == admin.state:
+        admin.photo = photo_binary
+        await user.save()
+        return
+
+    else:
+        await message.delete()
+
+
+@dp.message_handler(content_types=['photo'])
+async def handle_photo(message: types.Message):
+    user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
+    if user is None:
+        return
+
+    admin = await user.admin
+
+    photo = message.document
+
+    if 'jpg' not in photo['mime_type'] and \
+            'jpeg' not in photo['mime_type'] and \
+            'png' not in photo['mime_type']:
+        await message.delete()
+        return
+
+    name = f'files/{message.from_user.id}_{photo.file_id}.jpg'
+    await photo.download(destination_file=name)
+
+    photo_binary = open(name, 'rb').read()
+    os.remove(name)
+
+    if 'mail' == admin.state:
+        admin.photo = photo_binary
+        await user.save()
+        return
+
+    else:
+        await message.delete()

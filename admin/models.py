@@ -33,6 +33,30 @@ class TelegramUser(db.Model):
     max_field = db.Column(db.String(32), default='start')
     referral_url = db.Column(db.String(32))
 
+    wood_key = db.Column(db.Float(), default=0)
+    bronze_key = db.Column(db.Float(), default=0)
+    silver_key = db.Column(db.Float(), default=0)
+    gold_key = db.Column(db.Float(), default=0)
+    platinum_key = db.Column(db.Float(), default=0)
+    legendary_key = db.Column(db.Float(), default=0)
+
+    def __repr__(self):
+        return f'ID{self.id} {self.username}'
+
+
+class Admin(db.Model):
+    __tablename__ = 'admin'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    user = db.relationship("TelegramUser", uselist=False, backref="admin", foreign_keys=[user_id])
+
+
+class Priority(db.Model):
+    __tablename__ = 'admin'
+    id = db.Column(db.Integer(), primary_key=True)
+    table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    table = db.relationship("Table", uselist=False, backref="priority", foreign_keys=[table_id])
+
 
 class Table(db.Model):
     __tablename__ = 'table'

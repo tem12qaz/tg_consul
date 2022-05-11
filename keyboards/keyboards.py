@@ -116,6 +116,18 @@ async def get_back_to_info_keyboard():
     return keyboard
 
 
+async def get_delete_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('delete'),
+                                     callback_data=select_callback.new(select='delete')),
+            ],
+        ]
+    )
+    return keyboard
+
+
 async def get_player_keyboard(field: Table, role):
     me = await get_button('me_emoji')
     inline_keyboard = [
@@ -169,6 +181,13 @@ async def get_player_keyboard(field: Table, role):
     )
     inline_keyboard.append(
         [
+            InlineKeyboardButton(text=await get_button('picture'),
+                                 callback_data=select_callback.new(select=f'field_picture_{field.id}')),
+
+        ],
+    )
+    inline_keyboard.append(
+        [
             InlineKeyboardButton(text=await get_button('back_to_tables'),
                                  callback_data=select_callback.new(select=f'open')),
 
@@ -177,17 +196,27 @@ async def get_player_keyboard(field: Table, role):
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
+async def get_agreement_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=await get_button('agree'),
+                                     callback_data=select_callback.new(select='agree')),
+            ],
+        ]
+    )
+    return keyboard
+
 async def donors_keyboard(field: Table, role):
     inline_keyboard = []
+    valid_emoji = await get_button('valid_emoji')
+    invalid_emoji = await get_button('invalid_emoji')
 
     def valid(i):
-        if 'master' in role or ('mentor' in role and field.type != 'start'):
-            if getattr(field, f'donor_{i}_{role}'):
-                return '✅'
-            else:
-                return '❌'
+        if field.donor_valid(i):
+            return valid_emoji
         else:
-            return ''
+            return invalid_emoji
 
     async def donor_text(i):
         donor = await getattr(field, f'donor{i}')

@@ -32,8 +32,11 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 
 class TelegramUserView(AdminMixin, ModelView):
-    column_list = ('id', 'telegram_id', 'username', 'max_field', 'referral_url')
-    form_columns = ('telegram_id', 'username', 'max_field', 'referral_url')
+    column_filters = ("telegram_id", "id", "username")
+    column_list = ('id', 'telegram_id', 'username', 'max_field', 'referral_url', 'wood_key', 'bronze_key',
+                   'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
+    form_columns = ('telegram_id', 'username', 'max_field', 'referral_url', 'wood_key', 'bronze_key',
+                    'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
 
 
 class MessageView(AdminMixin, ModelView):
@@ -44,6 +47,17 @@ class MessageView(AdminMixin, ModelView):
 class ButtonView(AdminMixin, ModelView):
     column_list = ('id', 'name', 'text')
     form_columns = ('name', 'text')
+
+
+class AdminView(AdminMixin, ModelView):
+    column_filters = ("user",)
+    column_list = ('id', 'user')
+    form_columns = ('user',)
+
+
+class PriorityView(AdminMixin, ModelView):
+    column_list = ('id', 'table')
+    form_columns = ('table',)
 
 
 class TablePriceView(AdminMixin, ModelView):
@@ -99,12 +113,13 @@ class ConfigView(AdminMixin, ModelView):
 
 
 class TableView(AdminMixin, ModelView):
+    column_filters = ("id", "master", 'mentor1', 'mentor2')
     column_list = ('id', 'type', 'donor1', 'donor2', 'donor3', 'donor4', 'donor5',
                    'donor6', 'donor7', 'donor8', 'partner1', 'partner2',
-                                                             'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
+                   'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
     form_columns = ('type', 'donor1', 'donor2', 'donor3', 'donor4', 'donor5',
                     'donor6', 'donor7', 'donor8', 'partner1', 'partner2',
-                                                              'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
+                    'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
 
 
 class LogoutView(AdminMixin, BaseView):
