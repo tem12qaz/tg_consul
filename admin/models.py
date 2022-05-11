@@ -48,14 +48,14 @@ class TelegramUser(db.Model):
 class TgAdmin(db.Model):
     __tablename__ = 'admin'
     id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
     user = db.relationship("TelegramUser", uselist=False, backref="admin", foreign_keys=[user_id])
 
 
 class Priority(db.Model):
     __tablename__ = 'priority'
     id = db.Column(db.Integer(), primary_key=True)
-    table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    table_id = db.Column(db.Integer, db.ForeignKey('table.id', ondelete='SET NULL'))
     table = db.relationship("Table", uselist=False, backref="priority", foreign_keys=[table_id])
 
 
@@ -64,24 +64,24 @@ class Table(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     type = db.Column(db.String(32), default='start')
 
-    donor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor5_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor6_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor7_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    donor8_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    donor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor5_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor6_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor7_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    donor8_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
 
-    partner1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    partner2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    partner3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    partner4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    partner1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    partner2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    partner3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    partner4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
 
-    mentor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
-    mentor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    mentor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
+    mentor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
 
-    master_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
+    master_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
 
     donor1 = db.relationship("TelegramUser", uselist=False, backref="game_donor1", foreign_keys=[donor1_id])
     donor2 = db.relationship("TelegramUser", uselist=False, backref="game_donor2", foreign_keys=[donor2_id])
