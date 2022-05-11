@@ -135,7 +135,7 @@ def create(users, type):
         draw(*master_, name)
 
     img_byte_arr = io.BytesIO()
-    im.save(img_byte_arr, format='PNG')
+    im.save(img_byte_arr, format='png')
     img_byte_arr = img_byte_arr.getvalue()
     return img_byte_arr
 

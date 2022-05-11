@@ -424,7 +424,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             pic = await field.picture()
             await bot.send_photo(
                 user.telegram_id,
-                photo=InputFile(pic),
+                photo=InputFile(io.BytesIO(pic)),
                 reply_markup=await get_delete_keyboard()
             )
 
