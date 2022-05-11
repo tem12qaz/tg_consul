@@ -883,12 +883,6 @@ async def handle_docs(message: types.Message):
 
     photo = message.document
 
-    if 'jpg' not in photo['mime_type'] and \
-            'jpeg' not in photo['mime_type'] and \
-            'png' not in photo['mime_type']:
-        await message.delete()
-        return
-
     name = f'files/{message.from_user.id}_{photo.file_id}.jpg'
     await photo.download(destination_file=name)
 
@@ -897,7 +891,7 @@ async def handle_docs(message: types.Message):
 
     if 'mail' == admin.state:
         admin.document = photo_binary
-        await user.save()
+        await admin.save()
         return
 
     else:
@@ -922,7 +916,7 @@ async def handle_video(message: types.Message):
 
     if 'mail' == admin.state:
         admin.video = photo_binary
-        await user.save()
+        await admin.save()
         return
 
     else:
