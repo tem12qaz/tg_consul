@@ -52,7 +52,7 @@ class Admin(db.Model):
 
 
 class Priority(db.Model):
-    __tablename__ = 'admin'
+    __tablename__ = 'priority'
     id = db.Column(db.Integer(), primary_key=True)
     table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
     table = db.relationship("Table", uselist=False, backref="priority", foreign_keys=[table_id])
