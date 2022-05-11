@@ -50,6 +50,7 @@ class ButtonView(AdminMixin, ModelView):
 
 
 class AdminView(AdminMixin, ModelView):
+    name='TgAdmin'
     column_filters = ("user",)
     column_list = ('id', 'user')
     form_columns = ('user',)
