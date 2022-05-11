@@ -266,7 +266,6 @@ class Table(Model):
         return donors
 
     async def picture(self):
-        im = Image.open(f'photo/{self.type}.png')
         users = await self.users()
         return picture.create(users, self.type)
 

@@ -1,3 +1,5 @@
+import io
+
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -132,6 +134,9 @@ def create(users, type):
             name = master.username
         draw(*master_, name)
 
-    return im.tobytes()
+    img_byte_arr = io.BytesIO()
+    im.save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+    return img_byte_arr
 
 
