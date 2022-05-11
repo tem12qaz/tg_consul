@@ -367,7 +367,7 @@ async def get_donor_gift_keyboard(field: Table, price):
             ), url=TELEGRAM_URL.format(username=master_un))
         ]
     ]
-    if not field.type != 'start':
+    if field.type != 'start':
         mentor1_un = (await field.mentor1).username
         mentor2_un = (await field.mentor2).username
 

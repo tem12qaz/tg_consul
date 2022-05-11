@@ -2,6 +2,7 @@ import os
 import time
 import traceback
 
+import callback as callback
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import InputMedia
 from aiogram.utils.exceptions import BotBlocked
@@ -42,6 +43,7 @@ async def bot_start(message: types.Message):
             user = await TelegramUser.create(
                 telegram_id=message.from_user.id,
                 username=message.from_user.username,
+                name=message.from_user.full_name
             )
         if ' ' in message.text:
             try:
@@ -598,6 +600,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         else:
             users = await field.users()
             num = select.split('_')[1][-1]
+            gift = getattr(await TablePrice.get(id=1), field.type)
+
             if 'master' in select:
                 player = users['master']
                 role = 'Мастер'
@@ -605,10 +609,16 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             elif 'mentor' in select:
                 player = users['mentors'][int(num) - 1]
                 role = f'Ментор {num}'
+                if field.type == 'start':
+                    gift = 0
+                else:
+                    gift = gift // 2
 
             elif 'patrner' in select:
                 player = users['partners'][int(num) - 1]
                 role = f'Партнер {num}'
+                gift = 0
+
             else:
                 return
 
@@ -617,6 +627,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 username=player.username,
                 inviter=(await player.inviter).username,
                 refs=len(await player.referrals),
+                name=player.name,
+                sum=gift
             )
 
             await callback.message.edit_caption(
@@ -700,6 +712,21 @@ async def listen_handler(message: types.Message):
                 )
 
     elif message.text == await get_button('open'):
+        if not user.username:
+            un = message.from_user.username
+            if not un:
+                await message.answer(
+                    await get_message('add_usernaae')
+                )
+                return
+            else:
+                user.username = un
+                await user.save()
+
+        elif not user.name:
+            user.name = message.from_user.full_name
+            await user.save()
+
         await message.answer_photo(
             photo=open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'),
             caption=await get_message('open_table'),

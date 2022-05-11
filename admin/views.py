@@ -119,7 +119,40 @@ class TableView(AdminMixin, ModelView):
                    'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
     form_columns = ('type', 'donor1', 'donor2', 'donor3', 'donor4', 'donor5',
                     'donor6', 'donor7', 'donor8', 'partner1', 'partner2',
-                    'partner3', 'partner4', 'mentor1', 'mentor2', 'master')
+                    'partner3', 'partner4', 'mentor1', 'mentor2', 'master',
+                    'donor_1_mentor1', 'donor_1_mentor2', 'donor_1_master',
+                    'donor_2_mentor1', 'donor_2_mentor2', 'donor_2_master',
+                    'donor_3_mentor2', 'donor_3_mentor2', 'donor_3_master',
+                    'donor_4_mentor1', 'donor_4_mentor2', 'donor_4_master',
+                    'donor_5_mentor1', 'donor_5_mentor2', 'donor_5_master',
+                    'donor_6_mentor1', 'donor_6_mentor2', 'donor_6_master',
+                    'donor_7_mentor1', 'donor_7_mentor2', 'donor_7_master',
+                    'donor_8_mentor1', 'donor_8_mentor2', 'donor_8_master')
+
+    def donor_valid(view, context, model, name):
+        if model.type == 'start':
+            valid = getattr(model, name[:-1] + '_' + name[-1] + '_master')
+        else:
+            valid = getattr(model, name[:-1] + '_' + name[-1] + '_master') and \
+                    getattr(model, name[:-1] + '_' + name[-1] + '_mentor1') and \
+                    getattr(model, name[:-1] + '_' + name[-1] + '_mentor2')
+
+        if valid:
+            return str(model) + '✅'
+
+        else:
+            return str(model) + '❌'
+
+    column_formatters = {
+        'donor1': donor_valid,
+        'donor2': donor_valid,
+        'donor3': donor_valid,
+        'donor4': donor_valid,
+        'donor5': donor_valid,
+        'donor6': donor_valid,
+        'donor7': donor_valid,
+        'donor8': donor_valid,
+    }
 
 
 class LogoutView(AdminMixin, BaseView):

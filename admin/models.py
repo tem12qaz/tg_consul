@@ -32,6 +32,7 @@ class TelegramUser(db.Model):
     username = db.Column(db.String(128))
     max_field = db.Column(db.String(32), default='start')
     referral_url = db.Column(db.String(32))
+    active = db.Column(db.Boolean(), default=False)
 
     wood_key = db.Column(db.Float(), default=0)
     bronze_key = db.Column(db.Float(), default=0)
@@ -100,6 +101,38 @@ class Table(db.Model):
     mentor2 = db.relationship("TelegramUser", uselist=False, backref="game_mentor2", foreign_keys=[mentor2_id])
 
     master = db.relationship("TelegramUser", uselist=False, backref="game_master", foreign_keys=[master_id])
+
+    donor_1_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_1_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_1_master = db.Column(db.Boolean(), default=False)
+
+    donor_2_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_2_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_2_master = db.Column(db.Boolean(), default=False)
+
+    donor_3_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_3_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_3_master = db.Column(db.Boolean(), default=False)
+
+    donor_4_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_4_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_4_master = db.Column(db.Boolean(), default=False)
+
+    donor_5_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_5_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_5_master = db.Column(db.Boolean(), default=False)
+
+    donor_6_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_6_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_6_master = db.Column(db.Boolean(), default=False)
+
+    donor_7_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_7_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_7_master = db.Column(db.Boolean(), default=False)
+
+    donor_8_mentor1 = db.Column(db.Boolean(), default=False)
+    donor_8_mentor2 = db.Column(db.Boolean(), default=False)
+    donor_8_master = db.Column(db.Boolean(), default=False)
 
     def __repr__(self):
         return 'id' + str(self.id) + ' ' + self.name_ru
