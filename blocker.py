@@ -12,7 +12,7 @@ async def send_message(donor, field, now, block_time):
     await bot.send_message(
         donor.telegram_id,
         (await get_message('you_excluded')).format(
-            await get_button(f'{field.type}_name')
+            type=await get_button(f'{field.type}_name')
         )
     )
 
