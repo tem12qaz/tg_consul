@@ -854,8 +854,8 @@ async def handle_photo(message: types.Message):
         await message.delete()
 
 
-@dp.message_handler(content_types=['photo'])
-async def handle_photo(message: types.Message):
+@dp.message_handler(content_types=['document'])
+async def handle_docs(message: types.Message):
     user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
     if user is None:
         return
