@@ -63,9 +63,6 @@ async def bot_start(message: types.Message):
                         reply_markup=await get_agreement_keyboard()
                     )
 
-        await message.answer(
-            await get_message('incorrect_id'),
-        )
         await message.delete()
 
     else:
@@ -111,8 +108,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     if 'agree' in select:
         user.agree = True
         await user.save()
-        id_ = user.referral_url.split('_')[-1]
-        inviter = await TelegramUser.get_or_none(id=id_)
+        inviter = await user.inviter
         await callback.message.edit_text(
             await get_message('start'),
             reply_markup=await get_main_keyboard()
