@@ -44,7 +44,7 @@ class TelegramUser(db.Model):
         return f'ID{self.id} {self.username}'
 
 
-class Admin(db.Model):
+class TgAdmin(db.Model):
     __tablename__ = 'admin'
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id'))
