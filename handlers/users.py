@@ -725,13 +725,7 @@ async def listen_handler(message: types.Message):
             for table, role in tables.items():
                 table_text += tables_text[table.type].format(
                     status=await get_button(role[:-1] if role != 'master' else role),
-                    count=await table.donor_count(),
-                    wood=round(user.wood_key-0.1),
-                    bronze=round(user.bronze_key-0.1),
-                    silver=round(user.silver_key-0.1),
-                    gold=round(user.gold_key-0.1),
-                    platinum=round(user.platinum_key-0.1),
-                    legendary=round(user.legendary_key-0.1),
+                    count=await table.donor_count()
                 )
 
         else:
@@ -742,7 +736,13 @@ async def listen_handler(message: types.Message):
                 id=user.telegram_id, name=user.username,
                 inviter=(await user.inviter).username,
                 count=len(await user.referrals.all()),
-                tables=table_text
+                tables=table_text,
+                wood=round(user.wood_key - 0.1),
+                bronze=round(user.bronze_key - 0.1),
+                silver=round(user.silver_key - 0.1),
+                gold=round(user.gold_key - 0.1),
+                platinum=round(user.platinum_key - 0.1),
+                legendary=round(user.legendary_key - 0.1),
             ),
             reply_markup=await get_status_keyboard()
         )

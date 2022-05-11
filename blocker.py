@@ -26,6 +26,10 @@ async def blocker():
             to_block = await Table.filter(donor1_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor1)
+                if not donor:
+                    field.donor1_time = None
+                    await field.save()
+                    continue
                 field.donor1 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -33,6 +37,10 @@ async def blocker():
             to_block = await Table.filter(donor2_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor2)
+                if not donor:
+                    field.donor2_time = None
+                    await field.save()
+                    continue
                 field.donor2 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -40,6 +48,10 @@ async def blocker():
             to_block = await Table.filter(donor3_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor3)
+                if not donor:
+                    field.donor3_time = None
+                    await field.save()
+                    continue
                 field.donor3 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -47,6 +59,10 @@ async def blocker():
             to_block = await Table.filter(donor4_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor4)
+                if not donor:
+                    field.donor4_time = None
+                    await field.save()
+                    continue
                 field.donor4 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -54,6 +70,10 @@ async def blocker():
             to_block = await Table.filter(donor5_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor5)
+                if not donor:
+                    field.donor5_time = None
+                    await field.save()
+                    continue
                 field.donor5 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -61,6 +81,10 @@ async def blocker():
             to_block = await Table.filter(donor6_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor6)
+                if not donor:
+                    field.donor6_time = None
+                    await field.save()
+                    continue
                 field.donor6 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -68,6 +92,10 @@ async def blocker():
             to_block = await Table.filter(donor7_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor7)
+                if not donor:
+                    field.donor7_time = None
+                    await field.save()
+                    continue
                 field.donor7 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
@@ -75,6 +103,10 @@ async def blocker():
             to_block = await Table.filter(donor8_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor8)
+                if not donor:
+                    field.donor8_time = None
+                    await field.save()
+                    continue
                 field.donor8 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
