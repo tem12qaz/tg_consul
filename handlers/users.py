@@ -24,7 +24,7 @@ async def mail_handler(message: types.Message):
         await message.delete()
         return
 
-    user.state = 'mail'
+    admin.state = 'mail'
     await admin.save()
     await message.answer(
         await get_message('mail'),
