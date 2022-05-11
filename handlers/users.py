@@ -143,7 +143,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
     elif 'open_' in select:
         table = select.replace('open_', '')
-        if tables_order.index(user.max_field) > tables_order.index(table):
+        if tables_order.index(user.max_field) < tables_order.index(table):
             await callback.message.delete()
 
         for game, role in (await user.games()).items():
