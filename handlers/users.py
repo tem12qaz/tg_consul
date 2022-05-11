@@ -622,7 +622,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 else:
                     gift = gift // 2
 
-            elif 'patrner' in select:
+            elif 'partner' in select:
                 player = users['partners'][int(num) - 1]
                 role = f'Партнер {num}'
                 gift = 0
