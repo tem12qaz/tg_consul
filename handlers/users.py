@@ -2,7 +2,6 @@ import os
 import time
 import traceback
 
-import callback as callback
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import InputMedia
 from aiogram.utils.exceptions import BotBlocked
