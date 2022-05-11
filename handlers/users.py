@@ -225,7 +225,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await callback.message.edit_media(
                     InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
                 )
+                delete = time.time() + (await Config.get(id=1)).delete_time * 3600
                 donor_num = await field.add_donor(user)
+                setattr(field, f'donor{donor_num}_time', delete)
                 if table != 'start' and (await Config.get(id=1)).keys_system and keys > 1:
                     setattr(user, f'{table}_key', keys - 1)
                     await user.save()

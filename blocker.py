@@ -58,7 +58,7 @@ async def blocker():
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
-            to_block = await Table.filter(donor6_time__lte=time).all()
+            to_block = await Table.filter(donor6_time__lte=now).all()
             for field in to_block:
                 donor = (await field.donor6)
                 field.donor6 = None
