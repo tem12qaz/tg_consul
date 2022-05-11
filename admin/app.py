@@ -17,14 +17,14 @@ migrate = Migrate(app, db, directory=MIGRATION_DIR)
 # FLASK-ADMIN
 from models import User, Role, TelegramUser, Table, Config, Message, Button, TablePrice, Admin, Priority
 from views import HomeAdminView, LogoutView, TelegramUserView, TableView, ButtonView, MessageView, \
-    TablePriceView, ConfigView, AdminView, PriorityView
+    TablePriceView, ConfigView, TgAdminView, PriorityView
 
 admin = Admin_(app, 'TGbot', url='/admin', index_view=HomeAdminView())
 
 admin.add_view(TelegramUserView(TelegramUser, db.session))
 admin.add_view(TableView(Table, db.session))
 admin.add_view(PriorityView(Priority, db.session))
-admin.add_view(AdminView(Admin, db.session, name='TgAdmin'))
+admin.add_view(TgAdminView(Admin, db.session))
 admin.add_view(ConfigView(Config, db.session))
 admin.add_view(TablePriceView(TablePrice, db.session))
 admin.add_view(MessageView(Message, db.session))
