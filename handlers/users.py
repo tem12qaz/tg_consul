@@ -4,7 +4,7 @@ import time
 import traceback
 
 from aiogram.dispatcher.filters import CommandStart
-from aiogram.types import InputMedia
+from aiogram.types import InputMedia, InputFile
 from aiogram.utils.exceptions import BotBlocked
 from tortoise.expressions import Q
 
@@ -424,7 +424,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             pic = await field.picture()
             await bot.send_photo(
                 user.telegram_id,
-                photo=io.BytesIO(pic),
+                photo=InputFile(io.BytesIO(pic)),
                 reply_markup=await get_delete_keyboard()
             )
 
