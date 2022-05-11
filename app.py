@@ -9,7 +9,7 @@ from handlers import dp
 
 async def on_startup(dp):
     await db_init()
-    asyncio.get_running_loop().create_task(blocker)
+    asyncio.get_running_loop().create_task(blocker())
 
 
 if __name__ == '__main__':
