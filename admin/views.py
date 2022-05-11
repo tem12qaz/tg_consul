@@ -138,10 +138,10 @@ class TableView(AdminMixin, ModelView):
                     getattr(model, name[:-1] + '_' + name[-1] + '_mentor2')
 
         if valid:
-            return str(model) + '✅'
+            return str(getattr(model, name)) + '✅'
 
         else:
-            return str(model) + '❌'
+            return str(getattr(model, name)) + '❌'
 
     column_formatters = {
         'donor1': donor_valid,
