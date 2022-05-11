@@ -7,9 +7,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def create(users, type):
-    im = Image.open(f'../photo/{type}_name.png')
+    im = Image.open(f'photo/{type}_name.png')
     draw_text = ImageDraw.Draw(im)
-    font = ImageFont.truetype('../photo/font.ttf', size=17)
+    font = ImageFont.truetype('photo/font.ttf', size=17)
 
     def draw(a, b, text):
         draw_text.text(
@@ -71,7 +71,7 @@ def create(users, type):
                 draw(*donors[users['donors'].index(donor)], name)
 
         for partner in users['partners']:
-            font = ImageFont.truetype('../photo/font.ttf', size=19)
+            font = ImageFont.truetype('photo/font.ttf', size=19)
             if len(partner.username) > 11:
                 name = partner.username[:11] + '...'
             else:
@@ -79,7 +79,7 @@ def create(users, type):
             draw(*partners[users['partners'].index(partner)], name)
 
         for mentor in users['mentors']:
-            font = ImageFont.truetype('../photo/font.ttf', size=18)
+            font = ImageFont.truetype('photo/font.ttf', size=18)
             if len(mentor.username) > 8:
                 name = mentor.username[:8] + '...'
             else:
@@ -87,7 +87,7 @@ def create(users, type):
             draw(*mentors[users['mentors'].index(mentor)], name)
 
         master = users['master']
-        font = ImageFont.truetype('../photo/font.ttf', size=19)
+        font = ImageFont.truetype('photo/font.ttf', size=19)
         if len(master.username) > 15:
             name = master.username[:15] + '...'
         else:
@@ -117,7 +117,7 @@ def create(users, type):
                 draw(*donors[users['donors'].index(donor)], name)
 
         for mentor in users['mentors']:
-            font = ImageFont.truetype('../photo/font.ttf', size=18)
+            font = ImageFont.truetype('photo/font.ttf', size=18)
             if len(mentor.username) > 8:
                 name = mentor.username[:8] + '...'
             else:
@@ -125,7 +125,7 @@ def create(users, type):
             draw(*mentors[users['mentors'].index(mentor)], name)
 
         master = users['master']
-        font = ImageFont.truetype('../photo/font.ttf', size=19)
+        font = ImageFont.truetype('photo/font.ttf', size=19)
         if len(master.username) > 15:
             name = master.username[:15] + '...'
         else:
