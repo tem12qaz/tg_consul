@@ -109,10 +109,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         user.agree = True
         await user.save()
         inviter = await user.inviter
-        await callback.message.edit_text(
+        await callback.message.answer(
             await get_message('start'),
             reply_markup=await get_main_keyboard()
         )
+        await callback.message.delete()
         await bot.send_message(
             inviter.telegram_id,
             (await get_message('new_referral')).format(name=user.username)
