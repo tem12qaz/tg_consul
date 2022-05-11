@@ -139,6 +139,16 @@ async def get_player_keyboard(field: Table, role):
     if field.type != 'start':
         inline_keyboard.append(
             [
+                InlineKeyboardButton(text=await get_button('mentor1') + (me if role == 'mentor1' else ''),
+                                     callback_data=select_callback.new(select=f'field_mentor1_{field.id}')),
+
+                InlineKeyboardButton(text=await get_button('mentor2') + (me if role == 'mentor2' else ''),
+                                     callback_data=select_callback.new(select=f'field_mentor2_{field.id}')),
+
+            ]
+        )
+        inline_keyboard.append(
+            [
                 InlineKeyboardButton(text=await get_button('partner1') + (me if role == 'partner1' else ''),
                                      callback_data=select_callback.new(select=f'field_partner1_{field.id}')),
 
