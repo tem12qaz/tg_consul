@@ -252,6 +252,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                     table=await get_button(f'{field.type}_name')
                                 )
                             )
+                return
             else:
                 await callback.answer()
                 return
