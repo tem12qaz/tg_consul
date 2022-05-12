@@ -50,26 +50,26 @@ class TelegramUser(Model):
 
     async def games(self):
         donors = (
-            await self.game_donor1,
-            await self.game_donor2,
-            await self.game_donor3,
-            await self.game_donor4,
-            await self.game_donor5,
-            await self.game_donor6,
-            await self.game_donor7,
-            await self.game_donor8,
+            *(await self.game_donor1),
+            *(await self.game_donor2),
+            *(await self.game_donor3),
+            *(await self.game_donor4),
+            *(await self.game_donor5),
+            *(await self.game_donor6),
+            *(await self.game_donor7),
+            *(await self.game_donor8),
         )
         partners = (
-            await self.game_partner1,
-            await self.game_partner2,
-            await self.game_partner3,
-            await self.game_partner4,
+            *(await self.game_partner1),
+            *(await self.game_partner2),
+            *(await self.game_partner3),
+            *(await self.game_partner4),
         )
         mentors = (
-            await self.game_mentor1,
-            await self.game_mentor2,
+            *(await self.game_mentor1),
+            *(await self.game_mentor2),
         )
-        master = await self.game_master
+        master = (*(await self.game_master),)
 
         games = {}
 
@@ -94,24 +94,25 @@ class TelegramUser(Model):
 class Table(Model):
     id = fields.IntField(pk=True)
     type = fields.CharField(32, default='start', index=True)
-    donor1 = fields.OneToOneField('models.TelegramUser', related_name='game_donor1', null=True, on_delete="SET NULL")
-    donor2 = fields.OneToOneField('models.TelegramUser', related_name='game_donor2', null=True, on_delete="SET NULL")
-    donor3 = fields.OneToOneField('models.TelegramUser', related_name='game_donor3', null=True, on_delete="SET NULL")
-    donor4 = fields.OneToOneField('models.TelegramUser', related_name='game_donor4', null=True, on_delete="SET NULL")
-    donor5 = fields.OneToOneField('models.TelegramUser', related_name='game_donor5', null=True, on_delete="SET NULL")
-    donor6 = fields.OneToOneField('models.TelegramUser', related_name='game_donor6', null=True, on_delete="SET NULL")
-    donor7 = fields.OneToOneField('models.TelegramUser', related_name='game_donor7', null=True, on_delete="SET NULL")
-    donor8 = fields.OneToOneField('models.TelegramUser', related_name='game_donor8', null=True, on_delete="SET NULL")
 
-    partner1 = fields.OneToOneField('models.TelegramUser', related_name='game_partner1', null=True, on_delete="SET NULL")
-    partner2 = fields.OneToOneField('models.TelegramUser', related_name='game_partner2', null=True, on_delete="SET NULL")
-    partner3 = fields.OneToOneField('models.TelegramUser', related_name='game_partner3', null=True, on_delete="SET NULL")
-    partner4 = fields.OneToOneField('models.TelegramUser', related_name='game_partner4', null=True, on_delete="SET NULL")
+    donor1 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor1', index=True, null=True, on_delete="SET NULL")
+    donor2 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor2', index=True, null=True, on_delete="SET NULL")
+    donor3 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor3', index=True, null=True, on_delete="SET NULL")
+    donor4 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor4', index=True, null=True, on_delete="SET NULL")
+    donor5 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor5', index=True, null=True, on_delete="SET NULL")
+    donor6 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor6', index=True, null=True, on_delete="SET NULL")
+    donor7 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor7', index=True, null=True, on_delete="SET NULL")
+    donor8 = fields.ForeignKeyField('models.TelegramUser', related_name='game_donor8', index=True, null=True, on_delete="SET NULL")
 
-    mentor1 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor1', null=True, on_delete="SET NULL")
-    mentor2 = fields.OneToOneField('models.TelegramUser', related_name='game_mentor2', null=True, on_delete="SET NULL")
+    partner1 = fields.ForeignKeyField('models.TelegramUser', related_name='game_partner1', index=True, null=True, on_delete="SET NULL")
+    partner2 = fields.ForeignKeyField('models.TelegramUser', related_name='game_partner2', index=True, null=True, on_delete="SET NULL")
+    partner3 = fields.ForeignKeyField('models.TelegramUser', related_name='game_partner3', index=True, null=True, on_delete="SET NULL")
+    partner4 = fields.ForeignKeyField('models.TelegramUser', related_name='game_partner4', index=True, null=True, on_delete="SET NULL")
 
-    master = fields.OneToOneField('models.TelegramUser', related_name='game_master', null=True, on_delete="SET NULL")
+    mentor1 = fields.ForeignKeyField('models.TelegramUser', related_name='game_mentor1', index=True, null=True, on_delete="SET NULL")
+    mentor2 = fields.ForeignKeyField('models.TelegramUser', related_name='game_mentor2', index=True, null=True, on_delete="SET NULL")
+
+    master = fields.ForeignKeyField('models.TelegramUser', related_name='game_master', index=True, null=True, on_delete="SET NULL")
 
     donor1_time = fields.IntField(null=True, index=True)
     donor2_time = fields.IntField(null=True, index=True)
