@@ -50,40 +50,43 @@ class TelegramUser(Model):
 
     async def games(self):
         donors = {
-            1: (await self.game_donor1),
-            2: (await self.game_donor2),
-            3: (await self.game_donor3),
-            4: (await self.game_donor4),
-            5: (await self.game_donor5),
-            6: (await self.game_donor6),
-            7: (await self.game_donor7),
-            8: (await self.game_donor8),
+            1: [*(await self.game_donor1)],
+            2: [*(await self.game_donor2)],
+            3: [*(await self.game_donor3)],
+            4: [*(await self.game_donor4)],
+            5: [*(await self.game_donor5)],
+            6: [*(await self.game_donor6)],
+            7: [*(await self.game_donor7)],
+            8: [*(await self.game_donor8)],
         }
         partners = {
-            1: (await self.game_partner1),
-            2: (await self.game_partner2),
-            3: (await self.game_partner3),
-            4: (await self.game_partner4),
+            1: [*(await self.game_partner1)],
+            2: [*(await self.game_partner2)],
+            3: [*(await self.game_partner3)],
+            4: [*(await self.game_partner4)],
         }
         mentors = {
-            1: (await self.game_mentor1),
-            2: (await self.game_mentor2),
+            1: [*(await self.game_mentor1)],
+            2: [*(await self.game_mentor2)],
         }
         masters = (*(await self.game_master),)
 
         games = {}
 
-        for num, game in donors.items():
-            if game:
-                games[game] = f'donor{num}'
+        for num, inner_games in donors.items():
+            if inner_games:
+                for game in inner_games:
+                    games[game] = f'donor{num}'
 
-        for num, game in partners.items():
-            if game:
-                games[game] = f'partner{num}'
+        for num, inner_games in partners.items():
+            if inner_games:
+                for game in inner_games:
+                    games[game] = f'partner{num}'
 
-        for num, game in mentors.items():
-            if game:
-                games[game] = f'mentor{num}'
+        for num, inner_games in mentors.items():
+            if inner_games:
+                for game in inner_games:
+                    games[game] = f'mentor{num}'
 
         for i in masters:
             if i:
