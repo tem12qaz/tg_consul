@@ -149,7 +149,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 await callback.message.edit_media(
                     InputMedia(media=open(f'photo/{game.type}.png', 'rb'), type='photo')
                 )
-                if 'donor' not in role or game.valid_donor(role[-1]):
+                if 'donor' not in role or game.donor_valid(int(role[-1])):
                     await callback.message.edit_caption(
                         caption=(await get_message('table_info')).format(
                             name=await get_button(f'{table}_name'),
