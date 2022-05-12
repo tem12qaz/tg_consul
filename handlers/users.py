@@ -148,7 +148,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         table = select.replace('open_', '')
         if tables_order.index(user.max_field) < tables_order.index(table):
             await callback.answer(await get_message('not_allowed'), show_alert=True)
-            await callback.message.delete()
+            # await callback.message.delete()
         else:
             await callback.answer()
 
