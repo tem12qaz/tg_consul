@@ -93,7 +93,6 @@ async def get_captcha(callback, back, to, field=None):
 @dp.callback_query_handler(select_callback.filter())
 @dp.throttled(rate=FLOOD_RATE)
 async def main_menu(callback: types.CallbackQuery, callback_data):
-    await callback.answer()
     user = await TelegramUser.get_or_none(telegram_id=callback.from_user.id)
     if user is None:
         return
@@ -102,6 +101,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     print(select)
 
     if 'captcha' in select:
+        await callback.answer()
+
         to, back, field_id = select.split('.')[1:]
         print(back, to, field_id)
         await get_captcha(callback, back, to, field_id)
@@ -122,6 +123,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         return
 
     elif '_info' in select:
+        await callback.answer()
+
         text = await get_message(select)
 
         await bot.edit_message_caption(
@@ -132,6 +135,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         )
 
     elif select == 'info':
+        await callback.answer()
+
         await bot.edit_message_caption(
             user.telegram_id,
             callback.message.message_id,
@@ -142,7 +147,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     elif 'open_' in select:
         table = select.replace('open_', '')
         if tables_order.index(user.max_field) < tables_order.index(table):
+            await callback.answer('not_allowed', show_alert=True)
             await callback.message.delete()
+        else:
+            await callback.answer()
 
         for game, role in (await user.games()).items():
             if game.type == table:
@@ -259,6 +267,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 return
 
     elif select == 'open':
+        await callback.answer()
+
         await callback.message.edit_media(
             InputMedia(media=(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb')), type='photo')
         )
@@ -268,6 +278,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         )
 
     elif 'make_gift_' in select:
+        await callback.answer()
+
         field = await Table.get_or_none(id=int(select.replace('make_gift_', '')))
         if not field:
             await callback.message.delete()
@@ -291,6 +303,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     elif 'notify_users_' in select:
         field = await Table.get_or_none(id=int(select.replace('notify_users_', '')))
         if not field:
+            await callback.answer()
+
             await callback.message.delete()
             return
         await callback.answer(await get_message('success_notification'))
@@ -325,6 +339,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 role = role
 
         if break_:
+            await callback.answer()
+
             await callback.message.delete()
             return
 
@@ -502,7 +518,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             )
                             if master.max_field != 'legendary':
                                 if (master.max_field != 'start' or (
-                                        master.max_field == 'start' and len(await master.referrals.all()) > 2)) and \
+                                        master.max_field == 'start' and master.active)) and \
                                         master.max_field == field.type:
                                     master.max_field = tables_order[tables_order.index(master.max_field) + 1]
                                     await master.save()
@@ -643,8 +659,12 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 caption=text,
                 reply_markup=await get_user_keyboard(field, player)
             )
+        await callback.answer()
+
 
     elif 'confirm_exit' in select:
+        await callback.answer()
+
         field = await Table.get_or_none(id=int(select.replace('confirm_exit_', '')))
         if not field:
             await callback.message.delete()
@@ -669,6 +689,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         field = await Table.get_or_none(id=int(select.replace('exit_', '')))
         if not field:
             await callback.message.delete()
+            await callback.answer()
             return
         for game, role in (await user.games()).items():
             if game == field:
@@ -678,8 +699,12 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
                 await callback.answer(await get_message('exit_notification'), show_alert=True)
                 await get_captcha(callback, f'open_{field.type}', 'confirm_exit', field.id)
+        await callback.answer()
+
 
     elif select == 'delete':
+        await callback.answer()
+
         await callback.message.delete()
         admin = await user.admin
         if admin and admin.state == 'mail':

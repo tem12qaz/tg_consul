@@ -409,18 +409,13 @@ async def get_donor_gift_keyboard(field: Table, price):
 
 async def get_tables(user: TelegramUser):
     buttons = []
-    shift = 0
-    if user.max_field != 'start':
-        shift = 1
-    for table in tables_order[shift:]:
+    for table in tables_order:
         buttons.append(
             [
                 InlineKeyboardButton(text=await get_button(f'{table}_name'),
                                      callback_data=select_callback.new(select=f'open_{table}')),
             ]
         )
-        if table == user.max_field:
-            break
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
