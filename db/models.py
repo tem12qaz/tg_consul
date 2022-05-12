@@ -69,7 +69,7 @@ class TelegramUser(Model):
             *(await self.game_mentor1),
             *(await self.game_mentor2),
         )
-        master = (*(await self.game_master),)
+        masters = (*(await self.game_master),)
 
         games = {}
 
@@ -85,8 +85,9 @@ class TelegramUser(Model):
             if i:
                 games[i] = f'mentor{mentors.index(i)+1}'
 
-        if master:
-            games[master] = 'master'
+        for i in masters:
+            if i:
+                games[i] = 'master'
 
         return games
 
