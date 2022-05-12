@@ -49,41 +49,41 @@ class TelegramUser(Model):
     legendary_key = fields.FloatField(default=0)
 
     async def games(self):
-        donors = (
-            *(await self.game_donor1),
-            *(await self.game_donor2),
-            *(await self.game_donor3),
-            *(await self.game_donor4),
-            *(await self.game_donor5),
-            *(await self.game_donor6),
-            *(await self.game_donor7),
-            *(await self.game_donor8),
-        )
-        partners = (
-            *(await self.game_partner1),
-            *(await self.game_partner2),
-            *(await self.game_partner3),
-            *(await self.game_partner4),
-        )
-        mentors = (
-            *(await self.game_mentor1),
-            *(await self.game_mentor2),
-        )
+        donors = {
+            1: (await self.game_donor1),
+            2: (await self.game_donor2),
+            3: (await self.game_donor3),
+            4: (await self.game_donor4),
+            5: (await self.game_donor5),
+            6: (await self.game_donor6),
+            7: (await self.game_donor7),
+            8: (await self.game_donor8),
+        }
+        partners = {
+            1: (await self.game_partner1),
+            2: (await self.game_partner2),
+            3: (await self.game_partner3),
+            4: (await self.game_partner4),
+        }
+        mentors = {
+            1: (await self.game_mentor1),
+            2: (await self.game_mentor2),
+        }
         masters = (*(await self.game_master),)
 
         games = {}
 
-        for i in donors:
-            if i:
-                games[i] = f'donor{donors.index(i)+1}'
+        for num, game in donors.items():
+            if game:
+                games[game] = f'donor{num}'
 
-        for i in partners:
-            if i:
-                games[i] = f'partner{partners.index(i)+1}'
+        for num, game in partners.items():
+            if game:
+                games[game] = f'partner{num}'
 
-        for i in mentors:
-            if i:
-                games[i] = f'mentor{mentors.index(i)+1}'
+        for num, game in mentors.items():
+            if game:
+                games[game] = f'mentor{num}'
 
         for i in masters:
             if i:
