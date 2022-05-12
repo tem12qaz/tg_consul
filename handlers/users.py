@@ -99,6 +99,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         return
 
     select = callback_data.get('select')
+    print(select)
 
     if 'captcha' in select:
         to, back, field_id = select.split('.')[1:]
