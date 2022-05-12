@@ -155,13 +155,13 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             id=game.id,
                             count=await game.donor_count(),
                             max=4 if game.type == 'start' else 8,
-                            role=await get_button(role)
+                            role=(await get_button(role[:-1])) + role[:-1] if role != 'master' else await get_button(role)
                         ),
                         reply_markup=await get_player_keyboard(game, role)
                     )
                 else:
                     await callback.message.edit_caption(
-                        caption=(await get_message('table_donor_info')).format(
+                        caption=(await get_message('table_info')).format(
                             name=await get_button(f'{table}_name'),
                             id=game.id,
                             count=await game.donor_count(),
@@ -189,7 +189,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
         if table != 'start' and (await Config.get(id=1)).keys_system and keys < 1:
             await callback.answer(
-                (await get_message('need_referrals')).format(count=2 - len(await user.referrals.all()) % 2),
+                (await get_message('need_referrals')),
                 show_alert=True
             )
             return
@@ -232,7 +232,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     await user.save()
 
                 await callback.message.edit_caption(
-                    caption=(await get_message('table_donor_info')).format(
+                    caption=(await get_message('table_info')).format(
                         name=await get_button(f'{table}_name'),
                         id=field.id,
                         count=await field.donor_count(),
@@ -332,7 +332,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             users = await field.users()
             summ = getattr(await TablePrice.get(id=1), field.type)
             text += row.format(
-                role='Мастер',
+                role=await get_button('master'),
                 username=users['master'].username,
                 inviter=(await users['master'].inviter).username,
                 refs=len(await users['master'].referrals),
@@ -343,7 +343,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             for mentor in users['mentors']:
                 i += 1
                 text += row.format(
-                    role=f'Ментор {i}',
+                    role=f'{await get_button("mentor")} {i}',
                     username=mentor.username,
                     inviter=(await mentor.inviter).username,
                     refs=len(await mentor.referrals),
@@ -355,7 +355,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 for partner in users['partners']:
                     i += 1
                     text += row.format(
-                        role=f'Партнер {i}',
+                        role=f'{await get_button("partner")} {i}',
                         username=partner.username,
                         inviter=(await partner.inviter).username,
                         refs=len(await partner.referrals),
@@ -376,7 +376,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         elif 'field_donor_list_' in select:
             users = await field.users()
             text = ''
-            row = await get_message('team_list_row')
+            row = await get_message('donor_list_row')
             i = 0
             for donor in users['donors']:
                 i += 1
@@ -384,6 +384,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     text += row.format(
                         role=f'Даритель {i}',
                         username=donor.username,
+                        name=donor.name,
                         inviter=(await donor.inviter).username,
                         refs=len(await donor.referrals),
                     )
@@ -415,7 +416,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 name=donor.username,
                 id=donor.id,
                 inviter=(await donor.inviter).username,
-                count=len(await donor.referrals),
+                refs=len(await donor.referrals),
             )
 
             await callback.message.edit_caption(
