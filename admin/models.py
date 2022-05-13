@@ -136,7 +136,7 @@ class Table(db.Model):
     donor_8_master = db.Column(db.Boolean(), default=False)
 
     def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.username
+        return 'id' + str(self.id) + ' Table'
 
 
 class Message(db.Model):

@@ -19,7 +19,7 @@ class Admin(Model):
 
 class Priority(Model):
     id = fields.IntField(pk=True)
-    table = fields.OneToOneField('models.Table', related_name='priority', null=True)
+    table = fields.OneToOneField('models.Table', related_name='priority', null=True, on_delete="SET NULL")
 
 
 class TelegramUser(Model):
@@ -187,6 +187,18 @@ class Table(Model):
                 setattr(self, f'donor{i}_time', block_time)
                 await self.save()
                 return i
+
+    async def add_donor_num(self, user: TelegramUser, i):
+        if await getattr(self, f'donor{i}') is None:
+            setattr(self, f'donor{i}', user)
+            shift = (await Config.get(id=1)).delete_time * 3600
+            block_time = time.time() + shift
+            setattr(self, f'donor{i}', user)
+            setattr(self, f'donor{i}_time', block_time)
+            await self.save()
+            return i
+        else:
+            return False
 
     async def remove_donor(self, user: TelegramUser):
         for i in range(1, 9):

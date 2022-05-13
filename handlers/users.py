@@ -147,6 +147,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     elif 'open_' in select:
         table = select.replace('open_', '')
         if tables_order.index(user.max_field) < tables_order.index(table):
+            await callback.message.edit_media(
+                InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
+            )
             await callback.answer(await get_message('not_allowed'), show_alert=True)
             return
             # await callback.message.delete()
@@ -182,6 +185,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                 return
 
+        inviter = await user.inviter
         keys = 1
         if table != 'start':
             keys = getattr(user, f'{table}_key')
@@ -204,38 +208,67 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
             return
         while True:
-            if table != 'start':
-                field = (await Table.filter(
-                    Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
-                      Q(donor4=None), Q(donor5=None), Q(donor6=None),
-                      Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table) & Q(priority__not_isnull=True)
-                ).limit(1))
-                if not field:
+            field = None
+            donor_num = None
+            if table == 'start':
+                for inviter_game, inviter_role in (await inviter.games()).items():
+                    if inviter_game.type == 'start':
+                        field = (await Table.filter(
+                            Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                              Q(donor4=None), join_type="OR") & Q(type=table)
+                        ).limit(1))
+                        if field:
+                            field = field[0]
+                            if inviter_role == 'master':
+                                donor_num = await table.add_donor()
+                            elif inviter_role == 'mentor1':
+                                donor_num = 1
+                                if not await field.add_donor_num(user, 1):
+                                    donor_num = 2
+                                    if not await field.add_donor_num(user, 2):
+                                        donor_num = await field.add_donor(user)
+                            elif inviter_role == 'mentor2':
+                                donor_num = 3
+                                if not await field.add_donor_num(user, 3):
+                                    donor_num = 4
+                                    if not await field.add_donor_num(user, 4):
+                                        donor_num = await field.add_donor(user)
+                            else:
+                                donor_num = None
+            if not donor_num:
+                if table != 'start':
                     field = (await Table.filter(
                         Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
                           Q(donor4=None), Q(donor5=None), Q(donor6=None),
-                          Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
-                    ).limit(1))[0]
+                          Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table) & Q(priority__not_isnull=True)
+                    ).limit(1))
+                    if not field:
+                        field = (await Table.filter(
+                            Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                              Q(donor4=None), Q(donor5=None), Q(donor6=None),
+                              Q(donor7=None), Q(donor8=None), join_type="OR") & Q(type=table)
+                        ).limit(1))[0]
+                    else:
+                        field = field[0]
                 else:
-                    field = field[0]
-            else:
-                field = (await Table.filter(
-                    Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
-                      Q(donor4=None), join_type="OR") & Q(type=table) & Q(priority__not_isnull=True)
-                ).limit(1))
-                if not field:
                     field = (await Table.filter(
                         Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
-                          Q(donor4=None), join_type="OR") & Q(type=table)
-                    ).limit(1))[0]
-                else:
-                    field = field[0]
+                          Q(donor4=None), join_type="OR") & Q(type=table) & Q(priority__not_isnull=True)
+                    ).limit(1))
+                    if not field:
+                        field = (await Table.filter(
+                            Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
+                              Q(donor4=None), join_type="OR") & Q(type=table)
+                        ).limit(1))[0]
+                    else:
+                        field = field[0]
             if field:
                 await callback.message.edit_media(
                     InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
                 )
                 delete = time.time() + (await Config.get(id=1)).delete_time * 3600
-                donor_num = await field.add_donor(user)
+                if not donor_num:
+                    donor_num = await field.add_donor(user)
                 setattr(field, f'donor{donor_num}_time', delete)
                 if table != 'start' and (await Config.get(id=1)).keys_system and keys > 1:
                     setattr(user, f'{table}_key', keys - 1)
