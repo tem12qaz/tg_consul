@@ -148,7 +148,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         table = select.replace('open_', '')
         if tables_order.index(user.max_field) < tables_order.index(table):
             await callback.message.edit_media(
-                InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo')
+                InputMedia(media=open(f'photo/{table}.png', 'rb'), type='photo'),
+                reply_markup=await get_tables(user)
             )
             await callback.answer(await get_message('not_allowed'), show_alert=True)
             return
@@ -220,7 +221,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         if field:
                             field = field[0]
                             if inviter_role == 'master':
-                                donor_num = await table.add_donor()
+                                donor_num = await field.add_donor(user)
                             elif inviter_role == 'mentor1':
                                 donor_num = 1
                                 if not await field.add_donor_num(user, 1):
