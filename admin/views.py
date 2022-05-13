@@ -13,6 +13,8 @@ from jinja2 import Markup
 from werkzeug.utils import secure_filename
 from wtforms import ValidationError
 
+from admin.flask_app_init import db
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 file_path = os.path.join(basedir, 'files')
 
@@ -37,6 +39,26 @@ class TelegramUserView(AdminMixin, ModelView):
                    'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
     form_columns = ('telegram_id', 'username', 'max_field', 'active', 'ban', 'referral_url', 'wood_key', 'bronze_key',
                     'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
+
+    def on_model_change(form, model, created):
+        if model.ban:
+            model.game_donor1 = []
+            model.game_donor2 = []
+            model.game_donor3 = []
+            model.game_donor4 = []
+            model.game_donor5 = []
+            model.game_donor6 = []
+            model.game_donor7 = []
+            model.game_donor8 = []
+            model.game_partner1 = []
+            model.game_partner2 = []
+            model.game_partner3 = []
+            model.game_partner4 = []
+            model.game_mentor1 = []
+            model.game_mentor2 = []
+            model.game_master = []
+
+            db.session.commit()
 
 
 class MessageView(AdminMixin, ModelView):
