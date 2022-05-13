@@ -40,7 +40,7 @@ class TelegramUserView(AdminMixin, ModelView):
     form_columns = ('telegram_id', 'username', 'max_field', 'active', 'ban', 'referral_url', 'wood_key', 'bronze_key',
                     'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
 
-    def on_model_change(form, model, created):
+    def on_model_change(self, form, model, created):
         if model.ban:
             model.game_donor1 = []
             model.game_donor2 = []
