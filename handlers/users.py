@@ -643,6 +643,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 block_time = (await Config.get(id=1)).block_time
                 setattr(donor, f'{field.type}_block', now + block_time)
                 await field.save()
+                await donor.save()
                 await bot.send_message(
                     donor.telegram_id,
                     (await get_message('you_excluded')).format(
