@@ -94,7 +94,7 @@ async def get_captcha(callback, back, to, field=None):
 @dp.throttled(rate=FLOOD_RATE)
 async def main_menu(callback: types.CallbackQuery, callback_data):
     user = await TelegramUser.get_or_none(telegram_id=callback.from_user.id)
-    if user is None:
+    if user is None or not await user.inviter:
         return
 
     select = callback_data.get('select')
@@ -923,7 +923,7 @@ async def listen_handler(message: types.Message):
 
 @dp.message_handler(content_types=['photo'])
 async def handle_photo(message: types.Message):
-    user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
     if user is None:
         return
 
@@ -952,7 +952,7 @@ async def handle_photo(message: types.Message):
 
 @dp.message_handler(content_types=['document'])
 async def handle_docs(message: types.Message):
-    user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
     if user is None:
         return
 
@@ -982,7 +982,7 @@ async def handle_docs(message: types.Message):
 
 @dp.message_handler(content_types=['video'])
 async def handle_video(message: types.Message):
-    user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
+    user = await TelegramUser.get_or_none(telegram_id=message.from_user.id)
     if user is None:
         return
 
