@@ -33,6 +33,7 @@ class TelegramUser(db.Model):
     max_field = db.Column(db.String(32), default='start')
     referral_url = db.Column(db.String(32))
     active = db.Column(db.Boolean(), default=False)
+    ban = db.Column(db.Boolean(), default=False)
 
     wood_key = db.Column(db.Float(), default=0)
     bronze_key = db.Column(db.Float(), default=0)

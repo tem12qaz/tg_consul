@@ -32,6 +32,7 @@ class TelegramUser(Model):
     inviter = fields.ForeignKeyField('models.TelegramUser', related_name='referrals', index=True, null=True, on_delete="SET NULL")
     referral_url = fields.CharField(32, null=True)
     agree = fields.BooleanField(default=False)
+    ban = fields.BooleanField(default=False)
 
     start_block = fields.IntField(null=True)
     wood_block = fields.IntField(null=True)

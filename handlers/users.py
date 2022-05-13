@@ -97,6 +97,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     if user is None:
         return
 
+    elif not user.agree or user.ban:
+        await callback.answer()
+        return
+
     select = callback_data.get('select')
     print(select)
 
@@ -214,12 +218,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if table == 'start':
                 for inviter_game, inviter_role in (await inviter.games()).items():
                     if inviter_game.type == 'start':
-                        field = (await Table.filter(
-                            Q(Q(donor1=None), Q(donor2=None), Q(donor3=None),
-                              Q(donor4=None), join_type="OR") & Q(type=table)
-                        ).limit(1))
-                        if field:
-                            field = field[0]
+                        if await inviter_game.not_full():
+                            field = inviter_game
                             if inviter_role == 'master':
                                 donor_num = await field.add_donor(user)
                             elif inviter_role == 'mentor1':
@@ -466,7 +466,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             text = (await get_message('field_donor_info')).format(
                 status=status_text_,
                 role=f'Даритель {donor_num}',
-                name=donor.username,
+                name=donor.name,
+                username=donor.username,
                 id=donor.id,
                 inviter=(await donor.inviter).username,
                 refs=len(await donor.referrals),
@@ -781,6 +782,10 @@ async def listen_handler(message: types.Message):
                     await get_message('incorrect_id')
                 )
 
+    elif not user.agree or user.ban:
+        await message.delete()
+        return
+
     elif message.text == await get_button('open'):
         if not user.username:
             un = message.from_user.username
@@ -922,6 +927,11 @@ async def handle_photo(message: types.Message):
     if user is None:
         return
 
+    elif not user.agree or user.ban:
+        await message.delete()
+
+        return
+
     admin = await user.admin
 
     photo = message.photo[-1]
@@ -944,6 +954,11 @@ async def handle_photo(message: types.Message):
 async def handle_docs(message: types.Message):
     user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
     if user is None:
+        return
+
+    elif not user.agree or user.ban:
+        await message.delete()
+
         return
 
     admin = await user.admin
@@ -969,6 +984,11 @@ async def handle_docs(message: types.Message):
 async def handle_video(message: types.Message):
     user = await TelegramUser.get_or_none(telegram_id=message.chat.id)
     if user is None:
+        return
+
+    elif not user.agree or user.ban:
+        await message.delete()
+
         return
 
     admin = await user.admin
