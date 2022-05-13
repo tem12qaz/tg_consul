@@ -97,19 +97,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     if user is None:
         return
 
-    elif not user.agree or user.ban:
-        await callback.answer()
-        return
-
     select = callback_data.get('select')
     print(select)
-
-    if 'captcha' in select:
-        await callback.answer()
-
-        to, back, field_id = select.split('.')[1:]
-        print(back, to, field_id)
-        await get_captcha(callback, back, to, field_id)
 
     if 'agree' in select:
         user.agree = True
@@ -125,6 +114,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             (await get_message('new_referral')).format(name=user.username)
         )
         return
+
+    elif not user.agree or user.ban:
+        await callback.answer()
+        return
+
+    if 'captcha' in select:
+        await callback.answer()
+
+        to, back, field_id = select.split('.')[1:]
+        print(back, to, field_id)
+        await get_captcha(callback, back, to, field_id)
 
     elif '_info' in select:
         await callback.answer()
