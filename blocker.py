@@ -21,7 +21,7 @@ async def blocker():
     while True:
         try:
             now = time.time()
-            block_time = (await Config.get(id=1)).block_time
+            block_time = (await Config.get(id=1)).block_time * 3600
 
             to_block = await Table.filter(donor1_time__lte=now).all()
             for field in to_block:
