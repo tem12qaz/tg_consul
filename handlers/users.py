@@ -218,7 +218,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if table == 'start':
                 for inviter_game, inviter_role in (await inviter.games()).items():
                     if inviter_game.type == 'start':
-                        if await inviter_game.not_full():
+                        if await inviter_game.not_full:
                             field = inviter_game
                             if inviter_role == 'master':
                                 donor_num = await field.add_donor(user)
