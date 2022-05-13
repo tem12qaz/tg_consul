@@ -158,8 +158,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             await callback.answer(await get_message('not_allowed'), show_alert=True)
             return
             # await callback.message.delete()
-        else:
-            await callback.answer()
 
         for game, role in (await user.games()).items():
             if game.type == table:
@@ -206,6 +204,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 )
                 return
 
+        await callback.answer()
         if table != 'start' and (await Config.get(id=1)).keys_system and keys < 1:
             await callback.answer(
                 (await get_message('need_referrals')),
