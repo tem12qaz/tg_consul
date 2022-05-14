@@ -510,7 +510,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                             id=field.id,
                             count=await field.donor_count(),
                             max=4 if field.type == 'start' else 8,
-                            role=await get_button(role)
+                            role=(await get_button(role[:-1])) if role != 'master' else await get_button(role)
                         ),
                         reply_markup=await get_player_keyboard(field, role)
                     )
