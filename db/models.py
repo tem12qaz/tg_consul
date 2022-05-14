@@ -205,7 +205,13 @@ class Table(Model):
         for i in range(1, 9):
             if await getattr(self, f'donor{i}') == user:
                 setattr(self, f'donor{i}', None)
+                setattr(self, f'donor_{i}_mentor1', False)
+                setattr(self, f'donor_{i}_mentor2', False)
+                setattr(self, f'donor_{i}_master', False)
+                setattr(self, f'donor{i}_time', False)
+                setattr(self, f'donor{i}_notify', False)
                 await self.save()
+                return
 
     def donor_valid(self, donor_num):
         if not (1 <= int(donor_num) <= 8):

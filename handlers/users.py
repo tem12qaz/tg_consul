@@ -639,6 +639,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 setattr(field, f'donor{donor_num}', None)
                 setattr(field, f'donor_{donor_num}_mentor1', False)
                 setattr(field, f'donor_{donor_num}_mentor2', False)
+                setattr(field, f'donor_{donor_num}_master', False)
+                setattr(field, f'donor{donor_num}_time', False)
+                setattr(field, f'donor{donor_num}_notify', False)
                 now = time.time()
                 block_time = (await Config.get(id=1)).block_time * 3600
                 setattr(donor, f'{field.type}_block', now + block_time)

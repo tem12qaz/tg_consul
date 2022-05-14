@@ -8,6 +8,7 @@ from loader import bot
 
 async def send_message(donor, field, now, block_time):
     setattr(donor, f'{field.type}_block', now + block_time)
+    await field.remove_donor(donor)
     await donor.save()
     await bot.send_message(
         donor.telegram_id,
@@ -27,10 +28,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor1)
                 if not donor:
-                    field.donor1_time = None
                     await field.save()
                     continue
-                field.donor1 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -38,10 +37,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor2)
                 if not donor:
-                    field.donor2_time = None
                     await field.save()
                     continue
-                field.donor2 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -49,10 +46,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor3)
                 if not donor:
-                    field.donor3_time = None
                     await field.save()
                     continue
-                field.donor3 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -60,10 +55,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor4)
                 if not donor:
-                    field.donor4_time = None
                     await field.save()
                     continue
-                field.donor4 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -71,10 +64,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor5)
                 if not donor:
-                    field.donor5_time = None
                     await field.save()
                     continue
-                field.donor5 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -82,10 +73,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor6)
                 if not donor:
-                    field.donor6_time = None
                     await field.save()
                     continue
-                field.donor6 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -93,10 +82,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor7)
                 if not donor:
-                    field.donor7_time = None
                     await field.save()
                     continue
-                field.donor7 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
@@ -104,10 +91,8 @@ async def blocker():
             for field in to_block:
                 donor = (await field.donor8)
                 if not donor:
-                    field.donor8_time = None
                     await field.save()
                     continue
-                field.donor8 = None
                 await field.save()
                 await send_message(donor, field, now, block_time)
 
