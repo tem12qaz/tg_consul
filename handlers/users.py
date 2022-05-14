@@ -202,13 +202,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 )
                 return
 
-        await callback.answer()
         if table != 'start' and (await Config.get(id=1)).keys_system and keys < 1:
             await callback.answer(
                 (await get_message('need_referrals')),
                 show_alert=True
             )
             return
+        await callback.answer()
+
         while True:
             field = None
             donor_num = None
