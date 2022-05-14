@@ -177,11 +177,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
                 else:
                     await callback.message.edit_caption(
-                        caption=(await get_message('table_info')).format(
+                        caption=(await get_message('donor_table_info')).format(
                             name=await get_button(f'{table}_name'),
                             id=game.id,
-                            count=await game.donor_count(),
-                            max=4 if game.type == 'start' else 8,
                             role=await get_button('donor') + ' ' + role[-1]
                         ),
                         reply_markup=await get_donor_keyboard(game, role)
@@ -275,11 +273,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     await user.save()
 
                 await callback.message.edit_caption(
-                    caption=(await get_message('table_info')).format(
+                    caption=(await get_message('donor_table_info')).format(
                         name=await get_button(f'{table}_name'),
                         id=field.id,
-                        count=await field.donor_count(),
-                        max=4 if field.type == 'start' else 8,
                         role=(await get_button('donor')) + str(donor_num)
                     ),
                     reply_markup=await get_donor_keyboard(field, f'donor{donor_num}')
@@ -319,6 +315,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             await callback.message.delete()
             return
         price = getattr(await TablePrice.get(id=1), field.type)
+        price_mentor = getattr(await TablePrice.get(id=1), f'{field.type}_mentor')
 
         if field == 'start':
             text = (await get_message('start_make_gift')).format(
@@ -327,11 +324,11 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         else:
             text = (await get_message('make_gift')).format(
                 master_price=price,
-                mentor_price=price // 2
+                mentor_price=price_mentor
             )
         await callback.message.edit_caption(
             caption=text,
-            reply_markup=await get_donor_gift_keyboard(field, price)
+            reply_markup=await get_donor_gift_keyboard(field, price, price_mentor)
         )
 
     elif 'notify_users_' in select:
@@ -351,6 +348,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     setattr(field, f'{role}_notify', True)
                     await field.save()
                     users = [await field.master, await field.mentor1, await field.mentor2]
+                    if field.type == 'start':
+                        users = [await field.master]
                     for us in users:
                         await bot.send_message(
                             us.telegram_id,
@@ -383,6 +382,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             row = await get_message('team_list_row')
             users = await field.users()
             summ = getattr(await TablePrice.get(id=1), field.type)
+            summ_mentor = getattr(await TablePrice.get(id=1), f'{field.type}_mentor')
             text += row.format(
                 role=await get_button('master'),
                 username=users['master'].username,
@@ -400,7 +400,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     inviter=(await mentor.inviter).username,
                     refs=len(await mentor.referrals),
                     name = mentor.name,
-                    sum=summ//2 if field.type != 'start' else 'В очереди'
+                    sum=summ_mentor if field.type != 'start' else 'В очереди'
                 )
             i = 0
             if field.type != 'start':
@@ -664,6 +664,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             users = await field.users()
             num = select.split('_')[1][-1]
             gift = getattr(await TablePrice.get(id=1), field.type)
+            gift_mentor = getattr(await TablePrice.get(id=1), f'{field.type}_mentor')
 
             if 'master' in select:
                 player = users['master']
@@ -675,7 +676,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 if field.type == 'start':
                     gift = 0
                 else:
-                    gift = gift // 2
+                    gift = gift_mentor
 
             elif 'partner' in select:
                 player = users['partners'][int(num) - 1]

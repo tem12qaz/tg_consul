@@ -360,7 +360,7 @@ async def get_donor_keyboard(field: Table, role):
     return keyboard
 
 
-async def get_donor_gift_keyboard(field: Table, price):
+async def get_donor_gift_keyboard(field: Table, price, mentor_price):
     master_un = (await field.master).username
     inline_keyboard = [
         [
@@ -376,12 +376,12 @@ async def get_donor_gift_keyboard(field: Table, price):
         inline_keyboard += [
             [
                 InlineKeyboardButton(text=(await get_button('gift_mentor')).format(
-                    user=mentor1_un, sum=price//2
+                    user=mentor1_un, sum=mentor_price
                 ), url=TELEGRAM_URL.format(username=mentor1_un))
             ],
             [
                 InlineKeyboardButton(text=(await get_button('gift_mentor')).format(
-                    user=mentor2_un, sum=price//2
+                    user=mentor2_un, sum=mentor_price
                 ), url=TELEGRAM_URL.format(username=mentor2_un))
             ]
         ]

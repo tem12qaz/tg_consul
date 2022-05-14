@@ -35,8 +35,9 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 class TelegramUserView(AdminMixin, ModelView):
     column_filters = ("telegram_id", "id", "username")
-    column_list = ('id', 'telegram_id', 'username', 'max_field', 'active', 'ban', 'referral_url', 'wood_key', 'bronze_key',
-                   'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
+    column_list = (
+    'id', 'telegram_id', 'username', 'max_field', 'active', 'ban', 'referral_url', 'wood_key', 'bronze_key',
+    'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
     form_columns = ('telegram_id', 'username', 'max_field', 'active', 'ban', 'referral_url', 'wood_key', 'bronze_key',
                     'silver_key', 'gold_key', 'platinum_key', 'legendary_key')
 
@@ -83,8 +84,12 @@ class PriorityView(AdminMixin, ModelView):
 
 
 class TablePriceView(AdminMixin, ModelView):
-    column_list = ('id', 'start', 'wood', 'bronze', 'silver', 'gold', 'platinum', 'legendary')
-    form_columns = ('start', 'wood', 'bronze', 'silver', 'gold', 'platinum', 'legendary')
+    column_list = ('id', 'start', 'start_mentor', 'wood', 'wood_mentor', 'bronze', 'bronze_mentor', 'silver',
+                   'silver_mentor', 'gold', 'gold_mentor', 'platinum', 'platinum_mentor',
+                   'legendary' 'legendary_mentor')
+    form_columns = ('start', 'start_mentor', 'wood', 'wood_mentor', 'bronze', 'bronze_mentor', 'silver',
+                    'silver_mentor', 'gold', 'gold_mentor', 'platinum', 'platinum_mentor',
+                    'legendary' 'legendary_mentor')
 
 
 class ConfigView(AdminMixin, ModelView):

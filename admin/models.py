@@ -164,12 +164,19 @@ class TablePrice(db.Model):
     __tablename__ = 'tableprice'
     id = db.Column(db.Integer(), primary_key=True)
     start = db.Column(db.Integer())
+    start_mentor = db.Column(db.Integer())
     wood = db.Column(db.Integer())
+    wood_mentor = db.Column(db.Integer())
     bronze = db.Column(db.Integer())
+    bronze_mentor = db.Column(db.Integer())
     silver = db.Column(db.Integer())
+    silver_mentor = db.Column(db.Integer())
     gold = db.Column(db.Integer())
+    gold_mentor = db.Column(db.Integer())
     platinum = db.Column(db.Integer())
+    platinum_mentor = db.Column(db.Integer())
     legendary = db.Column(db.Integer())
+    legendary_mentor = db.Column(db.Integer())
 
 
 class Config(db.Model):

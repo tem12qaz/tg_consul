@@ -331,6 +331,13 @@ class TablePrice(Model):
     gold = fields.IntField()
     platinum = fields.IntField()
     legendary = fields.IntField()
+    start_mentor = fields.IntField()
+    wood_mentor = fields.IntField()
+    bronze_mentor = fields.IntField()
+    silver_mentor = fields.IntField()
+    gold_mentor = fields.IntField()
+    platinum_mentor = fields.IntField()
+    legendary_mentor = fields.IntField()
 
 
 class User(Model, UserMixin):
