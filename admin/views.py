@@ -87,7 +87,7 @@ class TablePriceView(AdminMixin, ModelView):
     column_list = ('id', 'start', 'start_mentor', 'wood', 'wood_mentor', 'bronze', 'bronze_mentor', 'silver',
                    'silver_mentor', 'gold', 'gold_mentor', 'platinum', 'platinum_mentor',
                    'legendary', 'legendary_mentor')
-    form_columns = ('start', 'start_mentor', 'wood', 'wood_mentor', 'bronze', 'bronze_mentor', 'silver',
+    form_columns = ('id', 'start', 'start_mentor', 'wood', 'wood_mentor', 'bronze', 'bronze_mentor', 'silver',
                     'silver_mentor', 'gold', 'gold_mentor', 'platinum', 'platinum_mentor',
                     'legendary', 'legendary_mentor')
 
