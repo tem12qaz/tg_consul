@@ -3,4 +3,4 @@ from db.models import TelegramUser
 
 
 def get_secret(user: TelegramUser):
-    return passgen.generate(length=20) + '_' + str(user.id)
+    return passgen.generate(length=20) + '_' + str(user.id + 13560)

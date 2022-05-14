@@ -49,7 +49,7 @@ async def bot_start(message: types.Message):
             try:
                 referral_url = message.text.split(' ')[-1]
                 id_ = referral_url.split('_')[-1]
-                inviter = await TelegramUser.get_or_none(id=id_)
+                inviter = await TelegramUser.get_or_none(id=int(id_)-13560)
             except:
                 await message.delete()
                 return
@@ -468,7 +468,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 role=f'Даритель {donor_num}',
                 name=donor.name,
                 username=donor.username,
-                id=donor.id,
+                id=donor.telegram_id,
                 inviter=(await donor.inviter).username,
                 refs=len(await donor.referrals),
             )
@@ -769,7 +769,7 @@ async def listen_handler(message: types.Message):
 
     elif not user.inviter:
         try:
-            inviter = await TelegramUser.get_or_none(id=int(message.text.split('_')[-1]))
+            inviter = await TelegramUser.get_or_none(id=int(message.text.split('_')[-1])-13560)
         except:
             await message.delete()
             return
