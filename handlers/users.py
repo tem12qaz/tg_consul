@@ -161,11 +161,12 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
         for game, role in (await user.games()).items():
             if game.type == table:
-                await callback.message.edit_media(
+                await callback.message.delete()
+                mess = await callback.message.answer_photo(
                     InputMedia(media=open(f'photo/{game.type}.png', 'rb'), type='photo')
                 )
                 if 'donor' not in role or game.donor_valid(int(role[-1])):
-                    await callback.message.edit_caption(
+                    await mess.edit_caption(
                         caption=(await get_message('table_info')).format(
                             name=await get_button(f'{table}_name'),
                             id=game.id,
@@ -176,7 +177,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         reply_markup=await get_player_keyboard(game, role)
                     )
                 else:
-                    await callback.message.edit_caption(
+                    await mess.edit_caption(
                         caption=(await get_message('donor_table_info')).format(
                             name=await get_button(f'{table}_name'),
                             id=game.id,
@@ -415,11 +416,12 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         name=partner.name,
                         sum='В очереди'
                     )
-
-            await callback.message.edit_caption(
-                caption=text,
+            await callback.message.delete()
+            await callback.message.answer(
+                text=text,
                 reply_markup=await back_on_table(field)
             )
+
 
         elif 'field_donors' in select:
             await callback.message.edit_reply_markup(
