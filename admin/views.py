@@ -13,7 +13,7 @@ from jinja2 import Markup
 from werkzeug.utils import secure_filename
 from wtforms import ValidationError
 
-from admin.flask_app_init import db
+from flask_app_init import db
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 file_path = os.path.join(basedir, 'files')
