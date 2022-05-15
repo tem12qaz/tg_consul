@@ -269,7 +269,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 if not donor_num:
                     donor_num = await field.add_donor(user)
                 setattr(field, f'donor{donor_num}_time', delete)
-                if table != 'start' and (await Config.get(id=1)).keys_system and keys > 1:
+                if table != 'start' and (await Config.get(id=1)).keys_system:
                     setattr(user, f'{table}_key', keys - 1)
                     await user.save()
 
