@@ -443,9 +443,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         inviter=(await donor.inviter).username,
                         refs=len(await donor.referrals),
                     )
-
-            await callback.message.edit_caption(
-                caption=text,
+            await callback.message.delete()
+            await callback.message.answer(
+                text=text,
                 reply_markup=await back_on_table(field)
             )
 
