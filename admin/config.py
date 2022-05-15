@@ -1,8 +1,8 @@
 
 PG_HOST = 'localhost'
-PG_PASSWORD = 'pass'
+PG_PASSWORD = 'hvg32hiu_6f5vgi_tf7'
 PG_USER = 'gift'
-PG_DATABASE = 'gift_db'
+PG_DATABASE = 'gift'
 
 
 
