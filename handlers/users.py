@@ -163,7 +163,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if game.type == table:
                 await callback.message.delete()
                 mess = await callback.message.answer_photo(
-                    InputMedia(media=open(f'photo/{game.type}.png', 'rb'), type='photo')
+                    photo=open(f'photo/{game.type}.png', 'rb')
                 )
                 if 'donor' not in role or game.donor_valid(int(role[-1])):
                     await mess.edit_caption(
