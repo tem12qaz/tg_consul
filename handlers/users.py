@@ -397,7 +397,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             for mentor in users['mentors']:
                 i += 1
                 text += row.format(
-                    role=f'{await get_button("mentor")} {i}',
+                    role=f'{await get_button("mentor")} {i}' if field.type != 'start' else f'{await get_button("partner")} {i}',
                     username=mentor.username,
                     inviter=(await mentor.inviter).username,
                     refs=len(await mentor.referrals),
