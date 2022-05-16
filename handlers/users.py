@@ -302,7 +302,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         await callback.answer()
 
         await callback.message.edit_media(
-            InputMedia(media=(open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb')), type='photo')
+            InputMedia(media=(open('photo/start.png', 'rb')), type='photo')
         )
         await callback.message.edit_caption(
             caption=await get_message('open_table'),
@@ -707,7 +707,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
         await callback.answer()
 
-
     elif 'confirm_exit' in select:
         await callback.answer()
 
@@ -813,7 +812,7 @@ async def listen_handler(message: types.Message):
             await user.save()
 
         await message.answer_photo(
-            photo=open(('admin/files/' + (await Config.get(id=1)).about_photo), 'rb'),
+            photo=open('photo/start.png', 'rb'),
             caption=await get_message('open_table'),
             reply_markup=await get_tables(user)
         )
