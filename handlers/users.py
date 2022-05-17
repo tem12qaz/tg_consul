@@ -422,7 +422,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 reply_markup=await back_on_table(field)
             )
 
-
         elif 'field_donors' in select:
             await callback.message.edit_reply_markup(
                 reply_markup=await donors_keyboard(field, role)
@@ -573,10 +572,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                                         )
 
                             if field.type != 'start':
-                                partner1 = await field.donor5,
-                                partner2 = await field.donor6,
-                                partner3 = await field.donor7,
-                                partner4 = await field.donor8,
+                                partner1 = await field.donor5
+                                partner2 = await field.donor6
+                                partner3 = await field.donor7
+                                partner4 = await field.donor8
 
                                 mentor1 = await field.partner3
                                 mentor2 = await field.partner4
