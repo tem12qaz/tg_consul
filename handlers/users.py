@@ -449,8 +449,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
 
         elif 'field_donor' in select:
-            print(user.username, role, field.id)
-            print('---------------------------')
             donor_num = select.split('_')[2]
             donor = await getattr(field, f'donor{donor_num}')
             if not donor:

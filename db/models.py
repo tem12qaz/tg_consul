@@ -73,6 +73,8 @@ class TelegramUser(Model):
         masters = (*(await self.game_master),)
 
         games = {}
+        print(self.username, mentors)
+        print('---------------')
 
         for num, inner_games in donors.items():
             if inner_games:
@@ -168,6 +170,9 @@ class Table(Model):
     donor_8_mentor1 = fields.BooleanField(default=False)
     donor_8_mentor2 = fields.BooleanField(default=False)
     donor_8_master = fields.BooleanField(default=False)
+
+    def __repr__(self):
+        return f'{self.type} table id{self.id}'
 
     def clear_donors(self):
         for i in range(1, 9):
