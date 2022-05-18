@@ -373,7 +373,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 break_ = False
                 role = role_
 
-                print(user.username, role)
                 break
 
         if break_:
