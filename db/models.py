@@ -73,8 +73,6 @@ class TelegramUser(Model):
         masters = (*(await self.game_master),)
 
         games = {}
-        print(self.username, mentors)
-        print('---------------')
 
         for num, inner_games in donors.items():
             if inner_games:
@@ -89,14 +87,14 @@ class TelegramUser(Model):
         for num, inner_games in mentors.items():
             if inner_games:
                 for game in inner_games:
-                    if game.id == 30:
-                        print(f'mentor{num}')
                     games[game] = f'mentor{num}'
 
         for i in masters:
             if i:
                 games[i] = 'master'
 
+        print(self.username, games)
+        print('---------------')
         return games
 
 
