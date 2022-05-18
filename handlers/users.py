@@ -270,9 +270,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 if not donor_num:
                     donor_num = await field.add_donor(user)
                 setattr(field, f'donor{donor_num}_time', delete)
-                if table != 'start' and (await Config.get(id=1)).keys_system:
-                    setattr(user, f'{table}_key', keys - 1)
-                    await user.save()
 
                 await callback.message.edit_caption(
                     caption=(await get_message('donor_table_info')).format(
@@ -498,8 +495,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
             if 'mentor' in role or 'master' in role:
                 try:
+                    if not getattr(field, f'donor_{donor_num}_master') and \
+                            not getattr(field, f'donor_{donor_num}_mentor1') and \
+                            not getattr(field, f'donor_{donor_num}_mentor2'):
+
+                        keys = getattr(donor, f'{field.type}_key')
+                        if field.type != 'start' and (await Config.get(id=1)).keys_system:
+                            setattr(donor, f'{field.type}_key', keys - 1)
+                            await donor.save()
                     setattr(field, f'donor_{donor_num}_{role}', True)
                     setattr(field, f'donor{donor_num}_time', None)
+
                     await field.save()
                     await bot.send_message(
                         donor.telegram_id,
