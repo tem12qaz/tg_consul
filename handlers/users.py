@@ -373,6 +373,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                 break_ = False
                 role = role
 
+                print(user.username, role)
+
         if break_:
             await callback.answer()
 

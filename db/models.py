@@ -93,8 +93,6 @@ class TelegramUser(Model):
             if i:
                 games[i] = 'master'
 
-        print(self.username, games)
-        print('---------------')
         return games
 
 
