@@ -368,12 +368,13 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             return
         role = None
         break_ = True
-        for game, role in (await user.games()).items():
+        for game, role_ in (await user.games()).items():
             if game == field:
                 break_ = False
-                role = role
+                role = role_
 
                 print(user.username, role)
+                break
 
         if break_:
             await callback.answer()
