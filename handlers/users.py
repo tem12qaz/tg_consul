@@ -503,6 +503,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                         if field.type != 'start' and (await Config.get(id=1)).keys_system:
                             setattr(donor, f'{field.type}_key', keys - 1)
                             await donor.save()
+
                     setattr(field, f'donor_{donor_num}_{role}', True)
                     setattr(field, f'donor{donor_num}_time', None)
 
