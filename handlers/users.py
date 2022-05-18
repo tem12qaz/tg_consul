@@ -449,6 +449,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             )
 
         elif 'field_donor' in select:
+            print(user.username, role, field.id)
+            print('---------------------------')
             donor_num = select.split('_')[2]
             donor = await getattr(field, f'donor{donor_num}')
             if not donor:
@@ -497,6 +499,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
             if 'mentor' in role or 'master' in role:
                 try:
                     setattr(field, f'donor_{donor_num}_{role}', True)
+                    setattr(field, f'donor{donor_num}_time', None)
                     await field.save()
                     await bot.send_message(
                         donor.telegram_id,
@@ -518,7 +521,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
                     )
 
                     if field.donor_valid(donor_num):
-                        setattr(field, f'donor{donor_num}_time', None)
                         await field.save()
                         if field.type == 'start':
                             donor.active = True

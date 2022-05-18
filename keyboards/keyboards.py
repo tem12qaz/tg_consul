@@ -271,7 +271,7 @@ async def get_donor_info_keyboard(field, donor, valid, donor_num, role):
     if not valid:
         if role == 'master' and not (
                 getattr(field, f'donor_{donor_num}_mentor1') or
-                getattr(field, f'donor_{donor_num}_mentor1')):
+                getattr(field, f'donor_{donor_num}_mentor2')):
             inline_keyboard.insert(
                 0,
                 [
