@@ -42,6 +42,15 @@ class TelegramUser(db.Model):
     platinum_key = db.Column(db.Float(), default=0)
     legendary_key = db.Column(db.Float(), default=0)
 
+    start_block = db.Column(db.Integer(), nullable=True)
+    wood_block = db.Column(db.Integer(), nullable=True)
+    bronze_block = db.Column(db.Integer(), nullable=True)
+    silver_block = db.Column(db.Integer(), nullable=True)
+    gold_block = db.Column(db.Integer(), nullable=True)
+    platinum_block = db.Column(db.Integer(), nullable=True)
+    legendary_block = db.Column(db.Integer(), nullable=True)
+
+
     def __repr__(self):
         return f'ID{self.id} {self.username}'
 
