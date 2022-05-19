@@ -8,6 +8,18 @@ from selenium.webdriver.support.ui import WebDriverWait as driver_wait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+def scroll_shim(driver, element):
+    x = element.location['x']
+    y = element.location['y']
+    scroll_by_coord = 'window.scrollTo(%s,%s);' % (
+        x,
+        y
+    )
+    scroll_nav_out_of_way = 'window.scrollBy(0, -120);'
+    driver.execute_script(scroll_by_coord)
+    driver.execute_script(scroll_nav_out_of_way)
+
+
 def driver_init(proxy):
     options = Options()
     options.headless = True
@@ -31,8 +43,7 @@ def get_request_params(account, proxy):
     driver.find_element(By.ID, 'user_password').send_keys(account.password)
     print('------------------------')
     elem = driver.find_element(By.ID, 'policy_confirmed')
-    actions = ActionChains(driver)
-    actions.move_to_element(elem).perform()
+    scroll_shim(driver, elem)
     elem.click()
     driver.find_element(By.XPATH, "//input[data-disable-with='Sign In']").click()
     time.sleep(2)
