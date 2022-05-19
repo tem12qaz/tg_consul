@@ -8,7 +8,11 @@ roles_users = db.Table('roles_users',
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
                        )
 
-tz = pytz.timezone('Europe/Moscow')
+
+account_city = db.Table('account_city',
+                       db.Column('city_id', db.Integer(), db.ForeignKey('city.id')),
+                       db.Column('account_id', db.Integer(), db.ForeignKey('account.id'))
+                       )
 
 
 class User(db.Model, UserMixin):
@@ -25,180 +29,46 @@ class Role(db.Model, RoleMixin):
     description = db.Column(db.String(255))
 
 
-class TelegramUser(db.Model):
-    __tablename__ = 'telegramuser'
-    id = db.Column(db.Integer(), primary_key=True)
-    telegram_id = db.Column(db.BigInteger())
-    username = db.Column(db.String(128))
-    max_field = db.Column(db.String(32), default='start')
-    referral_url = db.Column(db.String(32))
-    active = db.Column(db.Boolean(), default=False)
-    ban = db.Column(db.Boolean(), default=False)
-
-    wood_key = db.Column(db.Float(), default=0)
-    bronze_key = db.Column(db.Float(), default=0)
-    silver_key = db.Column(db.Float(), default=0)
-    gold_key = db.Column(db.Float(), default=0)
-    platinum_key = db.Column(db.Float(), default=0)
-    legendary_key = db.Column(db.Float(), default=0)
-
-    start_block = db.Column(db.Integer(), nullable=True)
-    wood_block = db.Column(db.Integer(), nullable=True)
-    bronze_block = db.Column(db.Integer(), nullable=True)
-    silver_block = db.Column(db.Integer(), nullable=True)
-    gold_block = db.Column(db.Integer(), nullable=True)
-    platinum_block = db.Column(db.Integer(), nullable=True)
-    legendary_block = db.Column(db.Integer(), nullable=True)
-
-
-    def __repr__(self):
-        return f'ID{self.id} {self.username}'
-
-
-class TgAdmin(db.Model):
-    __tablename__ = 'admin'
-    id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    user = db.relationship("TelegramUser", uselist=False, backref="admin", foreign_keys=[user_id])
-
-
-class Priority(db.Model):
-    __tablename__ = 'priority'
-    id = db.Column(db.Integer(), primary_key=True)
-    table_id = db.Column(db.Integer, db.ForeignKey('table.id', ondelete='SET NULL'))
-    table = db.relationship("Table", uselist=False, backref="priority", foreign_keys=[table_id])
-
-
-class Table(db.Model):
-    __tablename__ = 'table'
-    id = db.Column(db.Integer(), primary_key=True)
-    type = db.Column(db.String(32), default='start')
-
-
-    donor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor5_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor6_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor7_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    donor8_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-
-    partner1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    partner2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    partner3_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    partner4_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-
-    mentor1_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-    mentor2_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-
-    master_id = db.Column(db.Integer, db.ForeignKey('telegramuser.id', ondelete='SET NULL'))
-
-    donor1 = db.relationship("TelegramUser", backref="game_donor1", foreign_keys=[donor1_id])
-    donor2 = db.relationship("TelegramUser", backref="game_donor2", foreign_keys=[donor2_id])
-    donor3 = db.relationship("TelegramUser", backref="game_donor3", foreign_keys=[donor3_id])
-    donor4 = db.relationship("TelegramUser", backref="game_donor4", foreign_keys=[donor4_id])
-    donor5 = db.relationship("TelegramUser", backref="game_donor5", foreign_keys=[donor5_id])
-    donor6 = db.relationship("TelegramUser", backref="game_donor6", foreign_keys=[donor6_id])
-    donor7 = db.relationship("TelegramUser", backref="game_donor7", foreign_keys=[donor7_id])
-    donor8 = db.relationship("TelegramUser", backref="game_donor8", foreign_keys=[donor8_id])
-
-    partner1 = db.relationship("TelegramUser", backref="game_partner1", foreign_keys=[partner1_id])
-    partner2 = db.relationship("TelegramUser", backref="game_partner2", foreign_keys=[partner2_id])
-    partner3 = db.relationship("TelegramUser", backref="game_partner3", foreign_keys=[partner3_id])
-    partner4 = db.relationship("TelegramUser", backref="game_partner4", foreign_keys=[partner4_id])
-
-    mentor1 = db.relationship("TelegramUser", backref="game_mentor1", foreign_keys=[mentor1_id])
-    mentor2 = db.relationship("TelegramUser", backref="game_mentor2", foreign_keys=[mentor2_id])
-
-    master = db.relationship("TelegramUser", backref="game_master", foreign_keys=[master_id])
-
-    donor_1_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_1_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_1_master = db.Column(db.Boolean(), default=False)
-
-    donor_2_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_2_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_2_master = db.Column(db.Boolean(), default=False)
-
-    donor_3_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_3_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_3_master = db.Column(db.Boolean(), default=False)
-
-    donor_4_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_4_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_4_master = db.Column(db.Boolean(), default=False)
-
-    donor_5_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_5_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_5_master = db.Column(db.Boolean(), default=False)
-
-    donor_6_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_6_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_6_master = db.Column(db.Boolean(), default=False)
-
-    donor_7_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_7_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_7_master = db.Column(db.Boolean(), default=False)
-
-    donor_8_mentor1 = db.Column(db.Boolean(), default=False)
-    donor_8_mentor2 = db.Column(db.Boolean(), default=False)
-    donor_8_master = db.Column(db.Boolean(), default=False)
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' Table'
-
-
-class Message(db.Model):
-    __telegramusername__ = 'message'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(64))
-    text = db.Column(db.Text())
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name
-
-
-class Button(db.Model):
-    __tablename__ = 'button'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(64))
-    text = db.Column(db.String(128))
-
-    def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name
-
-
-class TablePrice(db.Model):
-    __tablename__ = 'tableprice'
-    id = db.Column(db.Integer(), primary_key=True)
-    start = db.Column(db.Integer())
-    start_mentor = db.Column(db.Integer())
-    wood = db.Column(db.Integer())
-    wood_mentor = db.Column(db.Integer())
-    bronze = db.Column(db.Integer())
-    bronze_mentor = db.Column(db.Integer())
-    silver = db.Column(db.Integer())
-    silver_mentor = db.Column(db.Integer())
-    gold = db.Column(db.Integer())
-    gold_mentor = db.Column(db.Integer())
-    platinum = db.Column(db.Integer())
-    platinum_mentor = db.Column(db.Integer())
-    legendary = db.Column(db.Integer())
-    legendary_mentor = db.Column(db.Integer())
-
-
 class Config(db.Model):
-    __tablename__ = 'config'
     id = db.Column(db.Integer(), primary_key=True)
-    support_url = db.Column(db.String(128))
-    pdf = db.Column(db.String(128))
-    about_photo = db.Column(db.String(128))
-    channel = db.Column(db.String(128))
-    chat = db.Column(db.String(128))
-    keys_system = db.Column(db.Boolean())
-    delete_time = db.Column(db.Integer())
-    block_time = db.Column(db.Integer())
+    sleep_min = db.Column(db.Integer())
+    sleep_max = db.Column(db.Integer())
+
+
+class Proxy(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    user = db.Column(db.String(32))
+    password = db.Column(db.String(32))
+    ip = db.Column(db.String(32))
+    port = db.Column(db.String(32))
+    status = db.Column(db.String(16), default='OK')
+
+    @property
+    def http(self):
+        return f'http://{self.user}:{self.password}@{self.ip}:{self.port}/'
+
+    @property
+    def https(self):
+        return f'https://{self.user}:{self.password}@{self.ip}:{self.port}/'
+
+
+class Account(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    login = db.Column(db.String(32))
+    password = db.Column(db.String(32))
+    month = db.Column(db.Integer())
+    status = db.Column(db.String(16), default='SEARCH')
+    cities = db.relationship("City", secondary="account_city")
 
     def __repr__(self):
-        return 'id' + str(self.id) + ' ' + self.name_ru
+        return self.login
+
+
+class City(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(32))
+    users = db.relationship("Account", secondary="account_city")
+
+    def __repr__(self):
+        return self.name
+

@@ -1,8 +1,10 @@
 
 PG_HOST = 'localhost'
-PG_PASSWORD = 'hvg32hiu_6f5vgi_tf7'
-PG_USER = 'gift'
-PG_DATABASE = 'gift'
+PG_PASSWORD = 'pass'
+PG_USER = 'myuser'
+PG_DATABASE = 'mybase'
+
+ERRS_MAX = 3
 
 
 
