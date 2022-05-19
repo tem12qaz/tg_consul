@@ -3,6 +3,8 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from seleniumwire import webdriver
+from selenium.webdriver.support.ui import WebDriverWait as driver_wait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def driver_init(proxy):
@@ -25,7 +27,8 @@ def get_request_params(account, proxy):
     driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
     driver.find_element(By.ID, 'user_password').send_keys(account.password)
-    driver.find_element(By.ID, 'policy_confirmed').click()
+    elem = driver.find_element(By.ID, 'policy_confirmed')
+    driver_wait(driver, 30).until(EC.element_to_be_clickable(elem))
     driver.find_element(By.XPATH, "//input[data-disable-with='Sign In']").click()
     time.sleep(2)
     request = driver.requests[-1]
