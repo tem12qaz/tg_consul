@@ -42,7 +42,7 @@ def get_request_params(account, proxy):
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
     driver.find_element(By.ID, 'user_password').send_keys(account.password)
     print('------------------------')
-    elem = driver.find_element(By.ID, 'policy_confirmed')
+    elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
     scroll_shim(driver, elem)
     time.sleep(4)
     driver.save_screenshot('eee2.png')
