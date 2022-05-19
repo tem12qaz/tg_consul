@@ -11,7 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 def driver_init(proxy):
     options = Options()
     options.headless = True
-
+    options.add_argument("--width=1200")
+    options.add_argument("--height=1000")
     proxy_options = {
         'proxy': {
             'http': f'{proxy.http}',
