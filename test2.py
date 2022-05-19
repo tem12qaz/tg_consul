@@ -44,10 +44,8 @@ def get_request_params(account, proxy):
     print('------------------------')
     elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
     scroll_shim(driver, elem)
-    time.sleep(4)
-    driver.save_screenshot('eee2.png')
     elem.click()
-    driver.find_element(By.XPATH, "//input[data-disable-with='Sign In']").click()
+    driver.find_element(By.XPATH, "//input[value='Sign In']").click()
     time.sleep(2)
     request = driver.requests[-1]
     print(request.headers)
