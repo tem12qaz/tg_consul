@@ -59,11 +59,11 @@ def get_cookies(account, proxy):
     return cookies
 
 
-def get_dates(account, proxy):
+async def get_dates(account, proxy):
     cookies = get_cookies(account, proxy)
     async with aiohttp.ClientSession(cookies=cookies) as session:
         resp = await session.get(
-            url=url,
+            url='url',
             headers=HEADERS,
             proxy=str(proxy)
         )
