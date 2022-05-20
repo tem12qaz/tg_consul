@@ -54,9 +54,9 @@ def get_cookies(account, proxy):
     for cookie in driver.get_cookies():
         cookies[cookie['name']] = cookie['value']
 
-    print(driver.current_url)
+    user_id = driver.find_element(By.CLASS_NAME, 'primary').get_attribute('href').split('/')[-2]
 
-    return cookies
+    return cookies, user_id
 
 
 async def get_dates(account, proxy):
