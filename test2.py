@@ -1,11 +1,14 @@
 import time
 
+import aiohttp
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from seleniumwire import webdriver
 from selenium.webdriver.support.ui import WebDriverWait as driver_wait
 from selenium.webdriver.support import expected_conditions as EC
+
+from admin.config import HEADERS
 
 
 def scroll_shim(driver, element):
@@ -36,7 +39,7 @@ def driver_init(proxy):
     return driver
 
 
-def get_request_params(account, proxy):
+def get_cookies(account, proxy):
     driver = driver_init(proxy)
     driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
@@ -47,9 +50,25 @@ def get_request_params(account, proxy):
     elem.click()
     driver.find_element(By.XPATH, '//input[@value="Sign In"]').click()
     time.sleep(2)
-    request = driver.requests[-1]
-    print(request.headers)
-    print(driver.get_cookies())
+    cookies = {}
+    for cookie in driver.get_cookies():
+        cookies[cookie['name']] = cookie['value']
+
+    print(driver.current_url)
+
+    return cookies
+
+
+def get_dates(account, proxy):
+    cookies = get_cookies(account, proxy)
+    async with aiohttp.ClientSession(cookies=cookies) as session:
+        resp = await session.get(
+            url=url,
+            headers=HEADERS,
+            proxy=str(proxy)
+        )
+        data = (await resp.read()).decode('utf-8')
+        return data
 
 
 if __name__ == '__main__':
@@ -75,4 +94,4 @@ if __name__ == '__main__':
 
     prx = Prx()
     acc = Acc()
-    get_request_params(acc, prx)
+    print(get_cookies(acc, prx))

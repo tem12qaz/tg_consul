@@ -45,7 +45,7 @@ class Parser(object):
         driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
         return driver
 
-    def get_request_params(self, account: Account, proxy: Proxy, db=None):
+    def get_request_params(self, account: Account, proxy: Proxy, db):
         driver = self.driver_init(proxy)
         driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
         driver.find_element(By.ID, 'user_email').send_keys(account.login)
@@ -200,30 +200,3 @@ class Parser(object):
         proxy.status = 'OK'
         db.session.commit()
         self.proxies.append(proxy)
-
-
-if __name__ == '__main__':
-    class Acc:
-        def __init__(self):
-            self.login = 'yuliakrivoruk@gmail.com'
-            self.password = 'Yulia08!'
-
-    class Prx:
-        def __init__(self):
-            self.ip = '138.59.207.172'
-            self.port = '9068'
-            self.user = 'UonNTz'
-            self.password = '1tfyat'
-
-        @property
-        def http(self):
-            return f'http://{self.user}:{self.password}@{self.ip}:{self.port}/'
-
-        @property
-        def https(self):
-            return f'https://{self.user}:{self.password}@{self.ip}:{self.port}/'
-
-    prx = Prx()
-    acc = Acc()
-    parser = Parser()
-    parser.get_request_params(acc, prx)
