@@ -45,14 +45,28 @@ class Parser(object):
         driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
         return driver
 
-    def get_request_params(self, account: Account, proxy: Proxy, db):
+    def driver_process(self, account: Account, proxy: Proxy, db, reg=None):
         driver = self.driver_init(proxy)
         driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
         driver.find_element(By.ID, 'user_email').send_keys(account.login)
         driver.find_element(By.ID, 'user_password').send_keys(account.password)
         driver.find_element(By.ID, 'policy_confirmed').click()
         driver.find_element(By.XPATH, "//input[data-disable-with='Sign In']").click()
+        driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").click()
+        user_id = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").get_attribute('href').split('/')[-2]
+        driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
+        button = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]")
+        if button:
+            button.click()
         time.sleep(2)
+
+        test = driver.execute_script(
+            "var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
+        )
+
+        for item in test:
+            print(item)
+
         request = driver.requests[-1]
         print(request.headers)
         print(driver.get_cookies())

@@ -44,19 +44,23 @@ def get_cookies(account, proxy):
     driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
     driver.find_element(By.ID, 'user_password').send_keys(account.password)
-    print('------------------------')
-    elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
-    scroll_shim(driver, elem)
-    elem.click()
-    driver.find_element(By.XPATH, '//input[@value="Sign In"]').click()
+    driver.find_element(By.ID, 'policy_confirmed').click()
+    driver.find_element(By.XPATH, "//input[data-disable-with='Sign In']").click()
+    driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").click()
+    user_id = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").get_attribute('href').split('/')[
+        -2]
+    driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
+    button = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]")
+    if button:
+        button.click()
     time.sleep(2)
-    cookies = {}
-    for cookie in driver.get_cookies():
-        cookies[cookie['name']] = cookie['value']
 
-    user_id = driver.find_element(By.CLASS_NAME, 'primary').get_attribute('href').split('/')[-2]
+    test = driver.execute_script(
+        "var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
+    )
 
-    return cookies, user_id
+    for item in test:
+        print(item)
 
 
 async def get_dates(account, proxy):
