@@ -42,32 +42,9 @@ def driver_init(proxy):
 
 
 def get_network(driver):
-    logs_raw = driver.get_log("performance")
-    logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
-
-    def log_filter(log_):
-        return (
-            # is an actual response
-                log_["method"] == "Network.responseReceived"
-                # and json
-                and "json" in log_["params"]["response"]["mimeType"]
-        )
-
-    output = ''
-    for log in filter(log_filter, logs):
-        request_id = log["params"]["requestId"]
-        resp_url = log["params"]["response"]["url"]
-        print(f"Caught {resp_url}")
-        resp = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})
-        output += resp
-        output += '''
-
-
-'''
-        print(resp)
-
-    with open('output.txt', 'w') as f:
-        f.write(output)
+    r = driver.execute_script("return window.performance.getEntries();")
+    for res in r:
+        print(res)
 
 
 def get_cookies(account, proxy):
