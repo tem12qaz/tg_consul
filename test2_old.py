@@ -41,14 +41,13 @@ def driver_init(proxy):
     return driver
 
 
-def get_network(driver):
-    for request in driver.requests:
-        if request.response:
-            print(
-                request.url,
-                request.response.status_code,
-                request.response.body)
-
+def get_network_dates(driver):
+    # for request in driver.requests:
+    #     if request.response:
+    #         if 'ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/'in request.url:
+    #             return
+    script = 'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/94.json?appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
+    print(driver.execute_script())
 
 def get_cookies(account, proxy):
     driver = driver_init(proxy)
