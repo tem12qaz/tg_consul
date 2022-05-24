@@ -61,6 +61,8 @@ def get_cookies(account, proxy):
         EC.presence_of_element_located(
             (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
 
+    get_network_dates(driver, user_id)
+
 
 async def get_dates(account, proxy):
     cookies = get_cookies(account, proxy)
