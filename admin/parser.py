@@ -1,4 +1,5 @@
 import asyncio
+import json
 import time
 import traceback
 import random
@@ -62,7 +63,16 @@ class Parser(object):
     @staticmethod
     def get_network_dates(driver, user_id, city):
         script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/days/{city.site_id}.json?appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
-        return driver.execute_script(script)
+        dates = json.loads(driver.execute_script(script))
+        dates_list = [date['date'] for date in dates]
+        return dates_list
+
+    @staticmethod
+    def get_network_times(driver, user_id, city, date):
+        script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/times/{city.site_id}.json?date{date}&appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
+        dates = json.loads(driver.execute_script(script))
+        dates_list = [date['date'] for date in dates]
+        return dates_list
 
     def driver_process(self, account: Account, proxy: Proxy, db, reg=None):
         driver = self.driver_init(proxy)
@@ -79,8 +89,14 @@ class Parser(object):
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
 
+        days = {}
         for city in account.cities:
             dates = self.get_network_dates(driver, user_id, city)
+            for date in dates:
+                if date:             # ЕСЛИ ДЕНЬ В ПРЕДЕЛАХ АККАУНТА
+                    self.get_network_dates(driver, user_id, date)
+
+
 
     def parse_account(self, account: Account, proxy: Proxy, db):
 

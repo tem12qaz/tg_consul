@@ -42,9 +42,8 @@ def driver_init(proxy):
 
 
 def get_network_dates(driver, user_id):
-    script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/days/94.json?appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
+    script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/times/94.json?date=2023-07-27&appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
     print(driver.execute_script(script))
-    print(type(driver.execute_script(script)))
 
 
 def get_cookies(account, proxy):
