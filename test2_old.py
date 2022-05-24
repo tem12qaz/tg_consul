@@ -47,7 +47,7 @@ def get_network_dates(driver, user_id, city):
     print(type(driver.execute_script(script)))
 
 
-def parse(account, proxy):
+def get_cookies(account, proxy):
     driver = driver_init(proxy)
     driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
