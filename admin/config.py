@@ -7,7 +7,7 @@ PG_DATABASE = 'mybase'
 ERRS_MAX = 3
 '''
 https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/times/94.json?date=2023-07-28&appointments[expedite]=false
-https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/times/{city.site_id}.json?date{date}&appointments[expedite]=false
+https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id/appointment/times/94.json?date{date}&appointments[expedite]=false
 '''
 
 

@@ -9,6 +9,8 @@ import json
 # from threading import Thread
 
 # from fake_useragent import UserAgent
+from pprint import pprint
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
@@ -69,9 +71,8 @@ class Parser(object):
 
     @staticmethod
     def get_network_times(driver, user_id, city, date):
-        script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/times/{city.site_id}.json?date{date}&appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
+        script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/times/{city.site_id}.json?date={date}&appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
         times = json.loads(driver.execute_script(script))
-        print(times)
         return times['available_times']
 
     def driver_process(self, account, proxy, db, reg=None):
@@ -273,4 +274,4 @@ if __name__ == '__main__':
     prx = Prx()
     acc = Acc()
     parser = Parser()
-    print(parser.driver_process(acc, prx, None))
+    pprint(parser.driver_process(acc, prx, None))
