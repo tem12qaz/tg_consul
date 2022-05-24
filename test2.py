@@ -4,6 +4,7 @@ import aiohttp
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.wait import WebDriverWait
 from seleniumwire import webdriver
 from selenium.webdriver.support.ui import WebDriverWait as driver_wait
 from selenium.webdriver.support import expected_conditions as EC
@@ -48,11 +49,12 @@ def get_cookies(account, proxy):
     elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
     scroll_shim(driver, elem)
     elem.click()
-    driver.find_element(By.XPATH, '//input[@value="Sign In"]').click()
-    time.sleep(2)
-    driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").click()
-    user_id = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").get_attribute('href').split('/')[
-        -2]
+    WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+    WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, 'primary"]'))).click()
+    user_id = WebDriverWait(driver, 10000).until(
+        EC.presence_of_element_located(
+            (By.XPATH, '//button[contains(text(),"Continue")]'))).get_attribute('href').split('/')[-2]
+
     driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
     button = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]")
     if button:
