@@ -94,7 +94,7 @@ class Parser(object):
             dates = self.get_network_dates(driver, user_id, city)
             for date in dates:
                 if date:             # ЕСЛИ ДЕНЬ В ПРЕДЕЛАХ АККАУНТА
-                    city_days[date] = self.get_network_dates(driver, user_id, date)
+                    city_days[date] = self.get_network_times(driver, user_id, city, date)
             days[city.name] = city_days
 
         return days
