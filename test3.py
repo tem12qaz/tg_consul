@@ -1,30 +1,71 @@
-{'connectEnd': 3, 'connectStart': 3, 'decodedBodySize': 28032, 'domComplete': 2402, 'domContentLoadedEventEnd': 2183, 'domContentLoadedEventStart': 1697, 'domInteractive': 1519, 'domainLookupEnd': 3, 'domainLookupStart': 3, 'duration': 2405, 'encodedBodySize': 28032, 'entryType': 'navigation', 'fetchStart': 3, 'initiatorType': 'navigation', 'loadEventEnd': 2405, 'loadEventStart': 2402, 'name': 'https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment?utf8=%E2%9C%93&applicants%5B%5D=45853796&applicants%5B%5D=45853930&applicants%5B%5D=45854052&applicants%5B%5D=45854131&applicants%5B%5D=45854300&confirmed_limit_message=1&commit=Continue', 'nextHopProtocol': 'http/1.1', 'redirectCount': 0, 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 89, 'responseEnd': 837, 'responseStart': 837, 'secureConnectionStart': 3, 'serverTiming': [], 'startTime': 0, 'transferSize': 29486, 'type': 'navigate', 'unloadEventEnd': 846, 'unloadEventStart': 843, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 131, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 851, 'initiatorType': 'script', 'name': 'https://www.google.com/recaptcha/api.js?render=explicit&hl=en', 'nextHopProtocol': 'h2', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 982, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 851, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 851, 'connectStart': 851, 'decodedBodySize': 1443, 'domainLookupEnd': 851, 'domainLookupStart': 851, 'duration': 344, 'encodedBodySize': 1443, 'entryType': 'resource', 'fetchStart': 851, 'initiatorType': 'img', 'name': 'https://ais.usvisa-info.com/assets/calendar-cf353c2a5c12c4378ea1198e8d55b5dd95d79d8c934a34ec40de54d97de33825.gif', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 982, 'responseEnd': 1195, 'responseStart': 1195, 'secureConnectionStart': 851, 'serverTiming': [], 'startTime': 851, 'transferSize': 1638, 'workerStart': 0}
-{'connectEnd': 851, 'connectStart': 851, 'decodedBodySize': 2105871, 'domainLookupEnd': 851, 'domainLookupStart': 851, 'duration': 130, 'encodedBodySize': 442973, 'entryType': 'resource', 'fetchStart': 851, 'initiatorType': 'script', 'name': 'https://ais.usvisa-info.com/assets/application-a5d81146f0dbde092ba8335f14cb72458e9108c3ecbf8e570acf6ed419b76545.js', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 851, 'responseEnd': 981, 'responseStart': 979, 'secureConnectionStart': 851, 'serverTiming': [], 'startTime': 851, 'transferSize': 0, 'workerStart': 0}{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 230, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 852, 'initiatorType': 'script', 'name': 'https://sealserver.trustwave.com/seal.js?style=invert&code=650db360ce4f433099c92bb27f79d08f', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 1082, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 852, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 1097, 'connectStart': 1097, 'decodedBodySize': 2861, 'domainLookupEnd': 1097, 'domainLookupStart': 1097, 'duration': 800, 'encodedBodySize': 2861, 'entryType': 'resource', 'fetchStart': 1097, 'initiatorType': 'other', 'name': 'https://ais.usvisa-info.com/assets/favicon-449421b3e1cf454074de7cb1e9c74b673d49c5285dddd30a7095722f112e5bd7.png', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 1097, 'responseEnd': 1897, 'responseStart': 1895, 'secureConnectionStart': 1097, 'serverTiming': [], 'startTime': 1097, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 4, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 1516, 'initiatorType': 'script', 'name': 'https://www.gstatic.com/recaptcha/releases/M-QqaF9xk6BpjLH22uHZRhXt/recaptcha__en.js', 'nextHopProtocol': 'h2', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 1520, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 1516, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 1518, 'connectStart': 1518, 'decodedBodySize': 4045, 'domainLookupEnd': 1518, 'domainLookupStart': 1518, 'duration': 365, 'encodedBodySize': 4045, 'entryType': 'resource', 'fetchStart': 1518, 'initiatorType': 'other', 'name': 'https://ais.usvisa-info.com/assets/iconFacebook.png', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 1594, 'responseEnd': 1883, 'responseStart': 1883, 'secureConnectionStart': 1518, 'serverTiming': [], 'startTime': 1518, 'transferSize': 322, 'workerStart': 0}
-{'connectEnd': 1518, 'connectStart': 1518, 'decodedBodySize': 4582, 'domainLookupEnd': 1518, 'domainLookupStart': 1518, 'duration': 373, 'encodedBodySize': 4582, 'entryType': 'resource', 'fetchStart': 1518, 'initiatorType': 'other', 'name': 'https://ais.usvisa-info.com/assets/iconTwitter.png', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 1594, 'responseEnd': 1891, 'responseStart': 1891, 'secureConnectionStart': 1518, 'serverTiming': [], 'startTime': 1518, 'transferSize': 322, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 259, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 1518, 'initiatorType': 'img', 'name': 'https://sealserver.trustwave.com/seal_image.php?customerId=650db360ce4f433099c92bb27f79d08f&size=105x54&style=invert', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 1777, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 1518, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 377, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 1519, 'initiatorType': 'script', 'name': 'https://www.google-analytics.com/analytics.js', 'nextHopProtocol': 'h2', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 1896, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 1519, 'transferSize': 0, 'workerStart': 0}
-{'duration': 0, 'entryType': 'paint', 'name': 'first-contentful-paint', 'startTime': 1577}
-{'connectEnd': 1902, 'connectStart': 1902, 'decodedBodySize': 61, 'domainLookupEnd': 1902, 'domainLookupStart': 1902, 'duration': 776, 'encodedBodySize': 61, 'entryType': 'resource', 'fetchStart': 1902, 'initiatorType': 'xmlhttprequest', 'name': 'https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/address/94', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 1981, 'responseEnd': 2678, 'responseStart': 2589, 'secureConnectionStart': 1902, 'serverTiming': [], 'startTime': 1902, 'transferSize': 1513, 'workerStart': 0}
-var = {'connectEnd': 1904, 'connectStart': 1904, 'decodedBodySize': 379, 'domainLookupEnd': 1904,
-       'domainLookupStart': 1904, 'duration': 483, 'encodedBodySize': 379, 'entryType': 'resource', 'fetchStart': 1904,
-       'initiatorType': 'xmlhttprequest',
-       'name': 'https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/94.json?appointments[expedite]=false',
-       'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 1992, 'responseEnd': 2387,
-       'responseStart': 2386, 'secureConnectionStart': 1904, 'serverTiming': [], 'startTime': 1904,
-       'transferSize': 1839, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 401, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 2396, 'initiatorType': 'xmlhttprequest', 'name': 'https://www.google-analytics.com/j/collect?v=1&_v=j96&a=1705012877&t=pageview&_s=1&dl=https%3A%2F%2Fais.usvisa-info.com%2Fen-ca%2Fniv%2Fschedule%2F38770842%2Fappointment%3Futf8%3D%25E2%259C%2593%26applicants%255B%255D%3D45853796%26applicants%255B%255D%3D45853930%26applicants%255B%255D%3D45854052%26applicants%255B%255D%3D45854131%26applicants%255B%255D%3D45854300%26confirmed_limit_message%3D1%26commit%3DContinue&ul=en-us&de=UTF-8&dt=Schedule%20Appointments%20%7C%20Official%20U.S.%20Department%20of%20State%20Visa%20Appointment%20Service%20%7C%20Canada%20%7C%20English&sd=24-bit&sr=1366x768&vp=1188x915&je=0&_u=AACAAEABAAAAAC~&jid=&gjid=&cid=108888177.1653414605&tid=UA-76621744-1&_gid=1300135941.1653414605&_slc=1&z=1317142', 'nextHopProtocol': 'h2', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 2797, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 2396, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 693, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 2402, 'initiatorType': 'script', 'name': 'https://js-agent.newrelic.com/nr-1216.min.js', 'nextHopProtocol': 'h2', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 3095, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 2402, 'transferSize': 0, 'workerStart': 0}
-{'connectEnd': 2483, 'connectStart': 2483, 'decodedBodySize': 61, 'domainLookupEnd': 2483, 'domainLookupStart': 2483, 'duration': 504, 'encodedBodySize': 61, 'entryType': 'resource', 'fetchStart': 2483, 'initiatorType': 'xmlhttprequest', 'name': 'https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/address/94', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 2485, 'responseEnd': 2987, 'responseStart': 2987, 'secureConnectionStart': 2483, 'serverTiming': [], 'startTime': 2483, 'transferSize': 1513, 'workerStart': 0}
-var = {'connectEnd': 2489, 'connectStart': 2489, 'decodedBodySize': 379, 'domainLookupEnd': 2489,
-       'domainLookupStart': 2489, 'duration': 1607, 'encodedBodySize': 379, 'entryType': 'resource', 'fetchStart': 2487,
-       'initiatorType': 'xmlhttprequest',
-       'name': 'https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/94.json?appointments[expedite]=false',
-       'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 2489, 'responseEnd': 4094,
-       'responseStart': 2877, 'secureConnectionStart': 2489, 'serverTiming': [], 'startTime': 2487,
-       'transferSize': 1422, 'workerStart': 0}
-{'connectEnd': 0, 'connectStart': 0, 'decodedBodySize': 0, 'domainLookupEnd': 0, 'domainLookupStart': 0, 'duration': 304, 'encodedBodySize': 0, 'entryType': 'resource', 'fetchStart': 3192, 'initiatorType': 'script', 'name': 'https://bam-cell.nr-data.net/1/9edb043da4?a=1729965&v=1216.487a282&to=eldYFkBWDlhWQBcWBlFdUhdeUAxTHFNIFQpQVkIPV1cWG11XTw%3D%3D&rst=3188&ck=1&ref=https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment&ap=463&be=856&fe=2402&dc=1697&perf=%7B%22timing%22:%7B%22of%22:1653414615181,%22n%22:0,%22u%22:843,%22ue%22:845,%22f%22:3,%22dn%22:3,%22dne%22:3,%22c%22:3,%22s%22:3,%22ce%22:3,%22rq%22:89,%22rp%22:837,%22rpe%22:838,%22dl%22:843,%22di%22:1518,%22ds%22:1696,%22de%22:2182,%22dc%22:2401,%22l%22:2401,%22le%22:2405%7D,%22navigation%22:%7B%7D%7D&fcp=1577&jsonp=NREUM.setToken', 'nextHopProtocol': 'http/1.1', 'redirectEnd': 0, 'redirectStart': 0, 'requestStart': 0, 'responseEnd': 3496, 'responseStart': 0, 'secureConnectionStart': 0, 'serverTiming': [], 'startTime': 3192, 'transferSize': 0, 'workerStart': 0}
+import asyncio
+
+import aiohttp
+import requests
+
+cookies = {
+    '_gat': '1',
+    '_yatri_session': 'aUVodjFkdG5YYTZNTm5NWUhsb2VDTUYxdGJXV1hZcXJoVm4rdVZYcnNsZ0QzT2FKNUpUalZoR1ZaVm5YZnU2QVRyZU5menF2aENXNzZselZXU3I3a1hKSWFzSmQyelVvY2YvQWZ2MGdSc3hXMHE2dmhzd0h2cEU4VW8rVlFOc0xhWlhkeEw1cXMvZXRJdWM3dXpJNVY4ODk2VUFlWmR3eTVOamdzVElQOEpFTTVHR3hodXlja2p6T3NYRGlRMytvNWhFb2drYTFtL1B1dVdNZWs1UHJDd1Q4b1FrU0lIakwxdkpuWnpnV2xYZG9lQUR5TUJYQW9kRWZjUC9ONm0wSmFvYVRZQlQ3UWNvUXlvVjNKUlp6b1NJbkcrRlRJUkpzSitIekhHSHh5WnVtSkhtdE1QMjlFQ3R6dUZJRmsraHEzSGovL3R5aTk2UnYya0hwazlyTTBidTVSbm81R3BVT1F3ZEpWNThJMVVEZzZoZCt2SkgxTS9Dcytuc2lqc1RvT0dxRkd1RStlaVVpKy9idndvNFZ5RFZhSWpacGFMV3l6N2FxMCtpMTJ6NkZ4MlJlSGJ4S0phM05SLzlEcndXeVZzZFZLS2FGUFZiaVN5V1RKUTMyTjJ4cC9hSzhPVEpxbE5aaW5kS0NFMWVKVkNmbCtIcFlSRzE2ME51Q05naVFmTklCa1g5TlZYSTBIam0zNHgzNS9RaGRlbzdmL1AwbHlZWnB1Qlp2M1BBPS0tcCtxZXhwL2NMMWg3YzM0Uk5yTVpKdz09--e282749062a356849d9c4c17d1b4a1d0b17b2620',
+    '_ga': 'GA1.2.1735939955.1653064144',
+    '_gid': 'GA1.2.971806773.1653064144'
+}
+
+headers = {
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8,es;q=0.7',
+    'Connection': 'keep-alive',
+    # Requests sorts cookies= alphabetically
+    # 'Cookie': '_ga=GA1.2.1541250795.1652893431; _gid=GA1.2.1139223970.1652893431; _yatri_session=TGpJcnl2NWF0V1JETXhrTmZwaFZ6ZVpWNlBGV3Z4RmZYK250MmVsaWlIK0VYS05zeVpWa21lWjZZUSs0dWZWbWZudVpZU05OWXAvenJZYWJ3S1dkQmpKdlBoMmVaMEpMSXMrYi8yd0theXZDV2tyUjkxZ1dtaWswTVFKdHNJZzNyTzg0RythMkZmQnYxMzJNYlNSd2F1bEZLTVBWTmhOUCtrYitEN3FpWlpucnNkeUpBOXgwQ1lkRGVXUkpsOXptQXlGMmFONjZMVElsb1p5TlZIcW8wRUZtRnF0ZFNsRWNNdGRobGZtamhjSHRJQWdCa3ZOS1Bha1hjNTVTd1oyNWprNDVZQlFzYXM4UUt1N1laZGZjaWtWd0FXMW1wOW0vUWR3M1E2cUZ4bGl5bWNleUR4MzY1NTQwNTVJM3N1TWc2QjYyTEc4SWdRN0MzYy8wcEJzUHI0OTZ4OTB4TTlTbExiMk51Y2RESmxvcUVrbWZqenpDd1EvbDhmZEV2VlpYQzRKRUN6Y1dGaDJNVVVQUUZvWlBPMXlnUG9zOFRkRWE3eUIvV1VHNC9pb0ZLYm9YcENrVU1KSktBZkplWGlqQ2F6djRSTnJzVW16OVpiYng4THZxRHc0aVhmYS92clVEczFaVGgrd0lDUTdUSWhpeVJwYlJHRmtGcHVaa3h6Q1FPekR3cHlUcnJRN1hGUjRpNkYzRHpST0JlVHp4ZDJsK1BWanVicGFyL2FrPS0tTkpKSC9nbmErVHcxbUJobEtZeGxmUT09--d3fa47363713b47b6698b869385b24c7dc7829b9',
+    'If-None-Match': 'W/"a96d28dfa64d718cee862570c1fc5600"',
+    'Referer': 'https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment?utf8=%E2%9C%93&applicants%5B%5D=45853796&applicants%5B%5D=45853930&applicants%5B%5D=45854052&applicants%5B%5D=45854131&applicants%5B%5D=45854300&confirmed_limit_message=1&commit=Continue',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36',
+    'X-CSRF-Token': 'jYPdO/irS0VRzzGfTSvxt9VFhDpv0T241HzpLhHkuK5KHFfbCtbhRZ5uheYGg4oW1MdCxhSdCXHOT6Zjq/bx+w==',
+    'X-Requested-With': 'XMLHttpRequest',
+    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+    'sec-ch-ua-mobile': '?1',
+    'sec-ch-ua-platform': '"Android"',
+}
+
+class Prx:
+    def __init__(self):
+        self.ip = '138.59.207.172'
+        self.port = '9068'
+        self.user = 'UonNTz'
+        self.password = '1tfyat'
+
+    @property
+    def http(self):
+        return f'http://{self.user}:{self.password}@{self.ip}:{self.port}'
+
+    @property
+    def https(self):
+        return f'https://{self.user}:{self.password}@{self.ip}:{self.port}'
+
+
+prx = Prx()
+proxies = {
+    "http": prx.http,
+    "https": prx.https,
+}
+
+
+async def main():
+    print('--------------')
+    async with aiohttp.ClientSession(cookies=cookies) as session:
+        resp = await session.get(
+            url='https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/94.json?appointments\\[expedite\\]=false',
+            headers=headers,
+            proxy=str(prx.http)
+        )
+        data = (await resp.read())
+        print (resp)
+        print(data)
+        print('----------------------')
+
+if __name__ == '__main__':
+    loop = asyncio.new_event_loop()
+    loop.create_task(main())
+    loop.run_forever()

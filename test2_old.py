@@ -41,7 +41,37 @@ def driver_init(proxy):
     return driver
 
 
-def get_cookies(driver, account, proxy):
+def get_network(driver):
+    logs_raw = driver.get_log("performance")
+    logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
+
+    def log_filter(log_):
+        return (
+            # is an actual response
+                log_["method"] == "Network.responseReceived"
+                # and json
+                and "json" in log_["params"]["response"]["mimeType"]
+        )
+
+    output = ''
+    for log in filter(log_filter, logs):
+        request_id = log["params"]["requestId"]
+        resp_url = log["params"]["response"]["url"]
+        print(f"Caught {resp_url}")
+        resp = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})
+        output += resp
+        output += '''
+
+
+'''
+        print(resp)
+
+    with open('output.txt', 'w') as f:
+        f.write(output)
+
+
+def get_cookies(account, proxy):
+    driver = driver_init(proxy)
     driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
     driver.find_element(By.ID, 'user_password').send_keys(account.password)
@@ -50,34 +80,29 @@ def get_cookies(driver, account, proxy):
     scroll_shim(driver, elem)
     elem.click()
     WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+    # WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, 'primary'))).click()
     user_id = WebDriverWait(driver, 10000).until(
         EC.presence_of_element_located(
             (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
 
-    cookies = driver.get_cookies()
-
-    return cookies, user_id
-
-
-def interceptor(request):
-    for key, value in HEADERS.items():
-        try:
-            del request.headers[key]  # Remember to delete the header first
-        except:
-            pass
-        request.headers[key] = value  # Spoof the referer
+    driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
+    button = driver.find_element(By.XPATH, "//input[@value='Continue']")
+    if button:
+        button.click()
+    time.sleep(2)
+    get_network(driver)
 
 
-def get_dates(account, proxy):
-    driver: webdriver = driver_init(proxy)
-    cookies, user_id = get_cookies(driver, account, proxy)
-    driver.request_interceptor = interceptor
-    driver.delete_all_cookies()
-    for cookie in cookies:
-        driver.add_cookie(cookie)
-    driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/days/94.json?appointments\\[expedite\\]=false')
-    print(driver.page_source)
-
+async def get_dates(account, proxy):
+    cookies = get_cookies(account, proxy)
+    async with aiohttp.ClientSession(cookies=cookies) as session:
+        resp = await session.get(
+            url='url',
+            headers=HEADERS,
+            proxy=str(proxy)
+        )
+        data = (await resp.read()).decode('utf-8')
+        return data
 
 
 if __name__ == '__main__':
@@ -103,4 +128,4 @@ if __name__ == '__main__':
 
     prx = Prx()
     acc = Acc()
-    get_dates(acc, prx)
+    get_cookies(acc, prx)
