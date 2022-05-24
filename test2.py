@@ -50,10 +50,10 @@ def get_cookies(account, proxy):
     scroll_shim(driver, elem)
     elem.click()
     WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
-    WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, 'primary'))).click()
+    # WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, 'primary'))).click()
     user_id = WebDriverWait(driver, 10000).until(
         EC.presence_of_element_located(
-            (By.XPATH, '//button[contains(text(),"Continue")]'))).get_attribute('href').split('/')[-2]
+            (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
 
     driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
     button = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]")
