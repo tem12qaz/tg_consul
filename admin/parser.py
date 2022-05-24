@@ -1,12 +1,12 @@
-import asyncio
+# import asyncio
 import json
-import time
-import traceback
-import random
-
-import pytz
-from datetime import datetime, timedelta
-from threading import Thread
+# import time
+# import traceback
+# import random
+#
+# import pytz
+# from datetime import datetime, timedelta
+# from threading import Thread
 
 # from fake_useragent import UserAgent
 from selenium.webdriver.common.by import By
@@ -15,9 +15,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumwire import webdriver
 
-from admin.views import AdminMixin
-from config import ERRS_MAX
-from models import Proxy, Account, Config
+# from admin.views import AdminMixin
+# from config import ERRS_MAX
+# from models import Proxy, Account, Config
 
 
 # fa = UserAgent()
@@ -34,7 +34,7 @@ class Parser(object):
 
 
     @staticmethod
-    def driver_init(proxy: Proxy):
+    def driver_init(proxy):
         options = Options()
         options.headless = True
 
@@ -73,7 +73,7 @@ class Parser(object):
         times = json.loads(driver.execute_script(script))['available_times']
         return times
 
-    def driver_process(self, account: Account, proxy: Proxy, db, reg=None):
+    def driver_process(self, account, proxy, db, reg=None):
         driver = self.driver_init(proxy)
         driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
         driver.find_element(By.ID, 'user_email').send_keys(account.login)
