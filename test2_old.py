@@ -69,7 +69,7 @@ def get_cookies(account, proxy):
     if button:
         button.click()
     time.sleep(2)
-    get_network(driver)
+    get_network_dates(driver)
 
 
 async def get_dates(account, proxy):
