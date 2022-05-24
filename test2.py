@@ -56,7 +56,7 @@ def get_cookies(account, proxy):
             (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
 
     driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
-    button = driver.find_element(By.XPATH, "//input[@value='Continue')]")
+    button = driver.find_element(By.XPATH, "//input[@value='Continue']")
     if button:
         button.click()
     time.sleep(2)
