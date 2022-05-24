@@ -70,8 +70,9 @@ class Parser(object):
     @staticmethod
     def get_network_times(driver, user_id, city, date):
         script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/times/{city.site_id}.json?date{date}&appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
-        times = json.loads(driver.execute_script(script))['available_times']
-        return times
+        times = json.loads(driver.execute_script(script))
+        print(times)
+        return times['available_times']
 
     def driver_process(self, account, proxy, db, reg=None):
         driver = self.driver_init(proxy)
