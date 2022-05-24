@@ -70,9 +70,8 @@ class Parser(object):
     @staticmethod
     def get_network_times(driver, user_id, city, date):
         script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/times/{city.site_id}.json?date{date}&appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
-        dates = json.loads(driver.execute_script(script))
-        dates_list = [date['date'] for date in dates]
-        return dates_list
+        times = json.loads(driver.execute_script(script))['available_times']
+        return times
 
     def driver_process(self, account: Account, proxy: Proxy, db, reg=None):
         driver = self.driver_init(proxy)
@@ -91,12 +90,14 @@ class Parser(object):
 
         days = {}
         for city in account.cities:
+            city_days = {}
             dates = self.get_network_dates(driver, user_id, city)
             for date in dates:
                 if date:             # ЕСЛИ ДЕНЬ В ПРЕДЕЛАХ АККАУНТА
-                    self.get_network_dates(driver, user_id, date)
+                    city_days[date] = self.get_network_dates(driver, user_id, date)
+            days[city.name] = city_days
 
-
+        return days
 
     def parse_account(self, account: Account, proxy: Proxy, db):
 
@@ -239,3 +240,36 @@ class Parser(object):
         proxy.status = 'OK'
         db.session.commit()
         self.proxies.append(proxy)
+
+
+if __name__ == '__main__':
+    class City:
+        def __init__(self, name, id_):
+            self.name = name
+            self.site_id = id_
+
+    class Acc:
+        def __init__(self):
+            self.login = 'yuliakrivoruk@gmail.com'
+            self.password = 'Yulia08!'
+            self.cities = [City('Torronto', 94), City('Calgary', 89), City('Vancouver', 95)]
+
+    class Prx:
+        def __init__(self):
+            self.ip = '138.59.207.172'
+            self.port = '9068'
+            self.user = 'UonNTz'
+            self.password = '1tfyat'
+
+        @property
+        def http(self):
+            return f'http://{self.user}:{self.password}@{self.ip}:{self.port}/'
+
+        @property
+        def https(self):
+            return f'https://{self.user}:{self.password}@{self.ip}:{self.port}/'
+
+    prx = Prx()
+    acc = Acc()
+    parser = Parser()
+    print(parser.driver_process(acc, prx, None))
