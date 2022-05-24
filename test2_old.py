@@ -42,9 +42,12 @@ def driver_init(proxy):
 
 
 def get_network(driver):
-    r = driver.execute_script("return window.performance.getEntries();")
-    for res in r:
-        print(res)
+    for request in driver.requests:
+        if request.response:
+            print(
+                request.url,
+                request.response.status_code,
+                request.response.body)
 
 
 def get_cookies(account, proxy):
