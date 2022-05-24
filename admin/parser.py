@@ -10,6 +10,8 @@ from threading import Thread
 # from fake_useragent import UserAgent
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from seleniumwire import webdriver
 
 from admin.views import AdminMixin
@@ -45,33 +47,40 @@ class Parser(object):
         driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
         return driver
 
+    @staticmethod
+    def scroll_shim(driver, element):
+        x = element.location['x']
+        y = element.location['y']
+        scroll_by_coord = 'window.scrollTo(%s,%s);' % (
+            x,
+            y
+        )
+        scroll_nav_out_of_way = 'window.scrollBy(0, -120);'
+        driver.execute_script(scroll_by_coord)
+        driver.execute_script(scroll_nav_out_of_way)
+
+    @staticmethod
+    def get_network_dates(driver, user_id, city):
+        script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/days/{city.site_id}.json?appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
+        return driver.execute_script(script)
+
     def driver_process(self, account: Account, proxy: Proxy, db, reg=None):
         driver = self.driver_init(proxy)
         driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
         driver.find_element(By.ID, 'user_email').send_keys(account.login)
         driver.find_element(By.ID, 'user_password').send_keys(account.password)
-        driver.find_element(By.ID, 'policy_confirmed').click()
-        driver.find_element(By.XPATH, "//input[data-disable-with='Sign In']").click()
-        driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").click()
-        user_id = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]").get_attribute('href').split('/')[-2]
-        driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
-        button = driver.find_element(By.XPATH, "//button[contains(text(),'Continue')]")
-        if button:
-            button.click()
-        time.sleep(2)
+        print('------------------------')
+        elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
+        self.scroll_shim(driver, elem)
+        elem.click()
+        WebDriverWait(driver, 10000).until(
+            EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+        user_id = WebDriverWait(driver, 10000).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
 
-        test = driver.execute_script(
-            "var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
-        )
-
-        for item in test:
-            print(item)
-
-        request = driver.requests[-1]
-        print(request.headers)
-        print(driver.get_cookies())
-
-        request = driver.requests[-1]
+        for city in account.cities:
+            dates = self.get_network_dates(driver, user_id, city)
 
     def parse_account(self, account: Account, proxy: Proxy, db):
 

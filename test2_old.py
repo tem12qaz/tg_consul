@@ -41,15 +41,13 @@ def driver_init(proxy):
     return driver
 
 
-def get_network_dates(driver):
-    # for request in driver.requests:
-    #     if request.response:
-    #         if 'ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/'in request.url:
-    #             return
-    script = 'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/days/94.json?appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
+def get_network_dates(driver, user_id, city):
+    script = f'let xmlHttpReq = new XMLHttpRequest();xmlHttpReq.open("GET", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment/days/{city.site_id}.json?appointments[expedite]=false", false); xmlHttpReq.send(null);return xmlHttpReq.responseText;'
     print(driver.execute_script(script))
+    print(type(driver.execute_script(script)))
 
-def get_cookies(account, proxy):
+
+def parse(account, proxy):
     driver = driver_init(proxy)
     driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
     driver.find_element(By.ID, 'user_email').send_keys(account.login)
@@ -59,17 +57,9 @@ def get_cookies(account, proxy):
     scroll_shim(driver, elem)
     elem.click()
     WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
-    # WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, 'primary'))).click()
     user_id = WebDriverWait(driver, 10000).until(
         EC.presence_of_element_located(
             (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
-
-    driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
-    button = driver.find_element(By.XPATH, "//input[@value='Continue']")
-    if button:
-        button.click()
-    time.sleep(2)
-    get_network_dates(driver)
 
 
 async def get_dates(account, proxy):
