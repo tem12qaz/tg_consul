@@ -39,13 +39,13 @@ class ProxyView(AdminMixin, ModelView):
 
 
 class AccountView(AdminMixin, ModelView):
-    column_list = ('id', 'login', 'password', 'month', 'status')
-    form_columns = ('login', 'password', 'month', 'status')
+    column_list = ('id', 'login', 'password', 'month', 'status', 'cities')
+    form_columns = ('login', 'password', 'month', 'status', 'cities')
 
 
 class CityView(AdminMixin, ModelView):
-    column_list = ('id', 'name')
-    form_columns = ('name',)
+    column_list = ('id', 'name', 'site_id')
+    form_columns = ('name', 'site_id')
 
 
 class ConfigView(AdminMixin, ModelView):

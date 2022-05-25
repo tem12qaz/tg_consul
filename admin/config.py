@@ -5,11 +5,12 @@ PG_USER = 'myuser'
 PG_DATABASE = 'mybase'
 
 ERRS_MAX = 3
-'''
-https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment/times/94.json?date=2023-07-28&appointments[expedite]=false
-https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id/appointment/times/94.json?date{date}&appointments[expedite]=false
-'''
 
+ADMIN_ID = ''
+
+STD_TEXT = '''Login: <b>{login}</b>
+{city}
+'''
 
 HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',

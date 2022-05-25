@@ -56,7 +56,7 @@ class Account(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     login = db.Column(db.String(32))
     password = db.Column(db.String(32))
-    month = db.Column(db.Integer())
+    up_to_date = db.Column(db.Date())
     status = db.Column(db.String(16), default='SEARCH')
     cities = db.relationship("City", secondary="account_city")
 
