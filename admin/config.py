@@ -6,11 +6,13 @@ PG_DATABASE = 'mybase'
 
 ERRS_MAX = 3
 
-ADMIN_ID = ''
+ADMIN_ID = '772311962'
 
 STD_TEXT = '''Login: <b>{login}</b>
 {city}
 '''
+
+BOT_TOKEN = '1671620851:AAHCEc74ng-uu4K-l6AT13slewux9cp3Zm8'
 
 HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
