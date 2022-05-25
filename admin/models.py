@@ -67,6 +67,7 @@ class Account(db.Model):
 class City(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(32))
+    site_id = db.Column(db.Integer())
     users = db.relationship("Account", secondary="account_city")
 
     def __repr__(self):
