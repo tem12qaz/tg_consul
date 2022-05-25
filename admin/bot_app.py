@@ -4,7 +4,7 @@ from loader import dp
 from parser import main_callback, Parser
 
 
-def on_startup():
+def on_startup(_):
     parser = Parser()
     parser.start_parse()
 
