@@ -104,7 +104,8 @@ class Parser(object):
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
 
-        except:
+        except Exception as e:
+            print(traceback.format_exc())
             if driver:
                 driver.quit()
                 driver.close()
@@ -230,7 +231,11 @@ class Parser(object):
                             if not result:
                                 self.add_error(account)
                                 if self.errors.get(account) > ERRS_MAX:
-                                    self.accounts.remove(account)
+                                    try:
+                                        self.accounts.remove(account)
+                                    except:
+                                        pass
+                                    break
                                     break
                                 else:
                                     continue
