@@ -1,7 +1,7 @@
 from aiogram import executor, types
 
-from admin.loader import dp
-from admin.parser import main_callback, Parser
+from loader import dp
+from parser import main_callback, Parser
 
 
 def on_startup():

@@ -17,7 +17,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumwire import webdriver
 
-from admin.flask_app_init import db
+from flask_app_init import db
 from config import ERRS_MAX, ADMIN_ID, STD_TEXT
 from loader import bot
 from models import Proxy, Account, Config
