@@ -78,6 +78,7 @@ class Parser(object):
         return times['available_times']
 
     def driver_process(self, account, proxy: Proxy):
+        print(proxy.http)
         driver = None
         try:
             driver = self.driver_init(proxy)
@@ -163,6 +164,7 @@ class Parser(object):
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
+        print(proxy.http)
         try:
             try:
                 days, user_id = self.driver_process(account, proxy)
