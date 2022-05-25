@@ -258,7 +258,7 @@ class Parser(object):
                 print(traceback.format_exc())
                 await asyncio.sleep(100)
 
-    def start_parse(self, db):
+    def start_parse(self, db=db):
         loop = asyncio.new_event_loop()
         Parser.loop = loop
         loop.create_task(self.parse(loop, db))

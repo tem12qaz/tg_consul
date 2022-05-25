@@ -1,7 +1,12 @@
 from aiogram import executor, types
 
+from admin.loader import dp
 from admin.parser import main_callback, Parser
-from handlers import dp
+
+
+def on_startup():
+    parser = Parser()
+    parser.start_parse()
 
 
 @dp.callback_query_handler(main_callback.filter())
@@ -21,7 +26,8 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         await callback.message.edit_text(
             'Success'
         )
+    await callback.answer()
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dp, on_startup=on_startup)
