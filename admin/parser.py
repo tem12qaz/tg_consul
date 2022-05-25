@@ -37,9 +37,8 @@ class Parser(object):
             cls.instance.db = db
         return cls.instance
 
-
     @staticmethod
-    def driver_init(proxy):
+    def driver_init(proxy: Proxy):
         options = Options()
         options.headless = True
 
@@ -78,7 +77,7 @@ class Parser(object):
         times = json.loads(driver.execute_script(script))
         return times['available_times']
 
-    def driver_process(self, account, proxy):
+    def driver_process(self, account, proxy: Proxy):
         driver = None
         try:
             driver = self.driver_init(proxy)
@@ -225,9 +224,7 @@ class Parser(object):
                     proxy = self.proxies[0]
                     self.shift_proxy()
                     print(account)
-                    print(proxy)
-                    print(proxy.ip)
-                    print(proxy.htпtp)
+                    print(proxy.http)
 
                     while True:
                         try:
