@@ -4,7 +4,7 @@ import traceback
 import random
 
 import pytz
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date as date_
 from threading import Thread
 
 from pprint import pprint
@@ -99,7 +99,7 @@ class Parser(object):
                 city_days = {}
                 dates = self.get_network_dates(driver, user_id, city)
                 for date in dates:
-                    if datetime.strptime(date, '%Y-%m-%d') < account.up_to_date:
+                    if date_(*date.split('-')) < account.up_to_date:
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
 
