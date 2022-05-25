@@ -6,8 +6,8 @@ from flask_admin import Admin as Admin_
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
 
-from admin.models import User, Role, Account, Proxy, Config, City
-from admin.views import HomeAdminView, LogoutView, AccountView, ProxyView, ConfigView, CityView
+from models import User, Role, Account, Proxy, Config, City
+from views import HomeAdminView, LogoutView, AccountView, ProxyView, ConfigView, CityView
 from flask_app_init import app, db
 
 MIGRATION_DIR = os.path.join('admin', 'migrations')
