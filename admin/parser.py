@@ -226,6 +226,8 @@ class Parser(object):
                     self.shift_proxy()
                     print(account)
                     print(proxy)
+                    print(proxy.ip)
+                    print(proxy.http)
 
                     while True:
                         try:
