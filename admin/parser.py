@@ -227,7 +227,7 @@ class Parser(object):
                     print(account)
                     print(proxy)
                     print(proxy.ip)
-                    print(proxy.http)
+                    print(proxy.htпtp)
 
                     while True:
                         try:
