@@ -223,7 +223,9 @@ class Parser(object):
                         i = 1
                     account = self.accounts.pop(0)
                     proxy = self.proxies[0]
+                    self.shift_proxy()
                     print(account)
+                    print(proxy)
 
                     while True:
                         try:
