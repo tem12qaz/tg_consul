@@ -17,6 +17,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumwire import webdriver
 
+from admin.flask_app_init import db
 from config import ERRS_MAX, ADMIN_ID, STD_TEXT
 from loader import bot
 from models import Proxy, Account, Config
@@ -27,11 +28,13 @@ main_callback = CallbackData("main", 'account_id', 'user_id', 'city_id', 'date',
 
 class Parser(object):
     loop = None
+
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Parser, cls).__new__(cls)
             cls.instance.table_dict = None
             cls.instance.proxies = None
+            cls.instance.db = db
         return cls.instance
 
 
@@ -128,8 +131,6 @@ class Parser(object):
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
-            
-
         except:
             if driver:
                 driver.quit()
@@ -137,6 +138,8 @@ class Parser(object):
             return False
         driver.quit()
         driver.close()
+        account.status = 'DONE'
+        cls.db.session.commit()
         return True
 
 
@@ -200,7 +203,12 @@ class Parser(object):
             try:
                 sleep_conf = Config.query.all()[0]
                 accounts = Account.query.filter_by(status='SEARCH').all()
-                proxies = Proxy.query.filter_by(status='OK').all()
+                while True:
+                    proxies = Proxy.query.filter_by(status='OK').all()
+                    if not proxies:
+                        await asyncio.sleep(20)
+                    else:
+                        break
                 self.proxies = proxies
                 self.accounts = accounts
                 self.errors = {}
