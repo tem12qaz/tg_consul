@@ -49,7 +49,8 @@ class Parser(object):
                 'no_proxy': 'localhost,127.0.0.1,dev_server:8085'
             }
         }
-        driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
+        # driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
+        driver = webdriver.Firefox(options=options)
         return driver
 
     @staticmethod
