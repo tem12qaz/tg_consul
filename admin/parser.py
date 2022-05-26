@@ -46,11 +46,10 @@ class Parser(object):
             'proxy': {
                 'http': f'{proxy.http}',
                 'https': f'{proxy.https}',
-                'no_proxy': 'localhost,127.0.0.1,dev_server:8085'
+                'no_proxy': 'localhost,127.0.0.1,dev_server:8080'
             }
         }
-        # driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
-        driver = webdriver.Firefox(options=options)
+        driver = webdriver.Firefox(seleniumwire_options=proxy_options, options=options)
         return driver
 
     @staticmethod
