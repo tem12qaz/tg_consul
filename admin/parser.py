@@ -121,7 +121,8 @@ class Parser(object):
         account = Account.query.filter(id=int(account_id)).all()[0]
         try:
             driver = cls.driver_init(proxy)
-            driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
+            driver.get('https://google.com')
+            # driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
             driver.find_element(By.ID, 'user_email').send_keys(account.login)
             driver.find_element(By.ID, 'user_password').send_keys(account.password)
             print('------------------------')
@@ -134,10 +135,10 @@ class Parser(object):
         except:
             if driver:
                 driver.quit()
-                driver.close()
+                # driver.close()
             return False
         driver.quit()
-        driver.close()
+        # driver.close()
         account.status = 'DONE'
         cls.db.session.commit()
         return True
