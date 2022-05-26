@@ -291,11 +291,17 @@ if __name__ == '__main__':
             self.up_to_date = date_(2024, 1, 1)
 
     class Prx:
+        # def __init__(self):
+        #     self.ip = '138.59.207.172'
+        #     self.port = '9068'
+        #     self.user = 'UonNTz'
+        #     self.password = '1tfyat'
         def __init__(self):
-            self.ip = '138.59.207.172'
-            self.port = '9068'
-            self.user = 'UonNTz'
-            self.password = '1tfyat'
+            self.ip = '192.241.122.246'
+            self.port = '8000'
+            self.user = 'fLu3uD'
+            self.password = '898X3o'
+
 
         @property
         def http(self):
