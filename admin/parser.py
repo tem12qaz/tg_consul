@@ -288,6 +288,7 @@ if __name__ == '__main__':
             self.login = 'yuliakrivoruk@gmail.com'
             self.password = 'Yulia08!'
             self.cities = [City('Torronto', 94), City('Calgary', 89), City('Vancouver', 95)]
+            self.up_to_date = date_(2024, 1, 1)
 
     class Prx:
         def __init__(self):
