@@ -4,12 +4,6 @@ from loader import dp
 from parser import main_callback, Parser
 
 
-def on_startup(_):
-    return
-    parser = Parser()
-    parser.start_parse()
-
-
 @dp.callback_query_handler(main_callback.filter())
 async def main_menu(callback: types.CallbackQuery, callback_data):
     print('----------')
@@ -34,4 +28,6 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
         await callback.message.delete()
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup)
+    parser = Parser()
+    parser.start_parse()
+    executor.start_polling(dp)
