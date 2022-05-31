@@ -95,7 +95,7 @@ class Parser(object):
                 EC.presence_of_element_located(
                     (By.CLASS_NAME, 'primary')))
 
-            print(user_id)
+            print(user_id.get_attribute('innerHTML'))
             user_id = user_id.get_attribute('href').split('/')[-2]
             print(user_id)
 
