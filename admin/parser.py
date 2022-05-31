@@ -166,7 +166,7 @@ class Parser(object):
             keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
             await bot.send_message(
                 ADMIN_ID,
-                text=STD_TEXT.format(login=account.login, city=city.name),
+                text=STD_TEXT.format(login=account.login, city=city),
                 reply_markup=keyboard
             )
 
