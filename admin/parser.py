@@ -97,6 +97,7 @@ class Parser(object):
 
             print(user_id)
             user_id = user_id.get_attribute('href').split('/')[-2]
+            print(user_id)
 
             days = {}
             for city in account.cities:
@@ -106,6 +107,7 @@ class Parser(object):
                     if date_(*[int(param) for param in date.split('-')]) < account.up_to_date:
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
+                print(days)
 
         except Exception as e:
             print(traceback.format_exc())
