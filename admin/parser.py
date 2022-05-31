@@ -116,6 +116,7 @@ class Parser(object):
 
     @classmethod
     def driver_do(cls, account_id, user_id, city_id, date, time):
+        return False
         driver = None
         proxy = Proxy.query.filter_by(status='OK').all()[0]
         account = Account.query.filter(id=int(account_id)).all()[0]
