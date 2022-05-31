@@ -11,6 +11,7 @@ def on_startup(_):
 
 @dp.callback_query_handler(main_callback.filter())
 async def main_menu(callback: types.CallbackQuery, callback_data):
+    print('----------')
     account_id = callback_data.get('account_id')
     user_id = callback_data.get('user_id')
     city_id = callback_data.get('city_id')
