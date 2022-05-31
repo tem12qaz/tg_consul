@@ -1,19 +1,12 @@
 import os
-import os.path as op
-import time
 
 from flask import redirect, url_for, request
-from flask_admin.form import FileUploadField, ImageUploadField
 from flask_security import current_user
 
-from flask_admin import BaseView, AdminIndexView, expose, form
+from flask_admin import BaseView, AdminIndexView, expose
 
 from flask_admin.contrib.sqla import ModelView
-from jinja2 import Markup
-from werkzeug.utils import secure_filename
-from wtforms import ValidationError
 
-from flask_app_init import db
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 file_path = os.path.join(basedir, 'files')

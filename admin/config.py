@@ -1,8 +1,8 @@
 
 PG_HOST = 'localhost'
-PG_PASSWORD = 'pass'
+PG_PASSWORD = 'zp443_eHssfghj344_Bfc75cy_v'
 PG_USER = 'myuser'
-PG_DATABASE = 'mybase'
+PG_DATABASE = 'usa_embassy'
 
 ERRS_MAX = 3
 
