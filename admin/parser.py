@@ -121,7 +121,6 @@ class Parser(object):
 
     @classmethod
     def driver_do(cls, account_id, user_id, city_id, date, time):
-        return False
         driver = None
         proxy = Proxy.query.filter_by(status='OK').all()[0]
         account = Account.query.filter(id=int(account_id)).all()[0]
@@ -137,6 +136,36 @@ class Parser(object):
             elem.click()
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+
+            user_id = WebDriverWait(driver, 10000).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, 'primary')))
+
+            user_id = user_id.get_attribute('href').split('/')[-2]
+            print(user_id)
+
+            driver.get('https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment')
+
+            WebDriverWait(driver, 10000).until(
+                EC.element_to_be_clickable(By.CLASS_NAME, 'primary')).click()
+
+            authenticity_token = WebDriverWait(driver, 10000).until(
+                EC.element_to_be_clickable(By.XPATH, '//input[@name="authenticity_token"]')).get_attribute('value')
+
+            data = {
+                'utf8': '✓',
+                'authenticity_token': authenticity_token,
+                'confirmed_limit_message': '1',
+                'use_consulate_appointment_capacity': 'true',
+                'appointments[consulate_appointment][facility_id]': city_id,
+                'appointments[consulate_appointment][date]': date,
+                'appointments[consulate_appointment][time]': time,
+            }
+            script = f'''var xhr = new XMLHttpRequest();xhr.open("POST", https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment, true);xhr.setRequestHeader('Content-Type', 'application/json');xhr.send(JSON.stringify({data}));'''
+            result = driver.execute_script(script)
+            with open('results.txt', 'a') as f:
+                f.write('--------------')
+                f.write(result)
 
         except:
             if driver:

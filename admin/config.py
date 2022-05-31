@@ -6,13 +6,13 @@ PG_DATABASE = 'usa_embassy'
 
 ERRS_MAX = 3
 
-ADMIN_ID = '772311962'
+ADMIN_ID = '1122459873'
 
 STD_TEXT = '''Login: <b>{login}</b>
 {city}
 '''
 
-BOT_TOKEN = '1671620851:AAHCEc74ng-uu4K-l6AT13slewux9cp3Zm8'
+BOT_TOKEN = '5353628622:AAHE6R5TbU0_gx_RAF7X5YI2muBEi3Y2OvY'
 
 HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
