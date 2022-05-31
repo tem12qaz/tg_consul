@@ -106,8 +106,8 @@ class Parser(object):
                     if date_(*[int(param) for param in date.split('-')]) < account.up_to_date:
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
-                print(days)
 
+            print(days)
         except Exception as e:
             print(traceback.format_exc())
             if driver:
@@ -159,9 +159,9 @@ class Parser(object):
                 for time in times:
                     time = time.replace(':', '.')
                     inline_keyboard.append(
-                        InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
+                        [InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
                             account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time
-                        )),
+                        ))]
                     )
             keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
             await bot.send_message(
