@@ -90,9 +90,13 @@ class Parser(object):
             elem.click()
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+
             user_id = WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'primary'))).get_attribute('href').split('/')[-2]
+                    (By.CLASS_NAME, 'primary')))
+
+            print(user_id)
+            user_id = user_id.get_attribute('href').split('/')[-2]
 
             days = {}
             for city in account.cities:
