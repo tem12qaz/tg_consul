@@ -91,10 +91,10 @@ class Parser(object):
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
             user_id = WebDriverWait(driver, 10000).until(
-                EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'primary')))
+                EC.element_attribute_to_include(
+                    (By.CLASS_NAME, 'primary'), 'href'))
 
-            print(user_id.get_attribute('innerHTML'))
+            # print(user_id.get_attribute('innerHTML'))
             user_id = user_id.get_attribute('href').split('/')[-2]
             print(user_id)
 
@@ -157,6 +157,7 @@ class Parser(object):
             inline_keyboard = []
             for date, times in dates.items():
                 for time in times:
+                    time = time.replace(':', '.')
                     inline_keyboard.append(
                         InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
                             account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time
