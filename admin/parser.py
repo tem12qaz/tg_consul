@@ -20,8 +20,7 @@ from seleniumwire import webdriver
 from flask_app_init import db
 from config import ERRS_MAX, ADMIN_ID, STD_TEXT
 from loader import bot
-from models import Proxy, Account, Config
-
+from models import Proxy, Account, Config, City
 
 main_callback = CallbackData("main", 'account_id', 'user_id', 'city_id', 'date', 'time')
 
@@ -154,12 +153,13 @@ class Parser(object):
     @staticmethod
     async def send_messages(days, account: Account, user_id):
         for city, dates in days.items():
+            city_obj = City.query.filter_by(name=city).all()[0]
             inline_keyboard = []
             for date, times in dates.items():
                 for time in times:
                     inline_keyboard.append(
                         InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
-                            account_id=account.id, user_id=user_id, city_id=city.id, date=date, time=time
+                            account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time
                         )),
                     )
             keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
@@ -286,40 +286,4 @@ class Parser(object):
 
 
 if __name__ == '__main__':
-    class City:
-        def __init__(self, name, id_):
-            self.name = name
-            self.site_id = id_
-
-    class Acc:
-        def __init__(self):
-            self.login = 'yuliakrivoruk@gmail.com'
-            self.password = 'Yulia08!'
-            self.cities = [City('Torronto', 94), City('Calgary', 89), City('Vancouver', 95)]
-            self.up_to_date = date_(2024, 1, 1)
-
-    class Prx:
-        def __init__(self):
-            self.ip = '138.59.207.172'
-            self.port = '9068'
-            self.user = 'UonNTz'
-            self.password = '1tfyat'
-        # def __init__(self):
-        #     self.ip = '192.241.122.246'
-        #     self.port = '8000'
-        #     self.user = 'fLu3uD'
-        #     self.password = '898X3o'
-
-
-        @property
-        def http(self):
-            return f'http://{self.user}:{self.password}@{self.ip}:{self.port}/'
-
-        @property
-        def https(self):
-            return f'https://{self.user}:{self.password}@{self.ip}:{self.port}/'
-
-    prx = Prx()
-    acc = Acc()
-    parser = Parser()
-    pprint(parser.driver_process(acc, prx))
+    pass
