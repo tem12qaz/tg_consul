@@ -113,11 +113,11 @@ class Parser(object):
             print(traceback.format_exc())
             if driver:
                 driver.quit()
-                driver.close()
+                # driver.close()
             return False, False
 
         driver.quit()
-        driver.close()
+        # driver.close()
         return days, user_id
 
     @classmethod
