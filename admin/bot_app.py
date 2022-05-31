@@ -19,15 +19,17 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
     if not result:
-        await callback.message.edit_text(
-            'Date not available for recording or error'
+        await callback.answer(
+            'Date not available for recording or error',
+            show_alert=True
         )
     else:
-        await callback.message.edit_text(
-            'Success'
-        )
-    await callback.answer()
 
+        await callback.answer(
+            'Success',
+            show_alert=True
+        )
+        await callback.message.delete()
 
 if __name__ == '__main__':
     executor.start_polling(dp, on_startup=on_startup)
