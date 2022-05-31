@@ -5,6 +5,7 @@ from parser import main_callback, Parser
 
 
 def on_startup(_):
+    return
     parser = Parser()
     parser.start_parse()
 
