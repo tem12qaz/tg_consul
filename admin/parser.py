@@ -226,7 +226,7 @@ class Parser(object):
             #     db.session.commit()
             #     return False
             await asyncio.sleep(0.1)
-            await self.send_messages(days, account, user_id)
+            self.message_loop.create_task(self.send_messages(days, account, user_id))
 
         except:
             self.accounts.append(account)

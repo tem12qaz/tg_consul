@@ -30,5 +30,4 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 if __name__ == '__main__':
     parser = Parser()
     parser.start_parse()
-    executor.start_polling(dp, loop=parser.loop)
-    print('start')
+    executor.start_polling(dp, loop=parser.message_loop)
