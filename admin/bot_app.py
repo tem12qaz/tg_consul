@@ -31,3 +31,4 @@ if __name__ == '__main__':
     parser = Parser()
     parser.start_parse()
     executor.start_polling(dp, loop=parser.loop)
+    print('start')

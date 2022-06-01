@@ -181,7 +181,7 @@ class Parser(object):
     @staticmethod
     async def send_messages(days, account: Account, user_id):
         print('send_messages')
-        async for admin_id in ADMIN_ID:
+        for admin_id in ADMIN_ID:
             for city, dates in days.items():
                 if dates:
                     city_obj = City.query.filter_by(name=city).all()[0]
@@ -314,6 +314,10 @@ class Parser(object):
         Parser.loop = loop
         loop.create_task(self.parse(loop, db))
         Thread(target=loop.run_forever, args=()).start()
+
+        message_loop = asyncio.new_event_loop()
+        Parser.message_loop = message_loop
+        Thread(target=message_loop.run_forever, args=()).start()
 
     async def wait_proxy(self, proxy: Proxy, db):
         await asyncio.sleep(30)
