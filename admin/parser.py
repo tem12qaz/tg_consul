@@ -182,22 +182,23 @@ class Parser(object):
     async def send_messages(days, account: Account, user_id):
         for admin_id in ADMIN_ID:
             for city, dates in days.items():
-                city_obj = City.query.filter_by(name=city).all()[0]
-                inline_keyboard = []
-                for date, times in dates.items():
-                    for time in times:
-                        time = time.replace(':', '.')
-                        inline_keyboard.append(
-                            [InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
-                                account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time
-                            ))]
-                        )
-                keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-                await bot.send_message(
-                    admin_id,
-                    text=STD_TEXT.format(login=account.login, city=city),
-                    reply_markup=keyboard
-                )
+                if dates:
+                    city_obj = City.query.filter_by(name=city).all()[0]
+                    inline_keyboard = []
+                    for date, times in dates.items():
+                        for time in times:
+                            time = time.replace(':', '.')
+                            inline_keyboard.append(
+                                [InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
+                                    account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time
+                                ))]
+                            )
+                    keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+                    await bot.send_message(
+                        admin_id,
+                        text=STD_TEXT.format(login=account.login, city=city),
+                        reply_markup=keyboard
+                    )
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
