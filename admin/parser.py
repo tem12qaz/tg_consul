@@ -178,7 +178,6 @@ class Parser(object):
         cls.db.session.commit()
         return True
 
-
     @staticmethod
     async def send_messages(days, account: Account, user_id):
         for admin_id in ADMIN_ID:
@@ -219,8 +218,8 @@ class Parser(object):
             #     proxy.status = 'EXPIRED'
             #     db.session.commit()
             #     return False
-
-            await self.send_messages(days, account, user_id)
+            await asyncio.sleep(0.1)
+            self.loop.create_task(self.send_messages(days, account, user_id))
 
         except:
             self.accounts.append(account)
