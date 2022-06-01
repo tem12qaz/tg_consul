@@ -181,7 +181,7 @@ class Parser(object):
     @staticmethod
     async def send_messages(days, account: Account, user_id):
         print('send_messages')
-        for admin_id in ADMIN_ID:
+        async for admin_id in ADMIN_ID:
             for city, dates in days.items():
                 if dates:
                     city_obj = City.query.filter_by(name=city).all()[0]
