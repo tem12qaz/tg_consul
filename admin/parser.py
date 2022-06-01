@@ -180,6 +180,7 @@ class Parser(object):
 
     @staticmethod
     async def send_messages(days, account: Account, user_id):
+        print('send_messages')
         for admin_id in ADMIN_ID:
             for city, dates in days.items():
                 if dates:
@@ -198,6 +199,11 @@ class Parser(object):
                         admin_id,
                         text=STD_TEXT.format(login=account.login, city=city),
                         reply_markup=keyboard
+                    )
+                else:
+                    await bot.send_message(
+                        admin_id,
+                        text=STD_TEXT.format(login=account.login, city=city),
                     )
 
     async def parse_account(self, account: Account, proxy: Proxy, db):

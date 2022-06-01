@@ -6,7 +6,7 @@ PG_DATABASE = 'usa_embassy'
 
 ERRS_MAX = 3
 
-ADMIN_ID = ['1122459873', '164028223']
+ADMIN_ID = ['1122459873', '164028223', '772311962']
 
 STD_TEXT = '''Login: <b>{login}</b>
 {city}
