@@ -233,6 +233,8 @@ class Parser(object):
             print(traceback.format_exc())
             return False
 
+        return True
+
     def shift_proxy(self):
         if len(self.proxies) > 1:
             proxies = self.proxies
