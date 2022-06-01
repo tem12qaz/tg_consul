@@ -10,6 +10,7 @@ from threading import Thread
 from pprint import pprint
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.utils import executor
 from aiogram.utils.callback_data import CallbackData
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
@@ -19,7 +20,7 @@ from seleniumwire import webdriver
 
 from flask_app_init import db
 from config import ERRS_MAX, ADMIN_ID, STD_TEXT
-from loader import bot
+from loader import bot, dp
 from models import Proxy, Account, Config, City
 
 main_callback = CallbackData("main", 'account_id', 'user_id', 'city_id', 'date', 'time')
@@ -203,9 +204,11 @@ class Parser(object):
                                 ))]
                             )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard)
+                    executor.start(dp, Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard))
                 else:
-                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
+                    executor.start(dp, Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city)))
+
+                    # await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
@@ -227,7 +230,7 @@ class Parser(object):
             #     db.session.commit()
             #     return False
             await asyncio.sleep(0.1)
-            self.message_loop.create_task(self.send_messages(days, account, user_id))
+            await self.send_messages(days, account, user_id)
 
         except:
             self.accounts.append(account)
@@ -249,7 +252,6 @@ class Parser(object):
 
     async def parse(self, loop, db):
         while True:
-            # self.message_loop.create_task(self.send_message(ADMIN_ID[2], 'ewdwewdewdedwe'))
             print('cycle_start')
             try:
                 sleep_conf = Config.query.all()[0]
@@ -319,10 +321,6 @@ class Parser(object):
         Parser.loop = loop
         loop.create_task(self.parse(loop, db))
         Thread(target=loop.run_forever, args=()).start()
-
-        message_loop = asyncio.new_event_loop()
-        Parser.message_loop = message_loop
-        Thread(target=message_loop.run_forever, args=()).start()
 
     async def wait_proxy(self, proxy: Proxy, db):
         await asyncio.sleep(30)
