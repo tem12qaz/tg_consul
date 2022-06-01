@@ -275,6 +275,8 @@ class Parser(object):
                     if i == 0:
                         i = 1
                     account = self.accounts.pop(0)
+                    print(proxies)
+
                     proxy = self.proxies[0]
                     self.shift_proxy()
                     print(account)
@@ -326,6 +328,7 @@ class Parser(object):
         Thread(target=loop.run_forever, args=()).start()
 
     async def wait_proxy(self, proxy: Proxy, db):
+        self.proxies.remove(proxy)
         await asyncio.sleep(30)
         proxy.status = 'OK'
         db.session.commit()
