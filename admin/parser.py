@@ -2,6 +2,8 @@ import asyncio
 import json
 import traceback
 import random
+from copy import copy
+
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
@@ -241,8 +243,9 @@ class Parser(object):
 
     def shift_proxy(self):
         if len(self.proxies) > 1:
-            proxies = self.proxies
+            proxies = copy(self.proxies)
             self.proxies = proxies[1:].append(proxies[0])
+            print(self.proxies)
 
     def add_error(self, account):
         if self.errors.get(account):
