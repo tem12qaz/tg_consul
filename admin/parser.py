@@ -179,6 +179,14 @@ class Parser(object):
         return True
 
     @staticmethod
+    async def send_message(user_id, text, keyboard=None):
+        bot.send_message(
+            user_id,
+            text=text,
+            reply_markup=keyboard
+        )
+
+    @staticmethod
     async def send_messages(days, account: Account, user_id):
         print('send_messages')
         for admin_id in ADMIN_ID:
@@ -195,16 +203,9 @@ class Parser(object):
                                 ))]
                             )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-                    await bot.send_message(
-                        admin_id,
-                        text=STD_TEXT.format(login=account.login, city=city),
-                        reply_markup=keyboard
-                    )
+                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard)
                 else:
-                    await bot.send_message(
-                        admin_id,
-                        text=STD_TEXT.format(login=account.login, city=city),
-                    )
+                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
@@ -248,6 +249,7 @@ class Parser(object):
 
     async def parse(self, loop, db):
         while True:
+            self.message_loop.create_task(self.send_message(ADMIN_ID[2], 'ewdwewdewdedwe'))
             print('cycle_start')
             try:
                 sleep_conf = Config.query.all()[0]
@@ -264,7 +266,7 @@ class Parser(object):
 
                 i = 0
 
-                while self.accounts and len([task for task in asyncio.all_tasks(loop) if not task.done()]) > i:
+                while self.accounts:
                     if i == 0:
                         i = 1
                     account = self.accounts.pop(0)
