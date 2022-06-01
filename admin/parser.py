@@ -249,7 +249,7 @@ class Parser(object):
 
     async def parse(self, loop, db):
         while True:
-            self.message_loop.create_task(self.send_message(ADMIN_ID[2], 'ewdwewdewdedwe'))
+            # self.message_loop.create_task(self.send_message(ADMIN_ID[2], 'ewdwewdewdedwe'))
             print('cycle_start')
             try:
                 sleep_conf = Config.query.all()[0]
