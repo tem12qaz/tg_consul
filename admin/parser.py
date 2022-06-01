@@ -10,7 +10,6 @@ from threading import Thread
 from pprint import pprint
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils import executor
 from aiogram.utils.callback_data import CallbackData
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
@@ -20,7 +19,7 @@ from seleniumwire import webdriver
 
 from flask_app_init import db
 from config import ERRS_MAX, ADMIN_ID, STD_TEXT
-from loader import bot, dp
+from loader import bot
 from models import Proxy, Account, Config, City
 
 main_callback = CallbackData("main", 'account_id', 'user_id', 'city_id', 'date', 'time')
@@ -204,11 +203,9 @@ class Parser(object):
                                 ))]
                             )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-                    executor.start(dp, Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard))
+                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard)
                 else:
-                    executor.start(dp, Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city)))
-
-                    # await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
+                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
