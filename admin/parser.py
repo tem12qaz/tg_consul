@@ -284,7 +284,6 @@ class Parser(object):
                                     except:
                                         pass
                                     break
-                                    break
                                 else:
                                     continue
 
@@ -303,6 +302,8 @@ class Parser(object):
 
                         else:
                             break
+
+                    print('sleep')
                     await asyncio.sleep(2)
 
                 sleep = random.randint(sleep_conf.sleep_min, sleep_conf.sleep_max)
