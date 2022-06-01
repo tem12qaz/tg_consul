@@ -244,7 +244,8 @@ class Parser(object):
     def shift_proxy(self):
         if len(self.proxies) > 1:
             proxies = copy(self.proxies)
-            self.proxies = proxies[1:].append(proxies[0])
+            self.proxies = proxies[1:]
+            self.proxies.append(proxies[0])
             print(self.proxies)
 
     def add_error(self, account):
