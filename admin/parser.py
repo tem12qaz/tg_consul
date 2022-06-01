@@ -2,6 +2,10 @@ import asyncio
 import json
 import traceback
 import random
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+from config import BOT_TOKEN
 
 import pytz
 from datetime import datetime, timedelta, date as date_
@@ -19,7 +23,6 @@ from seleniumwire import webdriver
 
 from flask_app_init import db
 from config import ERRS_MAX, ADMIN_ID, STD_TEXT
-from loader import bot
 from models import Proxy, Account, Config, City
 
 main_callback = CallbackData("main", 'account_id', 'user_id', 'city_id', 'date', 'time')
@@ -180,7 +183,7 @@ class Parser(object):
 
     @staticmethod
     async def send_message(user_id, text, keyboard=None):
-        await bot.send_message(
+        await Parser.bot.send_message(
             user_id,
             text=text,
             reply_markup=keyboard
@@ -248,6 +251,9 @@ class Parser(object):
             self.errors[account] = 1
 
     async def parse(self, loop, db):
+        Parser.bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
+        # storage = MemoryStorage()
+        # dp = Dispatcher(bot, storage=storage)
         while True:
             print('cycle_start')
             try:
