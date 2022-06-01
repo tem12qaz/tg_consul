@@ -207,8 +207,8 @@ class Parser(object):
                             )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
                     await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard)
-                else:
-                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
+                # else:
+                #     await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
@@ -275,7 +275,7 @@ class Parser(object):
                     if i == 0:
                         i = 1
                     account = self.accounts.pop(0)
-                    print(proxies)
+                    print(self.proxies)
 
                     proxy = self.proxies[0]
                     self.shift_proxy()
