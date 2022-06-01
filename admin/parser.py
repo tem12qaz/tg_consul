@@ -180,7 +180,7 @@ class Parser(object):
 
     @staticmethod
     async def send_message(user_id, text, keyboard=None):
-        bot.send_message(
+        await bot.send_message(
             user_id,
             text=text,
             reply_markup=keyboard
