@@ -259,7 +259,7 @@ class Parser(object):
         # storage = MemoryStorage()
         # dp = Dispatcher(bot, storage=storage)
         while True:
-            print('cycle_start')
+            # print('cycle_start')
             try:
                 sleep_conf = Config.query.all()[0]
                 accounts = Account.query.filter_by(status='SEARCH').all()
