@@ -181,7 +181,8 @@ class Parser(object):
                 f.write('--------------')
                 f.write(result)
 
-        except:
+        except Exception as e:
+            print(traceback.format_exc())
             if driver:
                 driver.quit()
                 # driver.close()
