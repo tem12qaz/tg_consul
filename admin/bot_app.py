@@ -11,7 +11,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     user_id = callback_data.get('user_id')
     city_id = callback_data.get('city_id')
     date = callback_data.get('date')
-    time = callback_data.get('time')
+    time = callback_data.get('time').replace('.', ':')
 
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
     if not result:

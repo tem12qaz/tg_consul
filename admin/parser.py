@@ -126,6 +126,7 @@ class Parser(object):
 
     @classmethod
     def driver_do(cls, account_id, user_id, city_id, date, time):
+        print('appointment')
         driver = None
         proxy = Proxy.query.filter_by(status='OK').all()[0]
         account = Account.query.filter(id=int(account_id)).all()[0]
@@ -201,10 +202,9 @@ class Parser(object):
                     inline_keyboard = []
                     for date, times in dates.items():
                         for time in times:
-                            time = time.replace(':', '.')
                             inline_keyboard.append(
                                 [InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
-                                    account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time
+                                    account_id=account.id, user_id=user_id, city_id=city_obj.id, date=date, time=time.replace(':', '.')
                                 ))]
                             )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
