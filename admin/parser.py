@@ -266,6 +266,7 @@ class Parser(object):
         Parser.bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
         # storage = MemoryStorage()
         # dp = Dispatcher(bot, storage=storage)
+        print('start_parse')
         while True:
             # print('cycle_start')
             try:
@@ -277,6 +278,7 @@ class Parser(object):
                         await asyncio.sleep(20)
                     else:
                         break
+                print('cycle')
                 self.proxies = proxies
                 self.accounts = accounts
                 self.errors = {}
