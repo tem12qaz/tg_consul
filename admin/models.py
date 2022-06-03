@@ -42,7 +42,7 @@ class Proxy(db.Model):
     ip = db.Column(db.String(32))
     port = db.Column(db.String(32))
     status = db.Column(db.String(16), default='OK')
-    # accounts = db.relationship("Account", backref="proxy", lazy='dynamic')
+    accounts = db.relationship("Account", backref="proxy", lazy='dynamic')
 
     @property
     def http(self):
@@ -60,8 +60,8 @@ class Account(db.Model):
     up_to_date = db.Column(db.Date())
     status = db.Column(db.String(16), default='SEARCH')
     cities = db.relationship("City", secondary="account_city")
-    # proxy_id = db.Column(db.Integer, db.ForeignKey('proxy.id'))
-    # proxy = db.relationship('Proxy')
+    proxy_id = db.Column(db.Integer, db.ForeignKey('proxy.id'))
+    proxy = db.relationship('Proxy')
 
     def __repr__(self):
         return self.login
