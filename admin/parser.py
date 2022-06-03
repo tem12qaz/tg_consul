@@ -142,8 +142,13 @@ class Parser(object):
             driver = cls.driver_init(proxy)
             driver.get('https://google.com')
             # driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
-            driver.find_element(By.ID, 'user_email').send_keys(account.login)
-            driver.find_element(By.ID, 'user_password').send_keys(account.password)
+            WebDriverWait(driver, 10000).until(
+                EC.presence_of_element_located((By.ID, 'user_email'))).send_keys(account.login)
+
+            WebDriverWait(driver, 10000).until(
+                EC.presence_of_element_located((By.ID, 'user_password'))).send_keys(account.login)
+
+            # driver.find_element(By.ID, 'user_password').send_keys(account.password)
             print('------------------------')
             elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
             cls.scroll_shim(driver, elem)
