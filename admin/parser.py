@@ -293,13 +293,13 @@ class Parser(object):
                     if i == 0:
                         i = 1
                     account = self.accounts.pop(0)
-                    print(self.proxies)
-
-                    proxy = self.proxies[0]
-                    self.shift_proxy()
+                    # print(self.proxies)
+                    #
+                    # proxy = self.proxies[0]
+                    # self.shift_proxy()
                     print(account)
                     print(account.up_to_date)
-                    # print(proxy.http)
+                    print(account.proxy.http)
 
                     while True:
                         try:
