@@ -61,7 +61,7 @@ class Account(db.Model):
     status = db.Column(db.String(16), default='SEARCH')
     cities = db.relationship("City", secondary="account_city")
     proxy_id = db.Column(db.Integer, db.ForeignKey('proxy.id'))
-    proxy = db.relationship('Proxy')
+    # proxy = db.relationship('Proxy')
 
     def __repr__(self):
         return self.login
