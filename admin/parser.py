@@ -279,6 +279,8 @@ class Parser(object):
                 i = 0
 
                 while self.accounts:
+                    while self.appointment:
+                        await asyncio.sleep(10)
                     if i == 0:
                         i = 1
                     account = self.accounts.pop(0)
