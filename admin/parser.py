@@ -130,8 +130,12 @@ class Parser(object):
     def driver_do(cls, account_id, user_id, city_id, date, time):
         print('appointment')
         driver = None
-        proxy = Proxy.query.filter_by(status='OK').all()[0]
-        account = Account.query.filter(id=int(account_id)).all()[0]
+        try:
+            proxy = Proxy.query.filter_by(status='OK').all()[0]
+            account = Account.query.filter(id=int(account_id)).all()[0]
+        except Exception as e:
+            print(traceback.format_exc())
+            return False
         print('appointment2')
         try:
             driver = cls.driver_init(proxy)
