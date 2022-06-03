@@ -59,7 +59,7 @@ class Account(db.Model):
     up_to_date = db.Column(db.Date())
     status = db.Column(db.String(16), default='SEARCH')
     cities = db.relationship("City", secondary="account_city")
-    proxy_id = db.Column(db.Integer, db.ForeignKey('proxy.proxy_id'))
+    proxy_id = db.Column(db.Integer, db.ForeignKey('proxy.id'))
     proxy = db.relationship('Proxy', backref='accounts', lazy='dynamic')
 
     def __repr__(self):
