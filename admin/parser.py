@@ -132,6 +132,7 @@ class Parser(object):
         driver = None
         proxy = Proxy.query.filter_by(status='OK').all()[0]
         account = Account.query.filter(id=int(account_id)).all()[0]
+        print('appointment2')
         try:
             driver = cls.driver_init(proxy)
             driver.get('https://google.com')
