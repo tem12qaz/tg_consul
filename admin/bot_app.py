@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import executor, types
 
 from loader import dp
@@ -13,7 +15,12 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     date = callback_data.get('date')
     time = callback_data.get('time').replace('.', ':')
 
+    while parser.search:
+        await asyncio.sleep(1)
+
+    parser.appointment = True
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
+    parser.appointment = False
     if not result:
         await callback.answer(
             'Date not available for recording or error',

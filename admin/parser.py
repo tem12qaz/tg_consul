@@ -39,6 +39,8 @@ class Parser(object):
             cls.instance.table_dict = None
             cls.instance.proxies = None
             cls.instance.db = db
+            cls.instance.search = False
+            cls.instance.appointment = False
         return cls.instance
 
     @staticmethod
@@ -288,7 +290,11 @@ class Parser(object):
 
                     while True:
                         try:
+                            while self.appointment:
+                                await asyncio.sleep(10)
+                            self.search = True
                             result = await self.parse_account(account, proxy, db)
+                            self.search = False
                             if not result:
                                 self.add_error(account)
                                 if self.errors.get(account) > ERRS_MAX:
@@ -301,6 +307,7 @@ class Parser(object):
                                     continue
 
                         except Exception as e:
+                            self.search = False
                             print(traceback.format_exc())
                             self.add_error(account)
                             if self.errors.get(account) > ERRS_MAX:
