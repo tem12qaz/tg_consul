@@ -132,7 +132,7 @@ class Parser(object):
         driver = None
         try:
             # proxy = Proxy.query.filter_by(status='OK').all()[0]
-            account = Account.query.get(int(account_id)).all()[0]
+            account = Account.query.get(int(account_id))
             proxy = account.proxy
         except Exception as e:
             print(traceback.format_exc())
