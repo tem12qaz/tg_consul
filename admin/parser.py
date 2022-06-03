@@ -278,7 +278,7 @@ class Parser(object):
                         await asyncio.sleep(20)
                     else:
                         break
-                print('cycle')
+                # print('cycle')
                 self.proxies = proxies
                 self.accounts = accounts
                 self.errors = {}
@@ -296,6 +296,7 @@ class Parser(object):
                     proxy = self.proxies[0]
                     self.shift_proxy()
                     print(account)
+                    print(account.up_to_date)
                     print(proxy.http)
 
                     while True:
