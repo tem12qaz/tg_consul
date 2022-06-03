@@ -224,6 +224,7 @@ class Parser(object):
         print('account parse')
         try:
             try:
+                print('proxy: ', proxy.https)
                 days, user_id = self.driver_process(account, proxy)
                 if not days:
                     return False
@@ -297,7 +298,7 @@ class Parser(object):
                     self.shift_proxy()
                     print(account)
                     print(account.up_to_date)
-                    print(proxy.http)
+                    # print(proxy.http)
 
                     while True:
                         try:
