@@ -131,8 +131,9 @@ class Parser(object):
         print('appointment')
         driver = None
         try:
-            proxy = Proxy.query.filter_by(status='OK').all()[0]
+            # proxy = Proxy.query.filter_by(status='OK').all()[0]
             account = Account.query.get(int(account_id)).all()[0]
+            proxy = account.proxy
         except Exception as e:
             print(traceback.format_exc())
             return False
@@ -300,7 +301,7 @@ class Parser(object):
                             while self.appointment:
                                 await asyncio.sleep(10)
                             self.search = True
-                            result = await self.parse_account(account, proxy, db)
+                            result = await self.parse_account(account, account.proxy, db)
                             self.search = False
                             if not result:
                                 self.add_error(account)
