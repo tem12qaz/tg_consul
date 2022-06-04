@@ -174,7 +174,7 @@ class Parser(object):
                 EC.presence_of_element_located((By.XPATH, '//input[@name="authenticity_token"]'))).get_attribute('value')
 
             data = {
-                # 'utf8': '',
+                'utf8': '✓',
                 'authenticity_token': authenticity_token,
                 'confirmed_limit_message': '1',
                 'use_consulate_appointment_capacity': 'true',
@@ -182,11 +182,11 @@ class Parser(object):
                 'appointments[consulate_appointment][date]': date,
                 'appointments[consulate_appointment][time]': time,
             }
-            print(str(data))
-            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment");xhr.send(JSON.stringify({data}));return [xhr.responseText, xhr.status];'''
-            print(str(script))
+            # print(str(data))
+            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment");xhr.send(JSON.stringify({data}));return [xhr.responseText, xhr.response];'''
+            # print(str(script))
             script = script.format(user_id=user_id, data=data)
-            print(script)
+            # print(script)
             result = driver.execute_script(script)
             print(result)
             result = result[0]
