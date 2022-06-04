@@ -183,7 +183,7 @@ class Parser(object):
                 'appointments[consulate_appointment][time]': time,
             }
             # print(str(data))
-            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment");xhr.send(JSON.stringify({data}));return [xhr.responseText, xhr.response];'''
+            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "http://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment");xhr.send(JSON.stringify({data}));return [xhr.responseText, xhr.response];'''
             # print(str(script))
             script = script.format(user_id=user_id, data=data)
             # print(script)
