@@ -156,12 +156,7 @@ class Parser(object):
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
-            user_id = WebDriverWait(driver, 10000).until(
-                EC.element_to_be_clickable(
-                    (By.CLASS_NAME, 'primary')))
-
-            user_id = user_id.get_attribute('href').split('/')[-2]
-            print(user_id)
+            time.sleep(2)
 
             driver.get('https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment')
 
