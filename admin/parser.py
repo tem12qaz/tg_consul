@@ -160,8 +160,10 @@ class Parser(object):
 
             driver.get('https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment')
 
-            WebDriverWait(driver, 10000).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, 'primary'))).click()
+            elem = WebDriverWait(driver, 10000).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, 'primary')))
+            cls.scroll_shim(driver, elem)
+            elem.click()
 
             authenticity_token = WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@name="authenticity_token"]'))).get_attribute('value')
