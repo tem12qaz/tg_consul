@@ -166,7 +166,7 @@ class Parser(object):
             #     EC.element_to_be_clickable((By.CLASS_NAME, 'primary')))
 
             elem_button = driver.find_element(By.CLASS_NAME, 'primary')
-            # cls.scroll_shim(driver, elem_button)
+            cls.scroll_shim(driver, elem_button)
             ActionChains(driver).move_to_element(elem_button).click().perform()
             # elem_button.click()
 
