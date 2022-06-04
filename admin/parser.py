@@ -184,6 +184,8 @@ class Parser(object):
             }
             script = f'''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment", true);xhr.setRequestHeader('Content-Type', 'application/json');xhr.send(JSON.stringify({data}));'''
             result = driver.execute_script(script)
+            print(result)
+            print(json.loads(result))
             with open('results.txt', 'a') as f:
                 f.write('--------------')
                 f.write(result)
