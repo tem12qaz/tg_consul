@@ -174,7 +174,7 @@ class Parser(object):
                 EC.presence_of_element_located((By.XPATH, '//input[@name="authenticity_token"]'))).get_attribute('value')
 
             data = {
-                'utf8': '',
+                # 'utf8': '',
                 'authenticity_token': authenticity_token,
                 'confirmed_limit_message': '1',
                 'use_consulate_appointment_capacity': 'true',
