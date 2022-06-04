@@ -183,14 +183,14 @@ class Parser(object):
                 'appointments[consulate_appointment][time]': time,
             }
             # print(str(data))
-            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment", false);xhr.send(JSON.stringify({data}));while (xhr.readyState != 4){empty} return [xhr.responseText, xhr.response, xhr.readyState];'''
+            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment", false);xhr.send(JSON.stringify({data}));while (xhr.readyState != 4){empty} return [xhr.responseText, xhr.status];'''
             # print(str(script))
             script = script.format(user_id=user_id, data=data, empty='{}')
             # print(script)
             result = driver.execute_script(script)
             print(result)
             result = result[0]
-            print(json.loads(result))
+            # print(json.loads(result))
             with open('results.txt', 'a') as f:
                 f.write('--------------')
                 f.write(result)
