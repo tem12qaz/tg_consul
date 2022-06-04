@@ -18,6 +18,9 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     while parser.search:
         await asyncio.sleep(1)
 
+    if parser.appointment:
+        await callback.answer('Бот уже записывает один из аккаунтов.', show_alert=True)
+        return
     parser.appointment = True
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
     parser.appointment = False
