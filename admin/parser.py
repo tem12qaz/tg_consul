@@ -5,6 +5,8 @@ import random
 from copy import copy
 
 from aiogram import Bot, Dispatcher, types
+from selenium.webdriver.common.action_chains import ActionChains
+
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from config import BOT_TOKEN
@@ -164,8 +166,9 @@ class Parser(object):
             #     EC.element_to_be_clickable((By.CLASS_NAME, 'primary')))
 
             elem_button = driver.find_element(By.CLASS_NAME, 'primary')
-            cls.scroll_shim(driver, elem_button)
-            elem_button.click()
+            # cls.scroll_shim(driver, elem_button)
+            ActionChains(driver).move_to_element(elem_button).click().perform()
+            # elem_button.click()
 
             authenticity_token = WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@name="authenticity_token"]'))).get_attribute('value')
