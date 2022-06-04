@@ -182,7 +182,7 @@ class Parser(object):
                 'appointments[consulate_appointment][date]': date,
                 'appointments[consulate_appointment][time]': time,
             }
-            script = f'''var xhr = new XMLHttpRequest();xhr.open("POST", https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment, true);xhr.setRequestHeader('Content-Type', 'application/json');xhr.send(JSON.stringify({data}));'''
+            script = f'''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment", true);xhr.setRequestHeader('Content-Type', 'application/json');xhr.send(JSON.stringify({data}));'''
             result = driver.execute_script(script)
             with open('results.txt', 'a') as f:
                 f.write('--------------')
