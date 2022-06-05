@@ -188,8 +188,10 @@ class Parser(object):
             script = script.format(user_id=user_id, data=data, empty='{}')
             # print(script)
             result = driver.execute_script(script)
-            print(result)
+            # print(result)
             result = result[0]
+
+            result = driver.page_source
             # print(json.loads(result))
             with open('results.txt', 'a') as f:
                 f.write('--------------')
