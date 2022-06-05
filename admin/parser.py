@@ -192,6 +192,7 @@ class Parser(object):
             result = result[0]
 
             result = driver.page_source
+            driver.save_screenshot('eee.png')
             # print(json.loads(result))
             with open('results.txt', 'a') as f:
                 f.write('--------------')
