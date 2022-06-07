@@ -314,9 +314,12 @@ class Parser(object):
                     #
                     # proxy = self.proxies[0]
                     # self.shift_proxy()
-                    print(account)
-                    print(account.up_to_date)
-                    print(account.proxy.http)
+                    try:
+                        print(account)
+                        print(account.up_to_date)
+                        print(account.proxy.http)
+                    except:
+                        continue
 
                     while True:
                         try:
