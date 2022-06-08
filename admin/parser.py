@@ -161,6 +161,8 @@ class Parser(object):
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
             # time.sleep(2)
+            driver.save_screenshot('pre.png')
+
 
             driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
 
