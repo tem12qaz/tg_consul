@@ -5,6 +5,7 @@ import random
 from copy import copy
 import time as time_
 
+import MONTH as MONTH
 from aiogram import Bot, Dispatcher, types
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -215,13 +216,13 @@ class Parser(object):
                     driver.save_screenshot('pre_date.png')
 
                     elem = driver.find_element(By.CLASS_NAME, 'ui-datepicker-group-first')
-                    date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-year').text
+                    date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-title').text
                     print(date_text)
                     if int(year) < int(date_text[-4:]):
                         print('no_dates')
                         driver.quit()
                         return False
-
+                    # print(date_text, MONTH_STRING[month])
                     if year in date_text and MONTH_STRING[month] in date_text:
                         print('selected')
                         break
