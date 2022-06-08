@@ -185,6 +185,8 @@ class Parser(object):
             # driver.find_element(By.XPATH, f'//option[@value="{city_id}"]').click()
             WebDriverWait(driver, 10000).until(
                 EC.element_to_be_clickable((By.XPATH, f'//option[@value="{city_id}"]'))).click()
+
+            time.sleep(10)
             print('selected')
             driver.save_screenshot('first.png')
 
