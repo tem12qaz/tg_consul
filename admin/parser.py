@@ -194,9 +194,14 @@ class Parser(object):
                 # WebDriverWait(driver, 10000).until(
                 #     EC.presence_of_element_located((By.ID, "appointments_consulate_appointment_date"))).click()
 
-                elem = driver.find_element(By.ID, "appointments_consulate_appointment_date")
-                cls.scroll_shim(driver, elem)
-                ActionChains(driver).move_to_element(elem).click().perform()
+                # elem = driver.find_element(By.ID, "appointments_consulate_appointment_date")
+                # cls.scroll_shim(driver, elem)
+                # ActionChains(driver).move_to_element(elem).click().perform()
+                temp = WebDriverWait(driver, 10000).until(EC.element_to_be_clickable((By.ID, "appointments_consulate_appointment_date")))
+                action = ActionChains(driver)
+                action.move_to_element(temp)
+                action.click()
+                action.perform()
 
                 while True:
                     elem = WebDriverWait(driver, 10000).until(
