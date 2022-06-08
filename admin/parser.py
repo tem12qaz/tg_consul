@@ -205,9 +205,10 @@ class Parser(object):
                 print('---')
 
                 while True:
-                    elem = WebDriverWait(driver, 10000).until(
-                        EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-group-first")))
+                    # elem = WebDriverWait(driver, 10000).until(
+                    #     EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-group-first")))
 
+                    elem = driver.find_element(By.CLASS_NAME, 'ui-datepicker-group-first')
                     date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-year').text
                     print(date_text)
                     if int(year) < int(date_text[-4:]):
