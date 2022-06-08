@@ -232,6 +232,7 @@ class Parser(object):
                 days = driver.find_elements(By.XPATH, f'//td[@data-month="{month}"]')
                 print('day select')
                 for day_ in days:
+                    print(day_.text)
                     if day_.text == day:
                         day_.click()
                         print('selected')
