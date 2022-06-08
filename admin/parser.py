@@ -263,7 +263,7 @@ class Parser(object):
                         time_.sleep(5)
                         driver.save_screenshot('last.png')
                         driver.quit()
-                        return False
+                        return True
 
                 driver.quit()
                 return False
