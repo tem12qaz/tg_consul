@@ -165,7 +165,7 @@ class Parser(object):
                 EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
             # time.sleep(2)
-            driver.save_screenshot('pre.png')
+            # driver.save_screenshot('pre.png')
 
 
             driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
@@ -177,18 +177,19 @@ class Parser(object):
             cls.scroll_shim(driver, elem_button)
             ActionChains(driver).move_to_element(elem_button).click().perform()
             # elem_button.click()
-            driver.save_screenshot('first.png')
+            # driver.save_screenshot('first.png')
 
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.ID, 'appointments_consulate_appointment_facility_id'))).click()
-
+            print('city_select')
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, f'//option[@value="{city_id}"]'))).click()
-
+            print('selected')
             driver.save_screenshot('first.png')
 
             year, month, day = date.split('-')
             try:
+                print('month select')
                 WebDriverWait(driver, 10000).until(
                     EC.presence_of_element_located((By.ID, "appointments_consulate_appointment_date"))).click()
 
@@ -203,6 +204,8 @@ class Parser(object):
                         return False
 
                     if year in date_text and MONTH_STRING[month] in date_text:
+                        print('selected')
+
                         break
 
                     WebDriverWait(driver, 10000).until(
