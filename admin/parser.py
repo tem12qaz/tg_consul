@@ -3,6 +3,7 @@ import json
 import traceback
 import random
 from copy import copy
+import time as time_
 
 from aiogram import Bot, Dispatcher, types
 from selenium.webdriver.common.action_chains import ActionChains
@@ -186,7 +187,7 @@ class Parser(object):
             WebDriverWait(driver, 10000).until(
                 EC.element_to_be_clickable((By.XPATH, f'//option[@value="{city_id}"]'))).click()
 
-            time.sleep(10)
+            time_.sleep(10)
             print('selected')
             driver.save_screenshot('first.png')
 
