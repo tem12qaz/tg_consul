@@ -216,7 +216,7 @@ class Parser(object):
 
                     elem = driver.find_element(By.CLASS_NAME, 'ui-datepicker-group-first')
                     date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-title').text
-                    print(date_text)
+                    # print(date_text)
                     if int(year) < int(date_text[-4:]):
                         print('no_dates')
                         driver.quit()
@@ -228,8 +228,10 @@ class Parser(object):
 
                     WebDriverWait(driver, 10000).until(
                         EC.presence_of_element_located((By.CLASS_NAME, "ui-icon-circle-triangle-e"))).click()
-
+                if month[0] == '0':
+                    month = month[1]
                 days = driver.find_elements(By.XPATH, f'//td[@data-month="{month}"]')
+                print(days)
                 print('day select')
                 for day_ in days:
                     print(day_.text)
