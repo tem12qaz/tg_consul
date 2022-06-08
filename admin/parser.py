@@ -233,7 +233,7 @@ class Parser(object):
                 print(month)
                 month = int(month) - 1
                 with open('source.txt', 'w') as f:
-                    f.write(driver.page_source)
+                    f.write(driver.page_source.encode('utf-8').decode('utf-8'))
                 days = driver.find_elements(By.XPATH, f'//td[@data-month="{month}"]')
                 print(days)
                 print('day select')
