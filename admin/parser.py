@@ -182,8 +182,9 @@ class Parser(object):
             WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.ID, 'appointments_consulate_appointment_facility_id'))).click()
             print('city_select')
-            WebDriverWait(driver, 10000).until(
-                EC.element_to_be_clickable((By.XPATH, f'//option[@value="{city_id}"]'))).click()
+            driver.find_element(By.XPATH, f'//option[@value="{city_id}"]').click()
+            # WebDriverWait(driver, 10000).until(
+            #     EC.element_to_be_clickable((By.XPATH, f'//option[@value="{city_id}"]'))).click()
             print('selected')
             driver.save_screenshot('first.png')
 
