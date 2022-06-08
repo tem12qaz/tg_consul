@@ -195,11 +195,11 @@ class Parser(object):
                 #     EC.presence_of_element_located((By.ID, "appointments_consulate_appointment_date"))).click()
 
                 temp = driver.find_element(By.ID, "appointments_consulate_appointment_date")
-                # cls.scroll_shim(driver, elem)
+                cls.scroll_shim(driver, temp)
                 # ActionChains(driver).move_to_element(elem).click().perform()
                 # temp = WebDriverWait(driver, 10000).until(EC.element_to_be_clickable((By.ID, "appointments_consulate_appointment_date")))
                 action = ActionChains(driver)
-                action.move_to_element(temp)
+                # action.move_to_element(temp)
                 action.click()
                 action.perform()
 
