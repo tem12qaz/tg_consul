@@ -5,7 +5,6 @@ import random
 from copy import copy
 import time as time_
 
-import MONTH as MONTH
 from aiogram import Bot, Dispatcher, types
 from selenium.webdriver.common.action_chains import ActionChains
 
