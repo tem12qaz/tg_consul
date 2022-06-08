@@ -207,6 +207,7 @@ class Parser(object):
                 while True:
                     # elem = WebDriverWait(driver, 10000).until(
                     #     EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-group-first")))
+                    driver.save_screenshot('pre_date.png')
 
                     elem = driver.find_element(By.CLASS_NAME, 'ui-datepicker-group-first')
                     date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-year').text
