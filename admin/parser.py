@@ -196,7 +196,7 @@ class Parser(object):
 
                 elem = driver.find_element(By.ID, "appointments_consulate_appointment_date")
                 cls.scroll_shim(driver, elem)
-                elem.click()
+                ActionChains(driver).move_to_element(elem).click().perform()
 
                 while True:
                     elem = WebDriverWait(driver, 10000).until(
