@@ -202,6 +202,7 @@ class Parser(object):
                 # action.move_to_element(temp)
                 action.click()
                 action.perform()
+                print('---')
 
                 while True:
                     elem = WebDriverWait(driver, 10000).until(
