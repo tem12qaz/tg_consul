@@ -142,6 +142,8 @@ class Parser(object):
         print('appointment2')
         try:
             driver = cls.driver_init(proxy)
+            driver.set_window_position(0, 0)
+            driver.set_window_size(1600, 1000)
             # driver.get('https://google.com')
             driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
             WebDriverWait(driver, 10000).until(
@@ -160,7 +162,7 @@ class Parser(object):
 
             # time.sleep(2)
 
-            driver.get('https://ais.usvisa-info.com/en-ca/niv/schedule/38770842/appointment')
+            driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
 
             # elem = WebDriverWait(driver, 10000).until(
             #     EC.element_to_be_clickable((By.CLASS_NAME, 'primary')))
@@ -169,6 +171,7 @@ class Parser(object):
             cls.scroll_shim(driver, elem_button)
             ActionChains(driver).move_to_element(elem_button).click().perform()
             # elem_button.click()
+            driver.save_screenshot('first.png')
 
             authenticity_token = WebDriverWait(driver, 10000).until(
                 EC.presence_of_element_located((By.XPATH, '//input[@name="authenticity_token"]'))).get_attribute('value')
@@ -192,11 +195,14 @@ class Parser(object):
             result = result[0]
 
             result = driver.page_source
-            driver.save_screenshot('eee.png')
+            driver.save_screenshot('last.png')
             # print(json.loads(result))
-            with open('results.txt', 'a') as f:
-                f.write('--------------')
-                f.write(result)
+            try:
+                with open('results.txt', 'a') as f:
+                    f.write('--------------')
+                    f.write(result)
+            except:
+                pass
 
         except Exception as e:
             print(traceback.format_exc())
