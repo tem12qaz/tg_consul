@@ -16,13 +16,13 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     date = callback_data.get('date')
     time = callback_data.get('time').replace('.', ':')
 
-    if str(city_id) == '7':
-        city_id = 95
-
+    # if str(city_id) == '7':
+    #     city_id = 95
+    #
     if str(city_id) == '6':
         city_id = 94
         date = '2023-08-18'
-        time = '11:00'
+        time = '11:00
 
 
     if parser.appointment:
@@ -37,16 +37,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     parser.appointment = True
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
     parser.appointment = False
-    if not result:
-        await callback.message.answer(
-            'Date not available for recording or error',
-        )
-    else:
-
-        await callback.message.answer(
-            'Success',
-        )
-        await callback.message.delete()
+    await callback.message.answer_photo(
+        open('last.png', 'rb'),
+    )
+    # await callback.message.delete()
 
 if __name__ == '__main__':
     parser = Parser()

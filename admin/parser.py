@@ -260,6 +260,7 @@ class Parser(object):
                         #     EC.presence_of_element_located(
                         #         (By.XPATH, "//a[@class='button alert']"))).click()
 
+                        time_.sleep(5)
                         driver.save_screenshot('last.png')
                         driver.quit()
                         return False
