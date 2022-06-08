@@ -16,6 +16,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     date = callback_data.get('date')
     time = callback_data.get('time').replace('.', ':')
 
+    if str(city_id) == '7':
+        city_id = 95
+
+
     if parser.appointment:
         await callback.answer('Бот уже записывает один из аккаунтов.', show_alert=True)
         return
