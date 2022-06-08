@@ -9,7 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from config import BOT_TOKEN
+from config import BOT_TOKEN, MONTH_STRING
 
 import pytz
 from datetime import datetime, timedelta, date as date_
@@ -179,48 +179,76 @@ class Parser(object):
             # elem_button.click()
             driver.save_screenshot('first.png')
 
-            authenticity_token = WebDriverWait(driver, 10000).until(
-                EC.presence_of_element_located((By.XPATH, '//input[@name="authenticity_token"]'))).get_attribute('value')
+            WebDriverWait(driver, 10000).until(
+                EC.presence_of_element_located((By.ID, 'appointments_consulate_appointment_facility_id'))).click()
 
-            data = {
-                'utf8': '✓',
-                'authenticity_token': authenticity_token,
-                'confirmed_limit_message': '1',
-                'use_consulate_appointment_capacity': 'true',
-                'appointments[consulate_appointment][facility_id]': city_id,
-                'appointments[consulate_appointment][date]': date,
-                'appointments[consulate_appointment][time]': time,
-            }
-            # print(str(data))
-            script = '''var xhr = new XMLHttpRequest();xhr.open("POST", "https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment", false);xhr.send(JSON.stringify({data}));while (xhr.readyState != 4){empty} return [xhr.responseText, xhr.status];'''
-            # print(str(script))
-            script = script.format(user_id=user_id, data=data, empty='{}')
-            # print(script)
-            result = driver.execute_script(script)
-            # print(result)
-            result = result[0]
+            WebDriverWait(driver, 10000).until(
+                EC.presence_of_element_located((By.XPATH, f'//option[@value="{city_id}"]'))).click()
 
-            result = driver.page_source
-            driver.save_screenshot('last.png')
-            # print(json.loads(result))
+            driver.save_screenshot('first.png')
+
+            year, month, day = date.split('-')
             try:
-                with open('results.txt', 'a') as f:
-                    f.write('--------------')
-                    f.write(result)
-            except:
-                pass
+                WebDriverWait(driver, 10000).until(
+                    EC.presence_of_element_located((By.ID, "appointments_consulate_appointment_date"))).click()
 
-        except Exception as e:
-            print(traceback.format_exc())
-            if driver:
+                while True:
+                    elem = WebDriverWait(driver, 10000).until(
+                        EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-group-first")))
+
+                    date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-year').text
+                    if int(year) < int(date_text[-4:]):
+                        print('no_dates')
+                        driver.quit()
+                        return False
+
+                    if year in date_text and MONTH_STRING[month] in date_text:
+                        break
+
+                    WebDriverWait(driver, 10000).until(
+                        EC.presence_of_element_located((By.CLASS_NAME, "ui-icon-circle-triangle-e"))).click()
+
+                days = driver.find_elements(By.XPATH, f'//td[@data-month="{month}"]')
+                for day_ in days:
+                    if day_.text == day:
+                        day_.click()
+                        driver.save_screenshot('middle.png')
+
+                        WebDriverWait(driver, 10000).until(
+                            EC.presence_of_element_located(
+                                (By.ID, 'appointments_consulate_appointment_time'))).click()
+
+                        WebDriverWait(driver, 10000).until(
+                            EC.presence_of_element_located(
+                                (By.XPATH, f'//option[@value="{time}"]'))).click()
+
+                        WebDriverWait(driver, 10000).until(
+                            EC.presence_of_element_located(
+                                (By.ID, "appointments_submit"))).click()
+
+                        WebDriverWait(driver, 10000).until(
+                            EC.presence_of_element_located(
+                                (By.XPATH, "//a[@class='button alert']"))).click()
+
+                        driver.save_screenshot('last.png')
+                        driver.quit()
+                        return False
+
                 driver.quit()
-                # driver.close()
+                return False
+
+            except Exception as e:
+                print('wrr_appointment')
+                print(traceback.format_exc())
+                return False
+        except Exception as e:
+            print('wrr_appointment')
+            print(traceback.format_exc())
             return False
-        driver.quit()
-        # driver.close()
-        account.status = 'DONE'
-        cls.db.session.commit()
-        return True
+
+        # account.status = 'DONE'
+        # cls.db.session.commit()
+        # return True
 
     @staticmethod
     async def send_message(user_id, text, keyboard=None):

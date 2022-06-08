@@ -15,25 +15,26 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     date = callback_data.get('date')
     time = callback_data.get('time').replace('.', ':')
 
-    while parser.search:
-        await asyncio.sleep(1)
-
     if parser.appointment:
         await callback.answer('Бот уже записывает один из аккаунтов.', show_alert=True)
         return
+    else:
+        await callback.answer('Загрузка...', show_alert=True)
+
+    while parser.search:
+        await asyncio.sleep(1)
+
     parser.appointment = True
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
     parser.appointment = False
     if not result:
-        await callback.answer(
+        await callback.message.answer(
             'Date not available for recording or error',
-            show_alert=True
         )
     else:
 
-        await callback.answer(
+        await callback.message.answer(
             'Success',
-            show_alert=True
         )
         await callback.message.delete()
 
