@@ -22,7 +22,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     if str(city_id) == '6':
         city_id = 94
         date = '2023-08-18'
-        time = '11:00
+        time = '11:00'
 
 
     if parser.appointment:
