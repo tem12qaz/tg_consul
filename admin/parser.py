@@ -191,8 +191,12 @@ class Parser(object):
             year, month, day = date.split('-')
             try:
                 print('month select')
-                WebDriverWait(driver, 10000).until(
-                    EC.presence_of_element_located((By.ID, "appointments_consulate_appointment_date"))).click()
+                # WebDriverWait(driver, 10000).until(
+                #     EC.presence_of_element_located((By.ID, "appointments_consulate_appointment_date"))).click()
+
+                elem = driver.find_element(By.ID, "appointments_consulate_appointment_date")
+                cls.scroll_shim(driver, elem)
+                elem.click()
 
                 while True:
                     elem = WebDriverWait(driver, 10000).until(
@@ -213,9 +217,11 @@ class Parser(object):
                         EC.presence_of_element_located((By.CLASS_NAME, "ui-icon-circle-triangle-e"))).click()
 
                 days = driver.find_elements(By.XPATH, f'//td[@data-month="{month}"]')
+                print('day select')
                 for day_ in days:
                     if day_.text == day:
                         day_.click()
+                        print('selected')
                         driver.save_screenshot('middle.png')
 
                         WebDriverWait(driver, 10000).until(
