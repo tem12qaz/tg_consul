@@ -230,6 +230,7 @@ class Parser(object):
                         EC.presence_of_element_located((By.CLASS_NAME, "ui-icon-circle-triangle-e"))).click()
                 if month[0] == '0':
                     month = month[1]
+                print(month)
                 days = driver.find_elements(By.XPATH, f'//td[@data-month="{month}"]')
                 print(days)
                 print('day select')
