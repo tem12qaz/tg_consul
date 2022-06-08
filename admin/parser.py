@@ -209,6 +209,7 @@ class Parser(object):
                         EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-group-first")))
 
                     date_text = elem.find_element(By.CLASS_NAME, 'ui-datepicker-year').text
+                    print(date_text)
                     if int(year) < int(date_text[-4:]):
                         print('no_dates')
                         driver.quit()
@@ -216,7 +217,6 @@ class Parser(object):
 
                     if year in date_text and MONTH_STRING[month] in date_text:
                         print('selected')
-
                         break
 
                     WebDriverWait(driver, 10000).until(
