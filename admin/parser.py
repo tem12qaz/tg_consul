@@ -89,11 +89,17 @@ class Parser(object):
     def driver_process(self, account, proxy: Proxy):
         driver = None
         try:
+            if self.appointment:
+                raise ZeroDivisionError
             driver = self.driver_init(proxy)
+            if self.appointment:
+                raise ZeroDivisionError
             driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
             driver.find_element(By.ID, 'user_email').send_keys(account.login)
             driver.find_element(By.ID, 'user_password').send_keys(account.password)
             print('------------------------')
+            if self.appointment:
+                raise ZeroDivisionError
             elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
             self.scroll_shim(driver, elem)
             elem.click()
@@ -107,7 +113,8 @@ class Parser(object):
             # print(user_id.get_attribute('innerHTML'))
             user_id = user_id.get_attribute('href').split('/')[-2]
             print(user_id)
-
+            if self.appointment:
+                raise ZeroDivisionError
             days = {}
             for city in account.cities:
                 city_days = {}
