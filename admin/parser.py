@@ -89,7 +89,7 @@ class Parser(object):
 
     def driver_process(self, account, proxy: Proxy, driver=None, user_id=None):
         try:
-            if driver:
+            if not driver:
                 # if self.appointment:
                 #     raise ZeroDivisionError
                 driver = self.driver_init(proxy)
