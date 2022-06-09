@@ -138,7 +138,7 @@ class Parser(object):
             return days, user_id, None
 
         else:
-            return days, driver, user_id
+            return days, user_id, driver
 
     @classmethod
     def driver_do(cls, account_id, user_id, city_id, date, time, driver=None, account=None):
@@ -327,6 +327,13 @@ class Parser(object):
         return messages
         # else:
         #     await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
+    @staticmethod
+    def has_days(days: dict):
+        for day in days.values():
+            if day:
+                return True
+        return False
+
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
@@ -334,7 +341,7 @@ class Parser(object):
             try:
                 print('proxy: ', proxy.https)
                 days, user_id, driver = self.driver_process(account, proxy)
-                if not days:
+                if not self.has_days(days):
                     return False
             except Exception as e:
                 print('proxy_err: ', e)
@@ -353,20 +360,34 @@ class Parser(object):
 
             i = 0
             self.wait = True
-            while days and not self.appointment and not self.pass_appointment:
+            while self.has_days(days) and not self.appointment and not self.pass_appointment:
                 await asyncio.sleep(5)
                 if i % 12 == 0:
                     old_days = deepcopy(days)
                     days, user_id, driver = self.driver_process(account, proxy, driver, user_id)
                     if days and days != old_days:
-                        for message in messages:
-                            await message.delete()
+                        try:
+                            for message in messages:
+                                await message.delete()
+                        except Exception as e:
+                            pass
                         messages = await self.send_messages(days, account, user_id)
                 i += 1
 
+            if not self.has_days(days):
+                try:
+                    for message in messages:
+                        await message.delete()
+                except Exception as e:
+                    pass
+                return
+
             if self.appointment:
-                for message in messages:
-                    await message.delete()
+                try:
+                    for message in messages:
+                        await message.delete()
+                except Exception as e:
+                    pass
                 if isinstance(self.appointment, list):
                     callback = self.appointment.pop(0)
                     result = self.driver_do(*self.appointment, driver, account)
@@ -387,16 +408,14 @@ class Parser(object):
             else:
                 for admin_id in ADMIN_ID:
                     if self.pass_appointment:
-                        for message in messages:
-                            await message.delete()
+                        try:
+                            for message in messages:
+                                await message.delete()
+                        except Exception as e:
+                            pass
                         await self.send_message(admin_id, 'Пропуск')
 
-                    if not days:
-                        for message in messages:
-                            await message.delete()
-                        await self.send_message(admin_id, 'Пропуск')
             self.wait = False
-
 
         except:
             self.accounts.append(account)
