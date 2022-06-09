@@ -2,7 +2,7 @@ import asyncio
 import json
 import traceback
 import random
-from copy import copy
+from copy import copy, deepcopy
 import time as time_
 
 from aiogram import Bot, Dispatcher, types
@@ -44,6 +44,7 @@ class Parser(object):
             cls.instance.db = db
             cls.instance.search = False
             cls.instance.appointment = False
+            cls.instance.pass_appointment = False
         return cls.instance
 
     @staticmethod
@@ -86,35 +87,35 @@ class Parser(object):
         times = json.loads(driver.execute_script(script))
         return times['available_times']
 
-    def driver_process(self, account, proxy: Proxy):
-        driver = None
+    def driver_process(self, account, proxy: Proxy, driver=None, user_id=None):
         try:
-            if self.appointment:
-                raise ZeroDivisionError
-            driver = self.driver_init(proxy)
-            if self.appointment:
-                raise ZeroDivisionError
-            driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
-            driver.find_element(By.ID, 'user_email').send_keys(account.login)
-            driver.find_element(By.ID, 'user_password').send_keys(account.password)
-            print('------------------------')
-            if self.appointment:
-                raise ZeroDivisionError
-            elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
-            self.scroll_shim(driver, elem)
-            elem.click()
-            WebDriverWait(driver, 10000).until(
-                EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+            if driver:
+                # if self.appointment:
+                #     raise ZeroDivisionError
+                driver = self.driver_init(proxy)
+                # if self.appointment:
+                #     raise ZeroDivisionError
+                driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
+                driver.find_element(By.ID, 'user_email').send_keys(account.login)
+                driver.find_element(By.ID, 'user_password').send_keys(account.password)
+                print('------------------------')
+                # if self.appointment:
+                #     raise ZeroDivisionError
+                elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
+                self.scroll_shim(driver, elem)
+                elem.click()
+                WebDriverWait(driver, 10000).until(
+                    EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
-            user_id = WebDriverWait(driver, 10000).until(
-                EC.element_to_be_clickable(
-                    (By.CLASS_NAME, 'primary')))
+                user_id = WebDriverWait(driver, 10000).until(
+                    EC.element_to_be_clickable(
+                        (By.CLASS_NAME, 'primary')))
 
-            # print(user_id.get_attribute('innerHTML'))
-            user_id = user_id.get_attribute('href').split('/')[-2]
-            print(user_id)
-            if self.appointment:
-                raise ZeroDivisionError
+                # print(user_id.get_attribute('innerHTML'))
+                user_id = user_id.get_attribute('href').split('/')[-2]
+                print(user_id)
+                # if self.appointment:
+                # raise ZeroDivisionError
             days = {}
             for city in account.cities:
                 city_days = {}
@@ -130,51 +131,56 @@ class Parser(object):
             if driver:
                 driver.quit()
                 # driver.close()
-            return False, False
+            return False, False, None
 
-        driver.quit()
-        # driver.close()
-        return days, user_id
+        if not days:
+            driver.quit()
+            return days, user_id, None
+
+        else:
+            return days, driver, user_id
 
     @classmethod
-    def driver_do(cls, account_id, user_id, city_id, date, time):
+    def driver_do(cls, account_id, user_id, city_id, date, time, driver=None, account=None):
         print('appointment')
-        driver = None
+        if not account:
+            try:
+                # proxy = Proxy.query.filter_by(status='OK').all()[0]
+                account = Account.query.get(int(account_id))
+                proxy = account.proxy
+            except Exception as e:
+                print(traceback.format_exc())
+                return False
         try:
-            # proxy = Proxy.query.filter_by(status='OK').all()[0]
-            account = Account.query.get(int(account_id))
-            proxy = account.proxy
-        except Exception as e:
-            print(traceback.format_exc())
-            return False
-        print('appointment2')
-        try:
-            driver = cls.driver_init(proxy)
-            driver.set_window_position(0, 0)
-            driver.set_window_size(1600, 1000)
-            # driver.get('https://google.com')
-            driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
-            print(account.login)
-            print(account.password)
 
+            if not driver:
+                print('appointment2')
+                driver = cls.driver_init(proxy)
+                driver.set_window_position(0, 0)
+                driver.set_window_size(1600, 1000)
+                # driver.get('https://google.com')
+                driver.get('https://ais.usvisa-info.com/en-ca/niv/users/sign_in')
+                print(account.login)
+                print(account.password)
 
-            WebDriverWait(driver, 10000).until(
-                EC.presence_of_element_located((By.ID, 'user_email'))).send_keys(account.login)
+                WebDriverWait(driver, 10000).until(
+                    EC.presence_of_element_located((By.ID, 'user_email'))).send_keys(account.login)
 
-            WebDriverWait(driver, 10000).until(
-                EC.presence_of_element_located((By.ID, 'user_password'))).send_keys(account.password)
+                WebDriverWait(driver, 10000).until(
+                    EC.presence_of_element_located((By.ID, 'user_password'))).send_keys(account.password)
 
-            # driver.find_element(By.ID, 'user_password').send_keys(account.password)
-            print('------------------------')
-            elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
-            cls.scroll_shim(driver, elem)
-            elem.click()
-            WebDriverWait(driver, 10000).until(
-                EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
-
+                # driver.find_element(By.ID, 'user_password').send_keys(account.password)
+                print('------------------------')
+                elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
+                cls.scroll_shim(driver, elem)
+                elem.click()
+                WebDriverWait(driver, 10000).until(
+                    EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
+            else:
+                driver.set_window_position(0, 0)
+                driver.set_window_size(1600, 1000)
             # time.sleep(2)
             # driver.save_screenshot('pre.png')
-
 
             driver.get(f'https://ais.usvisa-info.com/en-ca/niv/schedule/{user_id}/appointment')
 
@@ -290,15 +296,17 @@ class Parser(object):
 
     @staticmethod
     async def send_message(user_id, text, keyboard=None):
-        await Parser.bot.send_message(
+        message = await Parser.bot.send_message(
             user_id,
             text=text,
             reply_markup=keyboard
         )
+        return message
 
     @staticmethod
     async def send_messages(days, account: Account, user_id):
         print('send_messages')
+        messages = []
         for admin_id in ADMIN_ID:
             for city, dates in days.items():
                 if dates:
@@ -308,20 +316,24 @@ class Parser(object):
                         for time in times:
                             inline_keyboard.append(
                                 [InlineKeyboardButton(text=f'{date}  {time}', callback_data=main_callback.new(
-                                    account_id=account.id, user_id=user_id, city_id=city_obj.site_id, date=date, time=time.replace(':', '.')
+                                    account_id=account.id, user_id=user_id, city_id=city_obj.site_id, date=date,
+                                    time=time.replace(':', '.')
                                 ))]
                             )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-                    await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city), keyboard)
-                # else:
-                #     await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
+                    message = await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city),
+                                                        keyboard)
+                    messages.append(message)
+        return messages
+        # else:
+        #     await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
         try:
             try:
                 print('proxy: ', proxy.https)
-                days, user_id = self.driver_process(account, proxy)
+                days, user_id, driver = self.driver_process(account, proxy)
                 if not days:
                     return False
             except Exception as e:
@@ -337,7 +349,54 @@ class Parser(object):
             #     db.session.commit()
             #     return False
             await asyncio.sleep(0.1)
-            await self.send_messages(days, account, user_id)
+            messages = await self.send_messages(days, account, user_id)
+
+            i = 0
+            self.wait = True
+            while days and not self.appointment and not self.pass_appointment:
+                await asyncio.sleep(5)
+                if i % 12 == 0:
+                    old_days = deepcopy(days)
+                    days, user_id, driver = self.driver_process(account, proxy, driver, user_id)
+                    if days and days != old_days:
+                        for message in messages:
+                            await message.delete()
+                        messages = await self.send_messages(days, account, user_id)
+                i += 1
+
+            if self.appointment:
+                for message in messages:
+                    await message.delete()
+                if isinstance(self.appointment, list):
+                    callback = self.appointment.pop(0)
+                    result = self.driver_do(*self.appointment, driver, account)
+                    if not result:
+                        await callback.message.answer(
+                            'Date not available for recording or error',
+                        )
+                    else:
+                        await callback.message.answer_photo(
+                            open('last.png', 'rb'),
+                        )
+                else:
+                    print('self.appointment not a list')
+                self.appointment = False
+                self.pass_appointment = False
+                return
+
+            else:
+                for admin_id in ADMIN_ID:
+                    if self.pass_appointment:
+                        for message in messages:
+                            await message.delete()
+                        await self.send_message(admin_id, 'Пропуск')
+
+                    if not days:
+                        for message in messages:
+                            await message.delete()
+                        await self.send_message(admin_id, 'Пропуск')
+            self.wait = False
+
 
         except:
             self.accounts.append(account)
@@ -383,8 +442,8 @@ class Parser(object):
                 i = 0
 
                 while self.accounts:
-                    while self.appointment:
-                        await asyncio.sleep(10)
+                    # while self.appointment:
+                    #     await asyncio.sleep(10)
                     if i == 0:
                         i = 1
                     account = self.accounts.pop(0)
@@ -401,8 +460,8 @@ class Parser(object):
 
                     while True:
                         try:
-                            while self.appointment:
-                                await asyncio.sleep(10)
+                            # while self.appointment:
+                            #     await asyncio.sleep(10)
                             self.search = True
                             result = await self.parse_account(account, account.proxy, db)
                             self.search = False

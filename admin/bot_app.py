@@ -24,6 +24,14 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     #     date = '2023-08-18'
     #     time = '11:00'
 
+    if account_id == '-':
+        await callback.answer('ОК')
+        if not parser.appointment:
+            parser.pass_appointment = True
+        return
+
+    if not parser.wait:
+        await callback.answer('"Эта дата уже недоступна', show_alert=True)
 
     if parser.appointment:
         await callback.answer('Бот уже записывает один из аккаунтов.', show_alert=True)
@@ -31,20 +39,20 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     else:
         await callback.answer('Загрузка...', show_alert=True)
 
-    parser.appointment = True
-    while parser.search:
-        await asyncio.sleep(1)
-
-    result = Parser.driver_do(account_id, user_id, city_id, date, time)
-    parser.appointment = False
-    if not result:
-        await callback.message.answer(
-            'Date not available for recording or error',
-        )
-    else:
-        await callback.message.answer_photo(
-            open('last.png', 'rb'),
-        )
+    parser.appointment = [account_id, user_id, city_id, date, time, callback]
+    # while parser.search:
+    #     await asyncio.sleep(1)
+    #
+    # result = Parser.driver_do(account_id, user_id, city_id, date, time)
+    # parser.appointment = False
+    # if not result:
+    #     await callback.message.answer(
+    #         'Date not available for recording or error',
+    #     )
+    # else:
+    #     await callback.message.answer_photo(
+    #         open('last.png', 'rb'),
+    #     )
 
 if __name__ == '__main__':
     parser = Parser()
