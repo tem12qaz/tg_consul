@@ -31,10 +31,10 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     else:
         await callback.answer('Загрузка...', show_alert=True)
 
+    parser.appointment = True
     while parser.search:
         await asyncio.sleep(1)
 
-    parser.appointment = True
     result = Parser.driver_do(account_id, user_id, city_id, date, time)
     parser.appointment = False
     if not result:
