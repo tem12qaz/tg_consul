@@ -125,7 +125,7 @@ class Parser(object):
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
 
-            print(days)
+            # print(days)
         except Exception as e:
             print(traceback.format_exc())
             if driver:
@@ -377,7 +377,7 @@ class Parser(object):
                             for message in messages:
                                 await message.delete()
                         except Exception as e:
-                            pass
+                            print(e)
                         messages = await self.send_messages(days, account, user_id)
                 i += 1
 
@@ -386,6 +386,7 @@ class Parser(object):
                     for message in messages:
                         await message.delete()
                 except Exception as e:
+                    print(e)
                     pass
                 return
 
