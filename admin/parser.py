@@ -133,7 +133,7 @@ class Parser(object):
                 # driver.close()
             return False, False, None
 
-        if not days:
+        if not self.has_days(days):
             driver.quit()
             return days, user_id, None
 
@@ -341,7 +341,6 @@ class Parser(object):
             if day:
                 return True
         return False
-
 
     async def parse_account(self, account: Account, proxy: Proxy, db):
         print('account parse')
