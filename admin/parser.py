@@ -334,7 +334,9 @@ class Parser(object):
         # else:
         #     await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city))
     @staticmethod
-    def has_days(days: dict):
+    def has_days(days):
+        if not days:
+            return False
         for day in days.values():
             if day:
                 return True
