@@ -32,6 +32,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
 
     if not parser.wait:
         await callback.answer('"Эта дата уже недоступна', show_alert=True)
+        return
 
     if parser.appointment:
         await callback.answer('Бот уже записывает один из аккаунтов.', show_alert=True)
@@ -39,7 +40,7 @@ async def main_menu(callback: types.CallbackQuery, callback_data):
     else:
         await callback.answer('Загрузка...', show_alert=True)
 
-    parser.appointment = [account_id, user_id, city_id, date, time, callback]
+    parser.appointment = [callback, account_id, user_id, city_id, date, time]
     # while parser.search:
     #     await asyncio.sleep(1)
     #

@@ -367,35 +367,34 @@ class Parser(object):
 
             i = 0
             self.wait = True
-            while self.has_days(days) and not self.appointment and not self.pass_appointment:
+            while days and not self.appointment:
                 await asyncio.sleep(5)
                 if i % 12 == 0:
                     old_days = deepcopy(days)
                     days, user_id, driver = self.driver_process(account, proxy, driver, user_id)
                     if days and days != old_days:
-                        try:
-                            for message in messages:
+                        for message in messages:
+                            try:
                                 await message.delete()
-                        except Exception as e:
-                            print(e)
+                            except Exception as e:
+                                print(e)
                         messages = await self.send_messages(days, account, user_id)
                 i += 1
 
-            if not self.has_days(days):
-                try:
-                    for message in messages:
+            if not days:
+                for message in messages:
+                    try:
                         await message.delete()
-                except Exception as e:
-                    print(e)
-                    pass
+                    except Exception as e:
+                        print(e)
                 return
 
             if self.appointment:
-                try:
-                    for message in messages:
+                for message in messages:
+                    try:
                         await message.delete()
-                except Exception as e:
-                    pass
+                    except Exception as e:
+                        print(e)
                 if isinstance(self.appointment, list):
                     callback = self.appointment.pop(0)
                     result = self.driver_do(*self.appointment, driver, account)
