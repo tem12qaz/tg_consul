@@ -320,12 +320,12 @@ class Parser(object):
                                     time=time.replace(':', '.')
                                 ))]
                             )
-                    inline_keyboard.append(
-                        [InlineKeyboardButton(text='Пропуск', callback_data=main_callback.new(
-                            account_id='-', user_id='-', city_id='-', date='-',
-                            time='-'
-                        ))]
-                    )
+                    # inline_keyboard.append(
+                    #     [InlineKeyboardButton(text='Пропуск', callback_data=main_callback.new(
+                    #         account_id='-', user_id='-', city_id='-', date='-',
+                    #         time='-'
+                    #     ))]
+                    # )
                     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
                     message = await Parser.send_message(admin_id, STD_TEXT.format(login=account.login, city=city),
                                                         keyboard)
