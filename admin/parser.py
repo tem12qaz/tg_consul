@@ -565,11 +565,12 @@ class Parser(object):
 
     async def wait_account(self, account: Account, db):
         account.status = 'WAIT'
+        db.session.commit()
         await asyncio.sleep(12000)
         acc = Account.query.get(account.id)
         if acc.status == 'WAIT':
             acc.status = 'SEARCH'
-        db.session.commit()
+            db.session.commit()
 
 
 if __name__ == '__main__':
