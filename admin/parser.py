@@ -133,9 +133,9 @@ class Parser(object):
                 # driver.close()
             return False, False, None
 
-        if not self.has_days(days):
+        if not days:
             driver.quit()
-            return days, user_id, None
+            return False, False, None
 
         else:
             return days, user_id, driver
