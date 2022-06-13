@@ -502,7 +502,8 @@ class Parser(object):
                         print(account)
                         print(account.up_to_date)
                         print(account.proxy.http)
-                    except:
+                    except Exception as e:
+                        print(e)
                         continue
 
                     while True:
