@@ -138,6 +138,7 @@ class Parser(object):
                         else:
                             continue
                     if block:
+                        driver.quit()
                         print('account_blocked')
                         Parser.loop.create_task(self.wait_account(account, db))
                         return 'block', False, False
