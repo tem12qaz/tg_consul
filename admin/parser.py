@@ -475,9 +475,9 @@ class Parser(object):
             try:
                 print('loop')
                 sleep_conf = Config.query.all()[0]
-                accounts = Account.query.filter_by(status='SEARCH').all()
+                accounts = Account.query.populate_existing().filter_by(status='SEARCH').all()
                 while True:
-                    proxies = Proxy.query.filter_by(status='OK').all()
+                    proxies = Proxy.query.populate_existing().filter_by(status='OK').all()
                     if not proxies:
                         await asyncio.sleep(20)
                     else:
