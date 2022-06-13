@@ -348,7 +348,7 @@ class Parser(object):
             try:
                 print('proxy: ', proxy.https)
                 days, user_id, driver = self.driver_process(account, proxy)
-                if not self.has_days(days):
+                if not days:
                     return False
             except Exception as e:
                 print('proxy_err: ', e)
@@ -410,7 +410,7 @@ class Parser(object):
                     print('self.appointment not a list')
                 self.appointment = False
                 self.pass_appointment = False
-                return
+                return True
 
             else:
                 for admin_id in ADMIN_ID:
