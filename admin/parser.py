@@ -116,7 +116,10 @@ class Parser(object):
                 print(user_id)
                 # if self.appointment:
                 # raise ZeroDivisionError
+
+            print('redo')
             days = {}
+            block = True
             for city in account.cities:
                 city_days = {}
                 dates = self.get_network_dates(driver, user_id, city)
@@ -124,8 +127,22 @@ class Parser(object):
                     if date_(*[int(param) for param in date.split('-')]) < account.up_to_date:
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
+                if not dates and block:
+                    cities = City.query.all()
+                    for city_ in cities:
+                        time_.sleep(1)
+                        dates = self.get_network_dates(driver, user_id, city_)
+                        if dates:
+                            block = False
+                            break
+                        else:
+                            continue
+                    if block:
+                        print('account_blocked')
+                        Parser.loop.create_task(self.wait_account(account, db))
+                        return 'block', False, False
 
-            # print(days)
+            print(days)
         except Exception as e:
             print(traceback.format_exc())
             if driver:
@@ -177,6 +194,7 @@ class Parser(object):
                 WebDriverWait(driver, 10000).until(
                     EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
             else:
+                print('appointment with existing driver')
                 driver.set_window_position(0, 0)
                 driver.set_window_size(1600, 1000)
             # time.sleep(2)
@@ -282,11 +300,11 @@ class Parser(object):
                 return False
 
             except Exception as e:
-                print('wrr_appointment')
+                print('err_appointment')
                 print(traceback.format_exc())
                 return False
         except Exception as e:
-            print('wrr_appointment')
+            print('err_appointment')
             print(traceback.format_exc())
             return False
 
@@ -350,6 +368,8 @@ class Parser(object):
                 days, user_id, driver = self.driver_process(account, proxy)
                 if not days:
                     return False
+                elif days == 'block':
+                    return 'block'
             except Exception as e:
                 print('proxy_err: ', e)
                 proxy.status = 'WAIT'
@@ -501,6 +521,8 @@ class Parser(object):
                                     break
                                 else:
                                     continue
+                            elif result == 'block':
+                                break
 
                         except Exception as e:
                             self.search = False
@@ -540,6 +562,14 @@ class Parser(object):
         proxy.status = 'OK'
         db.session.commit()
         self.proxies.append(proxy)
+
+    async def wait_account(self, account: Account, db):
+        account.status = 'WAIT'
+        await asyncio.sleep(12000)
+        acc = Account.query.get(account.id)
+        if acc.status == 'WAIT':
+            acc.status = 'SEARCH'
+        db.session.commit()
 
 
 if __name__ == '__main__':
