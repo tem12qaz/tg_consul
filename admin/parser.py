@@ -473,6 +473,7 @@ class Parser(object):
         while True:
             # print('cycle_start')
             try:
+                print('loop')
                 sleep_conf = Config.query.all()[0]
                 accounts = Account.query.filter_by(status='SEARCH').all()
                 while True:
