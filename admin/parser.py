@@ -116,8 +116,8 @@ class Parser(object):
                 print(user_id)
                 # if self.appointment:
                 # raise ZeroDivisionError
-
-            print('redo')
+            else:
+                print('redo')
             days = {}
             block = True
             for city in account.cities:
@@ -567,7 +567,7 @@ class Parser(object):
     async def wait_account(self, account: Account, db):
         account.status = 'WAIT'
         db.session.commit()
-        await asyncio.sleep(12000)
+        await asyncio.sleep(14400)
         acc = Account.query.get(account.id)
         if acc.status == 'WAIT':
             acc.status = 'SEARCH'
