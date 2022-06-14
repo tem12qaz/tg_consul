@@ -315,6 +315,7 @@ class Parser(object):
 
     @staticmethod
     async def send_message(user_id, text, keyboard=None):
+        Bot.set_current(Parser.bot)
         message = await Parser.bot.send_message(
             user_id,
             text=text,
