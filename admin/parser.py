@@ -366,6 +366,9 @@ class Parser(object):
         print('account parse')
         try:
             try:
+                accounts = Account.query.populate_existing().filter_by(login=account.login).all()
+                if not accounts or accounts[0].status != 'SEARCH':
+                    return True
                 print('proxy: ', proxy.https)
                 days, user_id, driver = self.driver_process(account, proxy)
                 if not days:
@@ -390,10 +393,15 @@ class Parser(object):
             i = 0
             self.wait = True
             while days and not self.appointment:
+                accounts = Account.query.populate_existing().filter_by(login=account.login).all()
+                if not accounts or accounts[0].status != 'SEARCH':
+                    return True
                 await asyncio.sleep(5)
                 if i % 12 == 0:
                     old_days = deepcopy(days)
                     days, user_id, driver = self.driver_process(account, proxy, driver, user_id)
+                    if days == 'block':
+                        return 'block'
                     if days and days != old_days:
                         for message in messages:
                             try:
@@ -418,6 +426,7 @@ class Parser(object):
                     except Exception as e:
                         print(e)
                 if isinstance(self.appointment, list):
+                    Bot.set_current(Parser.bot)
                     callback = self.appointment.pop(0)
                     result = self.driver_do(*self.appointment, driver, account)
                     if not result:
