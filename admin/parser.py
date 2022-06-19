@@ -139,6 +139,8 @@ class Parser(object):
                             continue
                     if block:
                         driver.quit()
+                        for admin_id in ADMIN_ID:
+                            await self.send_message(admin_id, f'{account.login} заблокирован')
                         print('account_blocked')
                         Parser.loop.create_task(self.wait_account(account, db))
                         return 'block', False, False
@@ -393,7 +395,7 @@ class Parser(object):
             i = 0
             self.wait = True
             while days and not self.appointment:
-                time_.sleep(2)
+                time_.sleep(8)
                 accounts = Account.query.populate_existing().filter_by(login=account.login).all()
                 if not accounts or accounts[0].status != 'SEARCH':
                     return True
@@ -582,7 +584,10 @@ class Parser(object):
         db.session.commit()
         await asyncio.sleep(14400)
         acc = Account.query.get(account.id)
+
         if acc.status == 'WAIT':
+            for admin_id in ADMIN_ID:
+                await self.send_message(admin_id, f'{acc.login} разблокирован')
             acc.status = 'SEARCH'
             db.session.commit()
 
