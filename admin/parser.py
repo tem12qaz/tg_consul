@@ -87,7 +87,7 @@ class Parser(object):
         times = json.loads(driver.execute_script(script))
         return times['available_times']
 
-    def driver_process(self, account, proxy: Proxy, driver=None, user_id=None):
+    async def driver_process(self, account, proxy: Proxy, driver=None, user_id=None):
         try:
             if not driver:
                 # if self.appointment:
@@ -372,7 +372,7 @@ class Parser(object):
                 if not accounts or accounts[0].status != 'SEARCH':
                     return True
                 print('proxy: ', proxy.https)
-                days, user_id, driver = self.driver_process(account, proxy)
+                days, user_id, driver = await self.driver_process(account, proxy)
                 if not days:
                     return False
                 elif days == 'block':
@@ -402,7 +402,7 @@ class Parser(object):
                 await asyncio.sleep(5)
                 if i % 12 == 0:
                     old_days = deepcopy(days)
-                    days, user_id, driver = self.driver_process(account, proxy, driver, user_id)
+                    days, user_id, driver = await self.driver_process(account, proxy, driver, user_id)
                     if days == 'block':
                         return 'block'
                     if days and days != old_days:
