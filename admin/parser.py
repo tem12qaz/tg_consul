@@ -221,7 +221,7 @@ class Parser(object):
             WebDriverWait(driver, 10000).until(
                 EC.element_to_be_clickable((By.XPATH, f'//option[@value="{city_id}"]'))).click()
 
-            time_.sleep(5)
+            time_.sleep(2)
             print('selected')
             driver.save_screenshot('first.png')
 
@@ -241,7 +241,7 @@ class Parser(object):
                 action.perform()
                 print('---')
                 temp.click()
-                time_.sleep(5)
+                time_.sleep(2)
 
                 while True:
                     # elem = WebDriverWait(driver, 10000).until(
