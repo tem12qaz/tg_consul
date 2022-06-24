@@ -395,7 +395,7 @@ class Parser(object):
             i = 0
             self.wait = True
             while days and not self.appointment:
-                time_.sleep(5)
+                time_.sleep(15)
                 accounts = Account.query.populate_existing().filter_by(login=account.login).all()
                 if not accounts or accounts[0].status != 'SEARCH':
                     return True
@@ -582,7 +582,7 @@ class Parser(object):
     async def wait_account(self, account: Account, db):
         account.status = 'WAIT'
         db.session.commit()
-        await asyncio.sleep(18000)
+        await asyncio.sleep(10800)
         acc = Account.query.get(account.id)
 
         if acc.status == 'WAIT':
