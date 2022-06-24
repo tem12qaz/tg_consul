@@ -395,11 +395,11 @@ class Parser(object):
             i = 0
             self.wait = True
             while days and not self.appointment:
-                time_.sleep(15)
+                time_.sleep(5)
                 accounts = Account.query.populate_existing().filter_by(login=account.login).all()
                 if not accounts or accounts[0].status != 'SEARCH':
                     return True
-                await asyncio.sleep(5)
+                # await asyncio.sleep(5)
                 if i % 12 == 0:
                     old_days = deepcopy(days)
                     days, user_id, driver = await self.driver_process(account, proxy, driver, user_id)
