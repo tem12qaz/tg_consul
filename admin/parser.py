@@ -106,10 +106,9 @@ class Parser(object):
                 elem.click()
                 WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
-                time_.sleep(10)
-                driver.save_screenshot('lllll.png')
+
                 user_id = WebDriverWait(driver, 100).until(
-                    EC.element_to_be_clickable(
+                    EC.presence_of_element_located(
                         (By.CLASS_NAME, 'primary')))
 
                 # print(user_id.get_attribute('innerHTML'))
