@@ -104,10 +104,11 @@ class Parser(object):
                 elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
                 self.scroll_shim(driver, elem)
                 elem.click()
-                WebDriverWait(driver, 10000).until(
+                WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
-
-                user_id = WebDriverWait(driver, 10000).until(
+                time_.sleep(10)
+                driver.save_screenshot('lllll.png')
+                user_id = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable(
                         (By.CLASS_NAME, 'primary')))
 
