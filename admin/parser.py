@@ -107,9 +107,11 @@ class Parser(object):
                 WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
-                user_id = WebDriverWait(driver, 100).until(
-                    EC.element_attribute_to_include(
-                        (By.CLASS_NAME, 'primary'), 'href'))
+                WebDriverWait(driver, 100).until(
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, 'primary')))
+                time_.sleep(2)
+                user_id = driver.find_element(By.CLASS_NAME, 'primary')
 
                 # print(user_id.get_attribute('innerHTML'))
                 user_id = user_id.get_attribute('href').split('/')[-2]
