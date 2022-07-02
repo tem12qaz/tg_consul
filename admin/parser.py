@@ -113,6 +113,7 @@ class Parser(object):
                 time_.sleep(10)
                 user_id = driver.find_element(By.CLASS_NAME, 'primary')
                 print(user_id.get_attribute('outerHTML'))
+                driver.save_screenshot('lllll.png')
 
                 # print(user_id.get_attribute('innerHTML'))
                 user_id = user_id.get_attribute('href').split('/')[-2]
