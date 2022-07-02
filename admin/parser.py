@@ -130,7 +130,7 @@ class Parser(object):
                 if not dates and block:
                     cities = City.query.all()
                     for city_ in cities:
-                        time_.sleep(5)
+                        await asyncio.sleep(5)
                         dates = self.get_network_dates(driver, user_id, city_)
                         if dates:
                             block = False
