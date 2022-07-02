@@ -110,8 +110,9 @@ class Parser(object):
                 WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'primary')))
-                time_.sleep(2)
+                time_.sleep(10)
                 user_id = driver.find_element(By.CLASS_NAME, 'primary')
+                print(user_id.get_attribute('outerHTML'))
 
                 # print(user_id.get_attribute('innerHTML'))
                 user_id = user_id.get_attribute('href').split('/')[-2]
