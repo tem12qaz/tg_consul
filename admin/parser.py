@@ -121,6 +121,7 @@ class Parser(object):
             days = {}
             block = True
             for city in account.cities:
+                await asyncio.sleep(5)
                 city_days = {}
                 dates = self.get_network_dates(driver, user_id, city)
                 for date in dates:
