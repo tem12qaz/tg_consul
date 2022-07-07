@@ -104,6 +104,8 @@ class Parser(object):
                 elem = driver.find_element(By.CLASS_NAME, 'icheckbox')
                 self.scroll_shim(driver, elem)
                 elem.click()
+                await asyncio.sleep(1)
+
                 WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located((By.XPATH, '//input[@value="Sign In"]'))).click()
 
@@ -120,6 +122,7 @@ class Parser(object):
                 print('redo')
             days = {}
             block = True
+            await asyncio.sleep(2)
             for city in account.cities:
                 await asyncio.sleep(5)
                 city_days = {}
