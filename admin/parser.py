@@ -396,7 +396,7 @@ class Parser(object):
             i = 0
             self.wait = True
             while days and not self.appointment:
-                time_.sleep(1.3)
+                await asyncio.sleep(1.3)
                 accounts = Account.query.populate_existing().filter_by(login=account.login).all()
                 if not accounts or accounts[0].status != 'SEARCH':
                     return True
