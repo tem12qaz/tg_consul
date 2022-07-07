@@ -586,7 +586,7 @@ class Parser(object):
     async def wait_account(self, account: Account, db):
         account.status = 'WAIT'
         db.session.commit()
-        await asyncio.sleep(18000)
+        await asyncio.sleep(3600)
         acc = Account.query.get(account.id)
 
         if acc.status == 'WAIT':
