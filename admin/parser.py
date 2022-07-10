@@ -129,6 +129,7 @@ class Parser(object):
                 dates = self.get_network_dates(driver, user_id, city)
                 for date in dates:
                     if date_(*[int(param) for param in date.split('-')]) < account.up_to_date:
+                        print('times')
                         city_days[date] = self.get_network_times(driver, user_id, city, date)
                 days[city.name] = city_days
                 if not dates and block:
