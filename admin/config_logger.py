@@ -14,14 +14,14 @@ config = {
             'level': 'INFO',
             'formatter': 'file_format',
             'filename': 'log/access.log',
-            'mode': 'w'
+            'mode': 'a'
         },
         'error_handler': {
             'class': 'logging.FileHandler',
             'level': 'WARNING',
             'formatter': 'file_format',
             'filename': 'log/error.log',
-            'mode': 'w'
+            'mode': 'a'
         }
     },
     'loggers': {
