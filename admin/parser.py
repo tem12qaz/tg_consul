@@ -4,12 +4,15 @@ import traceback
 import random
 from copy import copy, deepcopy
 import time as time_
+import logging.config
+
 
 from aiogram import Bot, Dispatcher, types
 from selenium.webdriver.common.action_chains import ActionChains
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
+from admin.config_logger import config
 from config import BOT_TOKEN, MONTH_STRING
 
 import pytz
@@ -31,6 +34,9 @@ from config import ERRS_MAX, ADMIN_ID, STD_TEXT
 from models import Proxy, Account, Config, City
 
 main_callback = CallbackData("main", 'account_id', 'user_id', 'city_id', 'date', 'time')
+
+logging.config.dictConfig(config)
+logger = logging.getLogger('file_logger')
 
 
 class Parser(object):
@@ -377,6 +383,7 @@ class Parser(object):
                 if not accounts or accounts[0].status != 'SEARCH':
                     return True
                 print('proxy: ', proxy.https)
+                logger.info(f'{account.login} start')
                 days, user_id, driver = await self.driver_process(account, proxy)
                 if not days:
                     return False
@@ -409,6 +416,7 @@ class Parser(object):
                     old_days = deepcopy(days)
                     days, user_id, driver = await self.driver_process(account, proxy, driver, user_id)
                     if days == 'block':
+                        logger.warning(f'{account.login} blocked')
                         return 'block'
                     if days and days != old_days:
                         for message in messages:
