@@ -12,7 +12,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from admin.config_logger import config
+from config_logger import config
 from config import BOT_TOKEN, MONTH_STRING
 
 import pytz
